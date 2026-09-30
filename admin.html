@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — AI Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --surface: #f7f9ff;
+    --surface-lowest: #ffffff;
+    --surface-container-low: #f1f4fa;
+    --surface-container: #ebeef4;
+    --surface-container-high: #e5e8ee;
+    --on-surface: #181c20;
+    --on-surface-variant: #414754;
+    --outline-variant: #dadce0;
+    --primary: #1a73e8;
+    --primary-hover: #185abc;
+    --primary-tint: #e8f0fe;
+    --secondary: #0051d5;
+    --error: #ba1a1a;
+    --on-error-container: #93000a;
+    --error-container: #ffdad6;
+    --success: #0f9d58;
+    --success-container: #d4f5e2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: "Rubik", Arial, sans-serif;
+  }
+  a { color: inherit; }
+  button { font-family: inherit; }
+
+  header {
+    position: sticky; top: 0;
+    height: 60px;
+    background: rgba(247,249,255,.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 8px rgba(0,0,0,.04);
+    display: flex; align-items: center;
+    z-index: 60;
+  }
+  .header-inner {
+    width: 100%; max-width: 1100px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-weight: 600; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+  .brand a { text-decoration: none; color: var(--on-surface-variant); font-size: .82rem; font-weight: 500; }
+  .brand a:hover { color: var(--primary); }
+  .logout-btn {
+    padding: 8px 18px; border-radius: 999px; border: none;
+    background: var(--surface-container-low); color: var(--on-surface-variant);
+    font-size: .84rem; font-weight: 500; cursor: pointer;
+  }
+  .logout-btn:hover { background: var(--surface-container); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 30px 16px 70px; }
+
+  /* ---------- Login ---------- */
+  #loginView {
+    max-width: 380px; margin: 80px auto; text-align: center;
+    background: var(--surface-lowest); border-radius: 24px; padding: 36px 28px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+  }
+  #loginView .icon {
+    width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%;
+    background: var(--primary-tint); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #loginView h2 { margin: 0 0 20px; font-weight: 500; font-size: 1.3rem; }
+  .field { text-align: left; margin-bottom: 14px; }
+  .field label { display: block; font-size: .78rem; color: var(--on-surface-variant); margin-bottom: 6px; font-weight: 500; }
+  .field input, .field textarea {
+    width: 100%; padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--outline-variant); background: var(--surface-container-low);
+    font-family: inherit; font-size: .92rem; color: var(--on-surface); outline: none;
+  }
+  .field textarea { resize: vertical; }
+  .field input:focus, .field textarea:focus { border-color: var(--primary); background: var(--surface-lowest); }
+  .primary-btn {
+    width: 100%; padding: 12px; border: none; border-radius: 999px;
+    background: var(--primary); color: #fff; font-size: .92rem; font-weight: 500; cursor: pointer;
+  }
+  .primary-btn:hover { background: var(--primary-hover); }
+  .primary-btn:disabled { opacity: .6; cursor: not-allowed; }
+  .form-error { display: none; color: var(--error); font-size: .8rem; margin: 10px 0; }
+  .form-error.visible { display: block; }
+
+  #accessDeniedView { display: none; }
+
+  /* ---------- Tabs ---------- */
+  #adminView { display: none; }
+  .tab-row { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 22px; border-bottom: 1px solid var(--outline-variant); }
+  .tab-btn {
+    padding: 11px 16px; border: none; background: none; cursor: pointer;
+    font-size: .88rem; font-weight: 500; color: var(--on-surface-variant);
+    border-bottom: 2px solid transparent; white-space: nowrap;
+  }
+  .tab-btn.active { color: var(--primary); border-color: var(--primary); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: var(--surface-lowest); border-radius: 18px; padding: 20px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08); margin-bottom: 20px;
+  }
+  .card h3 { margin: 0 0 16px; font-size: 1.02rem; font-weight: 500; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--outline-variant); vertical-align: middle; }
+  th { color: var(--on-surface-variant); font-weight: 500; font-size: .78rem; white-space: nowrap; }
+  td.desc-cell { max-width: 260px; }
+  tbody tr:hover { background: var(--surface-container-low); }
+  .thumb { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; display: block; background: var(--surface-container); }
+
+  .pill-btn {
+    padding: 6px 12px; border-radius: 999px; border: none;
+    font-size: .76rem; font-weight: 500; cursor: pointer;
+  }
+  .pill-btn.on { background: var(--success-container); color: var(--success); }
+  .pill-btn.off { background: var(--surface-container); color: var(--on-surface-variant); }
+  .pill-btn.danger { background: var(--error-container); color: var(--on-error-container); }
+  .status-badge { padding: 4px 10px; border-radius: 999px; font-size: .72rem; font-weight: 500; }
+  .status-badge.success { background: var(--success-container); color: var(--success); }
+  .status-badge.error, .status-badge.timeout { background: var(--error-container); color: var(--on-error-container); }
+  .status-select {
+    padding: 5px 8px; border-radius: 8px; border: 1px solid var(--outline-variant);
+    background: var(--surface-container-low); font-size: .78rem; font-family: inherit;
+  }
+
+  .inline-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+  .inline-form .field { margin-bottom: 0; min-width: 160px; flex: 1; }
+  .inline-form .field.small { min-width: 100px; flex: 0 0 100px; }
+  .inline-form button { flex-shrink: 0; padding: 11px 22px; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+  .stat-card { background: var(--surface-lowest); border-radius: 16px; padding: 18px; box-shadow: 0 1px 6px rgba(32,33,36,.08); text-align: center; }
+  .stat-card .num { font-size: 1.6rem; font-weight: 600; color: var(--primary); }
+  .stat-card .label { font-size: .78rem; color: var(--on-surface-variant); margin-top: 4px; }
+
+  .empty-note { color: var(--on-surface-variant); font-size: .85rem; text-align: center; padding: 24px; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .ghost-btn {
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest); color: var(--on-surface); font-size: .82rem; cursor: pointer;
+  }
+  .ghost-btn:hover { background: var(--surface-container-low); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <span class="material-symbols-outlined" style="font-size:20px;color:var(--primary);">shield_person</span>
+      <span>Admin Dashboard</span>
+      <a href="index.html">← Back to site</a>
+    </div>
+    <button class="logout-btn" id="logoutBtn" style="display:none;">Log out</button>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== LOGIN ===================== -->
+  <div id="loginView">
+    <div class="icon"><span class="material-symbols-outlined">lock</span></div>
+    <h2>Admin Login</h2>
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword">
+      </div>
+      <div class="form-error" id="loginError">Invalid login credentials</div>
+      <button type="submit" class="primary-btn" id="loginBtn">Log In</button>
+    </form>
+  </div>
+
+  <!-- ===================== ACCESS DENIED ===================== -->
+  <div id="accessDeniedView">
+    <div id="loginView" style="display:block;">
+      <div class="icon" style="background:var(--error-container);color:var(--error);"><span class="material-symbols-outlined">block</span></div>
+      <h2>Access Denied</h2>
+      <p style="color:var(--on-surface-variant);font-size:.88rem;">Your account is signed in but is not set up as an admin.</p>
+      <button class="primary-btn" id="accessDeniedLogoutBtn" style="margin-top:16px;">Log out</button>
+    </div>
+  </div>
+
+  <!-- ===================== ADMIN ===================== -->
+  <div id="adminView">
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="gallery">Gallery</button>
+      <button class="tab-btn" data-tab="waitlist">Waitlist</button>
+      <button class="tab-btn" data-tab="advertisers">Advertiser Requests</button>
+      <button class="tab-btn" data-tab="stats">Stats</button>
+      <button class="tab-btn" data-tab="history">Generation History</button>
+      <button class="tab-btn" data-tab="settings">Settings</button>
+    </div>
+
+    <!-- Gallery tab -->
+    <div class="tab-panel active" id="tab-gallery">
+      <div class="card">
+        <h3>Add image to gallery</h3>
+        <form class="inline-form" id="addGalleryForm">
+          <div class="field"><label>Image URL</label><input type="text" id="newImgUrl" placeholder="https://..." required></div>
+          <div class="field"><label>Description</label><input type="text" id="newImgDesc" placeholder="Image description" required></div>
+          <div class="field small"><label>Starting likes</label><input type="number" id="newImgLikes" value="0" min="0"></div>
+          <button type="submit" class="primary-btn">Add</button>
+        </form>
+      </div>
+      <div class="card">
+        <div class="toolbar"><h3 style="margin:0;">All gallery images</h3><button class="ghost-btn" id="refreshGalleryBtn">Refresh</button></div>
+        <div class="table-wrap"><table id="galleryTable">
+          <thead><tr><th>Image</th><th>Description</th><th>Likes</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- Waitlist tab -->
+    <div class="tab-panel" id="tab-waitlist">
+      <div class="card">
+        <div class="toolbar"><h3 style="margin:0;">Waitlist</h3><button class="ghost-btn" id="exportWaitlistBtn">Export CSV</button></div>
+        <div class="table-wrap"><table id="waitlistTable">
+          <thead><tr><th>Email</th><th>Signup Date</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- Advertisers tab -->
+    <div class="tab-panel" id="tab-advertisers">
+      <div class="card">
+        <div class="toolbar"><h3 style="margin:0;">Advertiser Requests</h3><button class="ghost-btn" id="refreshAdvertisersBtn">Refresh</button></div>
+        <div class="table-wrap"><table id="advertisersTable">
+          <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Message</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- Stats tab -->
+    <div class="tab-panel" id="tab-stats">
+      <div class="stat-grid" id="statsGrid"></div>
+    </div>
+
+    <!-- History tab -->
+    <div class="tab-panel" id="tab-history">
+      <div class="card">
+        <div class="toolbar"><h3 style="margin:0;">Generation History (last 100)</h3><button class="ghost-btn" id="refreshHistoryBtn">Refresh</button></div>
+        <div class="table-wrap"><table id="historyTable">
+          <thead><tr><th>Image</th><th>Prompt</th><th>Negative Prompt</th><th>Status</th><th>Duration</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- Settings tab -->
+    <div class="tab-panel" id="tab-settings">
+      <div class="card">
+        <h3>Prompt Settings</h3>
+        <form id="settingsForm">
+          <div class="field">
+            <label for="settingsPositive">Positive prompt (always added to the beginning of every user prompt)</label>
+            <textarea id="settingsPositive" rows="3" placeholder="e.g. photorealistic, highly detailed, professional photography,"></textarea>
+          </div>
+          <div class="field" style="margin-top:14px;">
+            <label for="settingsNegative">Negative prompt (always added to every generation)</label>
+            <textarea id="settingsNegative" rows="3" placeholder="e.g. cartoon, illustration, 3d render, anime"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;margin-top:16px;">
+            <button type="submit" class="primary-btn" style="width:auto;padding:11px 26px;">Save Settings</button>
+            <span id="settingsSaved" style="display:none;color:var(--success);font-size:.85rem;font-weight:500;">Saved</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://mlrhoqapzmmjvtevclkf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UxZsUGPr7S3RjM6RRsy9Ig_sgUa0knv";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const loginView = document.getElementById("loginView");
+const accessDeniedView = document.getElementById("accessDeniedView");
+const adminView = document.getElementById("adminView");
+const logoutBtn = document.getElementById("logoutBtn");
+const loginError = document.getElementById("loginError");
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+/* ---------------- Auth ---------------- */
+async function checkSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    showLogin();
+    return;
+  }
+  const { data: isAdmin, error } = await sb.rpc("is_admin");
+  if (error || !isAdmin) {
+    showAccessDenied();
+    return;
+  }
+  showAdmin();
+}
+
+function showLogin() {
+  loginView.style.display = "block";
+  accessDeniedView.style.display = "none";
+  adminView.style.display = "none";
+  logoutBtn.style.display = "none";
+}
+function showAccessDenied() {
+  loginView.style.display = "none";
+  accessDeniedView.style.display = "block";
+  adminView.style.display = "none";
+  logoutBtn.style.display = "none";
+}
+function showAdmin() {
+  loginView.style.display = "none";
+  accessDeniedView.style.display = "none";
+  adminView.style.display = "block";
+  logoutBtn.style.display = "inline-block";
+  loadAllTabsData();
+}
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  loginError.classList.remove("visible");
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const btn = document.getElementById("loginBtn");
+  btn.disabled = true;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  btn.disabled = false;
+  if (error) {
+    loginError.textContent = "Invalid login credentials";
+    loginError.classList.add("visible");
+    return;
+  }
+  await checkSession();
+});
+
+async function doLogout() {
+  await sb.auth.signOut();
+  showLogin();
+}
+logoutBtn.addEventListener("click", doLogout);
+document.getElementById("accessDeniedLogoutBtn").addEventListener("click", doLogout);
+
+/* ---------------- Tabs ---------------- */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+function loadAllTabsData() {
+  loadGalleryTab();
+  loadWaitlistTab();
+  loadAdvertisersTab();
+  loadStatsTab();
+  loadHistoryTab();
+  loadSettingsTab();
+}
+
+/* ---------------- Gallery tab ---------------- */
+async function loadGalleryTab() {
+  const tbody = document.querySelector("#galleryTable tbody");
+  tbody.innerHTML = `<tr><td colspan="5" class="empty-note">Loading...</td></tr>`;
+  const { data, error } = await sb.from("gallery_images").select("*").order("created_at", { ascending: false });
+  if (error || !data || !data.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-note">No images in the gallery</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td><img class="thumb" src="${escapeHtml(row.image_url)}" alt=""></td>
+      <td class="desc-cell">${escapeHtml(row.description)}</td>
+      <td>${row.base_likes}</td>
+      <td><button class="pill-btn ${row.is_active ? "on" : "off"}" onclick="toggleGalleryActive('${row.id}', ${row.is_active})">${row.is_active ? "Active" : "Hidden"}</button></td>
+      <td><button class="pill-btn danger" onclick="deleteGalleryImage('${row.id}')">Delete</button></td>
+    </tr>`).join("");
+}
+
+async function toggleGalleryActive(id, current) {
+  await sb.from("gallery_images").update({ is_active: !current }).eq("id", id);
+  loadGalleryTab();
+}
+async function deleteGalleryImage(id) {
+  if (!confirm("Permanently delete this image?")) return;
+  await sb.from("gallery_images").delete().eq("id", id);
+  loadGalleryTab();
+}
+
+document.getElementById("addGalleryForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const image_url = document.getElementById("newImgUrl").value.trim();
+  const description = document.getElementById("newImgDesc").value.trim();
+  const base_likes = parseInt(document.getElementById("newImgLikes").value, 10) || 0;
+  if (!image_url || !description) return;
+  const { error } = await sb.from("gallery_images").insert({ image_url, description, base_likes });
+  if (error) { alert("Error adding image: " + error.message); return; }
+  e.target.reset();
+  document.getElementById("newImgLikes").value = 0;
+  loadGalleryTab();
+});
+document.getElementById("refreshGalleryBtn").addEventListener("click", loadGalleryTab);
+
+/* ---------------- Waitlist tab ---------------- */
+let waitlistCache = [];
+async function loadWaitlistTab() {
+  const tbody = document.querySelector("#waitlistTable tbody");
+  tbody.innerHTML = `<tr><td colspan="2" class="empty-note">Loading...</td></tr>`;
+  const { data, error } = await sb.from("waitlist_signups").select("*").order("created_at", { ascending: false });
+  waitlistCache = data || [];
+  if (error || !waitlistCache.length) {
+    tbody.innerHTML = `<tr><td colspan="2" class="empty-note">No signups yet</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = waitlistCache.map(row => `
+    <tr><td>${escapeHtml(row.email)}</td><td>${new Date(row.created_at).toLocaleString("en-US")}</td></tr>
+  `).join("");
+}
+
+document.getElementById("exportWaitlistBtn").addEventListener("click", () => {
+  if (!waitlistCache.length) { alert("No data to export"); return; }
+  const rows = [["email", "created_at"], ...waitlistCache.map(r => [r.email, r.created_at])];
+  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "waitlist.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ---------------- Advertisers tab ---------------- */
+async function loadAdvertisersTab() {
+  const tbody = document.querySelector("#advertisersTable tbody");
+  tbody.innerHTML = `<tr><td colspan="7" class="empty-note">Loading...</td></tr>`;
+  const { data, error } = await sb.from("advertiser_requests").select("*").order("created_at", { ascending: false });
+  if (error || !data || !data.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty-note">No requests yet</td></tr>`;
+    return;
+  }
+  const statusLabels = { new: "New", contacted: "Contacted", approved: "Approved", rejected: "Rejected" };
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td>${escapeHtml(row.name)}</td>
+      <td>${escapeHtml(row.company || "-")}</td>
+      <td>${escapeHtml(row.email)}</td>
+      <td>${escapeHtml(row.phone || "-")}</td>
+      <td class="desc-cell">${escapeHtml(row.message || "-")}</td>
+      <td>
+        <select class="status-select" onchange="updateAdvertiserStatus('${row.id}', this.value)">
+          ${Object.entries(statusLabels).map(([val, label]) => `<option value="${val}" ${row.status === val ? "selected" : ""}>${label}</option>`).join("")}
+        </select>
+      </td>
+      <td>${new Date(row.created_at).toLocaleDateString("en-US")}</td>
+    </tr>`).join("");
+}
+async function updateAdvertiserStatus(id, status) {
+  await sb.from("advertiser_requests").update({ status }).eq("id", id);
+}
+document.getElementById("refreshAdvertisersBtn").addEventListener("click", loadAdvertisersTab);
+
+/* ---------------- Stats tab ---------------- */
+async function loadStatsTab() {
+  const grid = document.getElementById("statsGrid");
+  grid.innerHTML = `<div class="empty-note">Loading stats...</div>`;
+
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const [
+    totalGen, todayGen, successGen, waitlistCount, advertiserCount, likesCount, galleryCount
+  ] = await Promise.all([
+    sb.from("generations").select("id", { count: "exact", head: true }),
+    sb.from("generations").select("id", { count: "exact", head: true }).gte("created_at", startOfDay.toISOString()),
+    sb.from("generations").select("id", { count: "exact", head: true }).eq("status", "success"),
+    sb.from("waitlist_signups").select("id", { count: "exact", head: true }),
+    sb.from("advertiser_requests").select("id", { count: "exact", head: true }),
+    sb.from("likes").select("id", { count: "exact", head: true }),
+    sb.from("gallery_images").select("id", { count: "exact", head: true })
+  ]);
+
+  const total = totalGen.count || 0;
+  const success = successGen.count || 0;
+  const successRate = total ? Math.round((success / total) * 100) : 0;
+
+  const cards = [
+    { num: total, label: "Total Image Generations" },
+    { num: todayGen.count || 0, label: "Generations Today" },
+    { num: successRate + "%", label: "Success Rate" },
+    { num: likesCount.count || 0, label: "Total Likes" },
+    { num: galleryCount.count || 0, label: "Gallery Images" },
+    { num: waitlistCount.count || 0, label: "Waitlist Signups" },
+    { num: advertiserCount.count || 0, label: "Advertiser Requests" }
+  ];
+
+  grid.innerHTML = cards.map(c => `
+    <div class="stat-card"><div class="num">${c.num}</div><div class="label">${c.label}</div></div>
+  `).join("");
+}
+
+/* ---------------- History tab ---------------- */
+async function loadHistoryTab() {
+  const tbody = document.querySelector("#historyTable tbody");
+  tbody.innerHTML = `<tr><td colspan="7" class="empty-note">Loading...</td></tr>`;
+  const { data, error } = await sb.from("generations").select("*").order("created_at", { ascending: false }).limit(100);
+  if (error || !data || !data.length) {
+    tbody.innerHTML = `<tr><td colspan="7" class="empty-note">No generation history yet</td></tr>`;
+    return;
+  }
+  const statusLabels = { success: "Success", error: "Error", timeout: "Timeout" };
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td>${row.image_url ? `<img class="thumb" src="${escapeHtml(row.image_url)}" alt="">` : "-"}</td>
+      <td class="desc-cell">${escapeHtml(row.prompt)}</td>
+      <td class="desc-cell">${escapeHtml(row.negative_prompt || "-")}</td>
+      <td><span class="status-badge ${row.status}">${statusLabels[row.status] || row.status}</span></td>
+      <td>${row.duration_ms ? Math.round(row.duration_ms / 1000) + "s" : "-"}</td>
+      <td>${new Date(row.created_at).toLocaleString("en-US")}</td>
+      <td>${row.image_url ? `<button class="pill-btn on" onclick="addToGallery('${row.image_url.replace(/'/g, "\\'")}', '${(row.prompt || "").replace(/'/g, "\\'")}')">Add to Gallery</button>` : "-"}</td>
+    </tr>`).join("");
+}
+document.getElementById("refreshHistoryBtn").addEventListener("click", loadHistoryTab);
+
+async function addToGallery(image_url, prompt) {
+  const description = prompt.length > 120 ? prompt.slice(0, 120) + "…" : prompt;
+  const { error } = await sb.from("gallery_images").insert({ image_url, description, base_likes: 0 });
+  if (error) { alert("Error adding to gallery: " + error.message); return; }
+  alert("Added to gallery successfully");
+  loadGalleryTab();
+}
+
+/* ---------------- Settings tab ---------------- */
+async function loadSettingsTab() {
+  const { data, error } = await sb.from("app_settings").select("*").eq("id", 1).maybeSingle();
+  if (error) return;
+  document.getElementById("settingsPositive").value = data?.positive_prompt || "";
+  document.getElementById("settingsNegative").value = data?.negative_prompt || "";
+}
+
+document.getElementById("settingsForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const positive_prompt = document.getElementById("settingsPositive").value.trim();
+  const negative_prompt = document.getElementById("settingsNegative").value.trim();
+  const btn = e.target.querySelector(".primary-btn");
+  const savedMsg = document.getElementById("settingsSaved");
+  savedMsg.style.display = "none";
+  btn.disabled = true;
+  const { error } = await sb
+    .from("app_settings")
+    .update({ positive_prompt, negative_prompt, updated_at: new Date().toISOString() })
+    .eq("id", 1);
+  btn.disabled = false;
+  if (error) { alert("Error saving settings: " + error.message); return; }
+  savedMsg.style.display = "inline";
+  setTimeout(() => { savedMsg.style.display = "none"; }, 2000);
+});
+
+checkSession();
+</script>
+</body>
+</html>

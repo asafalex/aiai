@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Image Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --surface: #f7f9ff;
+    --surface-lowest: #ffffff;
+    --surface-container-low: #f1f4fa;
+    --surface-container: #ebeef4;
+    --surface-container-high: #e5e8ee;
+    --on-surface: #181c20;
+    --on-surface-variant: #414754;
+    --outline-variant: #dadce0;
+    --primary: #1a73e8;
+    --primary-hover: #185abc;
+    --primary-tint: #e8f0fe;
+    --secondary: #0051d5;
+    --error: #ba1a1a;
+    --on-error-container: #93000a;
+    --error-container: #ffdad6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: "Rubik", Arial, sans-serif;
+  }
+  body.gated { overflow: hidden; }
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    height: 60px;
+    background: rgba(247, 249, 255, .92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 8px rgba(0,0,0,.04);
+    display: flex;
+    align-items: center;
+    z-index: 60;
+  }
+  .header-inner {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-weight: 600; font-size: 1rem; }
+  nav { display: flex; gap: 22px; }
+  nav a {
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  nav a.active { color: var(--primary); border-color: var(--primary); }
+
+  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 70px; }
+
+  /* ---------- Prompt bar ---------- */
+  .prompt-shell { max-width: 700px; margin: 0 auto; }
+  .fixed-phrase {
+    display: block;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.25;
+    color: var(--on-surface);
+    margin: 0 0 20px;
+  }
+  .prompt-row { display: flex; align-items: center; gap: 12px; }
+  .prompt-row .prompt-bar { flex: 1; min-width: 0; }
+  .prompt-row button#generateBtn { flex-shrink: 0; }
+  @media (max-width: 640px) {
+    .fixed-phrase { font-size: 1.5rem; }
+    .prompt-row { flex-direction: column; align-items: stretch; }
+    .prompt-row button#generateBtn { width: 100%; justify-content: center; }
+  }
+  .prompt-bar {
+    background: var(--surface-lowest);
+    border: 1px solid var(--outline-variant);
+    border-radius: 28px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .prompt-bar:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(26,115,232,.18);
+  }
+  #promptInput {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 1.02rem;
+    color: var(--on-surface);
+    padding: 10px 0;
+  }
+  #promptInput::placeholder { color: var(--on-surface-variant); opacity: .55; }
+  @media (max-width: 640px) {
+    #promptInput { text-align: center; }
+  }
+
+  .prompt-note {
+    text-align: center;
+    font-size: .78rem;
+    color: var(--on-surface-variant);
+    margin: 10px 0 0;
+  }
+  .pool-link-row { text-align: center; margin-top: 12px; }
+  .pool-link {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: .84rem;
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .pool-link:hover { color: var(--secondary); }
+
+  button#generateBtn {
+    padding: 13px 36px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .98rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(26,115,232,.3);
+    transition: background .15s, box-shadow .15s, transform .05s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  button#generateBtn:hover { background: var(--primary-hover); box-shadow: 0 2px 10px rgba(26,115,232,.4); }
+  button#generateBtn:active { transform: scale(.98); }
+  button#generateBtn:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
+
+  /* ---------- Loading / error / result ---------- */
+  .state-box { display: none; margin-top: 32px; text-align: center; }
+  .state-box.visible { display: block; }
+
+  .progress-outer {
+    max-width: 320px;
+    margin: 0 auto 10px;
+    background: var(--surface-container);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 999px;
+    transition: width .3s ease;
+  }
+  .progress-percent { font-size: .9rem; font-weight: 600; color: var(--primary); margin: 0 0 14px; }
+  .state-title { font-size: 1.02rem; font-weight: 500; margin: 0 0 4px; }
+  .state-sub { font-size: .85rem; color: var(--on-surface-variant); margin: 0; }
+
+  #errorBox .state-icon {
+    width: 44px; height: 44px; margin: 0 auto 12px;
+    border-radius: 50%;
+    background: var(--error-container);
+    color: var(--error);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #errorBox .state-title { color: var(--on-error-container); }
+  .retry-btn {
+    margin-top: 14px;
+    padding: 9px 26px;
+    border-radius: 999px;
+    border: none;
+    background: var(--error);
+    color: #fff;
+    font-family: inherit;
+    font-size: .86rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  #resultArea .result-frame {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(32,33,36,.12);
+    background: var(--surface-container);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  #resultImg { width: 100%; display: block; }
+
+  .suggestions {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .suggestion-pills { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+  .suggestion-label { font-size: .78rem; color: var(--on-surface-variant); }
+  .suggestion-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .82rem;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .suggestion-pill:hover { background: var(--primary-tint); color: var(--primary); }
+
+  /* ---------- Top 5 / gallery cards ---------- */
+  .section-divider { height: 1px; background: var(--outline-variant); margin: 44px 0 28px; opacity: .6; }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title { font-size: 1.05rem; font-weight: 600; margin: 0; color: var(--on-surface); }
+
+  .quota-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-lowest);
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: .8rem;
+    font-weight: 500;
+  }
+  .quota-badge .material-symbols-outlined { font-size: 16px; color: var(--secondary); }
+  .quota-count { color: var(--primary); font-weight: 600; }
+  .quota-exhausted-msg { display: none; color: var(--error); font-size: .78rem; margin-top: 6px; }
+  .quota-exhausted-msg.visible { display: block; }
+
+  .top-five-list { display: flex; flex-direction: column; gap: 16px; }
+  .empty-note { color: var(--on-surface-variant); font-size: .88rem; text-align: center; padding: 20px; }
+
+  .g-card {
+    background: var(--surface-lowest);
+    border-radius: 18px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  .g-card:hover { box-shadow: 0 2px 10px rgba(32,33,36,.14); }
+
+  .top-five-list .g-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 16px;
+    padding: 12px;
+    position: relative;
+  }
+  .top-five-list .g-image { width: 180px; flex-shrink: 0; border-radius: 12px; overflow: hidden; background: var(--surface-container); }
+  .top-five-list .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
+  .top-five-list .g-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+  .g-rank {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(24,28,32,.7); color: #fff;
+    font-size: .68rem; font-weight: 500;
+    padding: 2px 8px; border-radius: 999px;
+    z-index: 2;
+  }
+  @media (max-width: 560px) {
+    .top-five-list .g-card { flex-direction: column; }
+    .top-five-list .g-image { width: 100%; }
+  }
+
+  .g-desc { font-size: .92rem; color: var(--on-surface); margin: 0; line-height: 1.5; }
+
+  .like-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .like-btn .heart { font-size: 18px; }
+  .like-btn.liked { background: var(--primary-tint); color: var(--primary); }
+  .like-btn:disabled { opacity: .55; cursor: not-allowed; }
+  .like-btn.shake { animation: shake .35s; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  .view-all-row { text-align: center; margin-top: 26px; }
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 26px;
+    border-radius: 999px;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+  }
+  .view-all-link:hover { background: var(--surface-container); color: var(--primary); }
+
+  /* ---------- Gallery view ---------- */
+  #galleryView { display: none; }
+  .gallery-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .gallery-head h1 { font-size: 1.4rem; font-weight: 500; margin: 0; }
+  .back-link { font-size: .85rem; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .back-link:hover { color: var(--primary-hover); }
+
+  .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .gallery-grid .g-card { display: flex; flex-direction: column; }
+  .gallery-grid .g-image { aspect-ratio: 4/3; background: var(--surface-container); }
+  .gallery-grid .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gallery-grid .g-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* ---------- Footer ---------- */
+  footer { text-align: center; padding: 10px 16px 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; }
+  .footer-link {
+    background: none; border: none; font-family: inherit;
+    font-size: .8rem; color: var(--on-surface-variant);
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+  }
+  .footer-link:hover { color: var(--primary); }
+  footer a.footer-link { text-decoration: underline; }
+
+  /* ---------- Modals (pool / advertiser) ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(24,28,32,.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-card {
+    position: relative;
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    max-width: 380px;
+    width: 100%;
+    padding: 32px 26px 26px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(32,33,36,.2);
+    margin: auto;
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    border: none; border-radius: 50%;
+    background: transparent;
+    color: var(--on-surface-variant);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .modal-close:hover { background: var(--surface-container-low); }
+  .modal-icon {
+    width: 52px; height: 52px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--primary-tint);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-card h3 { font-size: 1.25rem; font-weight: 500; margin: 0 0 8px; }
+  .modal-card p { font-size: .88rem; color: var(--on-surface-variant); line-height: 1.5; margin: 0 0 20px; }
+  .modal-field { text-align: left; margin-bottom: 14px; }
+  .modal-field label { display: block; font-size: .78rem; color: var(--on-surface-variant); margin-bottom: 6px; font-weight: 500; }
+  .modal-field input, .modal-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-container-low);
+    font-family: inherit;
+    font-size: .92rem;
+    color: var(--on-surface);
+    outline: none;
+  }
+  .modal-field textarea { resize: vertical; min-height: 70px; }
+  .modal-field input:focus, .modal-field textarea:focus { border-color: var(--primary); background: var(--surface-lowest); }
+  .modal-error-msg { display: none; color: var(--error); font-size: .78rem; margin-top: 6px; margin-bottom: 10px; }
+  .modal-error-msg.visible { display: block; }
+  .modal-submit {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .92rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .modal-submit:hover { background: var(--primary-hover); }
+  .modal-submit:disabled { opacity: .6; cursor: not-allowed; }
+  .modal-success-view { display: none; }
+  .modal-success-view .modal-icon { background: #d4f5e2; color: #0f9d58; }
+  .modal-success-view.visible { display: block; }
+  .modal-form-view.hidden { display: none; }
+  .modal-close-secondary {
+    margin-top: 16px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+  }
+
+  /* ---------- Age gate ---------- */
+  #ageGate {
+    position: fixed; inset: 0;
+    background: rgba(24,28,32,.55);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 16px;
+  }
+  #ageGate.hidden { display: none; }
+  .age-card {
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    padding: 32px 28px;
+    max-width: 380px; width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(32,33,36,.2);
+  }
+  .age-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary-tint); font-weight: 700; font-size: 1.1rem; color: var(--primary);
+    margin-bottom: 16px;
+  }
+  .age-card h2 { margin: 0 0 8px; font-weight: 500; font-size: 1.3rem; }
+  .age-card p { color: var(--on-surface-variant); font-size: .88rem; margin: 0 0 22px; line-height: 1.5; }
+  .age-actions { display: flex; gap: 10px; }
+  .age-actions button { flex: 1; padding: 12px; border-radius: 999px; border: none; font-family: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; }
+  #ageConfirmBtn { background: var(--primary); color: #fff; box-shadow: 0 1px 6px rgba(26,115,232,.3); }
+  #ageConfirmBtn:hover { background: var(--primary-hover); }
+  #ageExitBtn { background: var(--surface-container-low); color: var(--on-surface-variant); }
+  #ageExitBtn:hover { background: var(--surface-container); }
+</style>
+</head>
+<body class="gated">
+
+<div id="ageGate">
+  <div class="age-card">
+    <div class="age-badge">18+</div>
+    <h2>Age Verification</h2>
+    <p>This site may display content unsuitable for minors. You must be 18 or older to continue.</p>
+    <div class="age-actions">
+      <button id="ageExitBtn">Exit</button>
+      <button id="ageConfirmBtn">I am 18+</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">AI Studio</div>
+    <nav>
+      <a href="#/" id="navHome">Create</a>
+      <a href="#/gallery" id="navGallery">All Images</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== HOME VIEW ===================== -->
+  <div id="homeView">
+    <form class="prompt-shell" id="promptForm">
+      <span class="fixed-phrase">Create a photo of a girl</span>
+      <div class="prompt-row">
+        <div class="prompt-bar">
+          <input type="text" id="promptInput" placeholder="with curly hair and a blue dress, on the beach">
+        </div>
+        <button type="submit" id="generateBtn">
+          <span class="material-symbols-outlined" style="font-size:18px;" id="generateBtnIcon">auto_awesome</span>
+          <span id="generateBtnText">Generate</span>
+        </button>
+      </div>
+
+      <p class="prompt-note">* she must be alone and without any other person</p>
+
+      <div class="pool-link-row">
+        <button type="button" class="pool-link" id="poolLinkBtn">Want to see her at the pool?</button>
+      </div>
+    </form>
+
+    <!-- Loading state -->
+    <div class="state-box" id="loadingBox">
+      <p class="progress-percent" id="progressPercent">0%</p>
+      <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
+      <p class="state-title">Creating your image…</p>
+      <p class="state-sub">This may take a few seconds, please wait</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="state-box" id="errorBox">
+      <div class="state-icon"><span class="material-symbols-outlined">error</span></div>
+      <p class="state-title">We couldn't create the image. Please try again</p>
+      <p class="state-sub">The server might be busy right now. Please try again in a few seconds.</p>
+      <button class="retry-btn" id="retryBtn">Try Again</button>
+    </div>
+
+    <!-- Result state -->
+    <div class="state-box" id="resultArea">
+      <div class="result-frame">
+        <img id="resultImg" alt="Generated image">
+      </div>
+      <div class="suggestions">
+        <span class="suggestion-label">More ideas:</span>
+        <div class="suggestion-pills" id="suggestionPills"></div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Home feed: top loved images, filled out with the latest to always total 8 -->
+    <section>
+      <div class="section-head">
+        <h2 class="section-title">Most Loved Images</h2>
+        <div>
+          <div class="quota-badge">
+            <span class="material-symbols-outlined">favorite</span>
+            <span>You have <span class="quota-count">3</span> likes left today</span>
+          </div>
+          <div class="quota-exhausted-msg">You've used your 3 likes for today. You can rate again tomorrow.</div>
+        </div>
+      </div>
+      <div class="top-five-list" id="topFiveList"></div>
+      <div class="view-all-row">
+        <a href="#/gallery" class="view-all-link">
+          <span>View All Images</span>
+          <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== GALLERY VIEW ===================== -->
+  <div id="galleryView">
+    <div class="gallery-head">
+      <h1>All Images</h1>
+      <a href="#/" class="back-link">
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+        Back to Create
+      </a>
+    </div>
+    <div class="section-head">
+      <div class="quota-badge">
+        <span class="material-symbols-outlined">favorite</span>
+        <span>You have <span class="quota-count">3</span> likes left today</span>
+      </div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</main>
+
+<footer>
+  <button type="button" class="footer-link" id="advertiserLinkBtn">Advertise with us</button>
+  <a class="footer-link" href="terms.html">Terms of Use</a>
+  <a class="footer-link" href="privacy.html">Privacy Policy</a>
+</footer>
+
+<!-- Pool "coming soon" modal -->
+<div class="modal-overlay" id="poolModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="modal-form-view" id="modalFormView">
+      <div class="modal-icon"><span class="material-symbols-outlined">pool</span></div>
+      <h3>Coming Soon</h3>
+      <p>Join the waitlist and get notified when this becomes available</p>
+      <form id="poolForm" novalidate>
+        <div class="modal-field">
+          <label for="modalEmailInput">Your email address</label>
+          <input type="email" id="modalEmailInput" placeholder="name@example.com">
+          <div class="modal-error-msg" id="modalErrorMsg">Please enter a valid email address</div>
+        </div>
+        <button type="submit" class="modal-submit">Join Waitlist</button>
+      </form>
+    </div>
+
+    <div class="modal-success-view" id="modalSuccessView">
+      <div class="modal-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>You're subscribed!</h3>
+      <p>We'll notify you when this becomes available</p>
+      <button class="modal-close-secondary" id="modalSuccessCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Advertiser request modal -->
+<div class="modal-overlay" id="advertiserModal">
+  <div class="modal-card">
+    <button class="modal-close" id="advertiserCloseBtn" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="modal-form-view" id="advertiserFormView">
+      <div class="modal-icon"><span class="material-symbols-outlined">campaign</span></div>
+      <h3>Advertise with us</h3>
+      <p>Leave your details and we'll get back to you with advertising options</p>
+      <form id="advertiserForm" novalidate>
+        <div class="modal-field">
+          <label for="advName">Full name</label>
+          <input type="text" id="advName" placeholder="John Smith">
+        </div>
+        <div class="modal-field">
+          <label for="advCompany">Company name</label>
+          <input type="text" id="advCompany" placeholder="Your company (optional)">
+        </div>
+        <div class="modal-field">
+          <label for="advEmail">Email address</label>
+          <input type="email" id="advEmail" placeholder="name@example.com">
+        </div>
+        <div class="modal-field">
+          <label for="advPhone">Phone</label>
+          <input type="text" id="advPhone" placeholder="+1 555-0100 (optional)">
+        </div>
+        <div class="modal-field">
+          <label for="advMessage">Message</label>
+          <textarea id="advMessage" placeholder="Tell us a bit about what you're looking for... (optional)"></textarea>
+        </div>
+        <div class="modal-error-msg" id="advErrorMsg">Please fill in your name and a valid email address</div>
+        <button type="submit" class="modal-submit">Send Request</button>
+      </form>
+    </div>
+
+    <div class="modal-success-view" id="advertiserSuccessView">
+      <div class="modal-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>Request sent!</h3>
+      <p>Thanks for reaching out, we'll be in touch soon</p>
+      <button class="modal-close-secondary" id="advertiserSuccessCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Supabase client ---------------- */
+const SUPABASE_URL = "https://mlrhoqapzmmjvtevclkf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UxZsUGPr7S3RjM6RRsy9Ig_sgUa0knv";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const EDGE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/generate-image`;
+
+function uuidv4() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === "x" ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+const VISITOR_ID_KEY = "aiStudioVisitorId";
+let visitorId = localStorage.getItem(VISITOR_ID_KEY);
+if (!visitorId) {
+  visitorId = uuidv4();
+  localStorage.setItem(VISITOR_ID_KEY, visitorId);
+}
+
+/* ---------------- Age gate ---------------- */
+const AGE_GATE_KEY = "ageVerified18";
+const ageGate = document.getElementById("ageGate");
+if (sessionStorage.getItem(AGE_GATE_KEY) === "yes") {
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+}
+document.getElementById("ageConfirmBtn").addEventListener("click", () => {
+  sessionStorage.setItem(AGE_GATE_KEY, "yes");
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+});
+document.getElementById("ageExitBtn").addEventListener("click", () => {
+  window.location.href = "https://www.google.com";
+});
+
+/* ---------------- Router ---------------- */
+const homeView = document.getElementById("homeView");
+const galleryView = document.getElementById("galleryView");
+const navHome = document.getElementById("navHome");
+const navGallery = document.getElementById("navGallery");
+
+function route() {
+  const isGallery = location.hash === "#/gallery";
+  homeView.style.display = isGallery ? "none" : "block";
+  galleryView.style.display = isGallery ? "block" : "none";
+  navHome.classList.toggle("active", !isGallery);
+  navGallery.classList.toggle("active", isGallery);
+  if (isGallery) renderGallery();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+/* ---------------- Gallery data & likes quota (Supabase-backed) ---------------- */
+let galleryItems = [];
+let likedSet = new Set();
+let likesRemaining = 3;
+const HOME_FEED_LOVED_COUNT = 5;
+const HOME_FEED_TOTAL = 8;
+
+async function loadGalleryItems() {
+  const { data, error } = await sb.rpc("get_gallery_images");
+  if (!error && data) {
+    galleryItems = data.map(row => ({
+      id: row.id,
+      img: row.image_url,
+      desc: row.description,
+      likes: Number(row.total_likes),
+      createdAt: row.created_at
+    }));
+  }
+}
+
+async function loadLikedSet() {
+  const { data, error } = await sb.from("likes").select("gallery_image_id").eq("visitor_id", visitorId);
+  if (!error && data) likedSet = new Set(data.map(r => r.gallery_image_id));
+}
+
+async function loadRemainingQuota() {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const { count, error } = await sb
+    .from("likes")
+    .select("id", { count: "exact", head: true })
+    .eq("visitor_id", visitorId)
+    .gte("created_at", startOfDay.toISOString());
+  if (!error) likesRemaining = Math.max(0, 3 - (count || 0));
+}
+
+function updateQuotaBadges() {
+  document.querySelectorAll(".quota-count").forEach(el => el.textContent = likesRemaining);
+  document.querySelectorAll(".quota-exhausted-msg").forEach(el => el.classList.toggle("visible", likesRemaining <= 0));
+}
+
+async function toggleLike(itemId, btn) {
+  btn.disabled = true;
+  const isLiked = likedSet.has(itemId);
+
+  if (!isLiked) {
+    if (likesRemaining <= 0) {
+      btn.classList.add("shake");
+      setTimeout(() => btn.classList.remove("shake"), 350);
+      btn.disabled = false;
+      return;
+    }
+    const { error } = await sb.from("likes").insert({ gallery_image_id: itemId, visitor_id: visitorId });
+    if (error) {
+      await loadRemainingQuota();
+      updateQuotaBadges();
+      btn.classList.add("shake");
+      setTimeout(() => btn.classList.remove("shake"), 350);
+      btn.disabled = false;
+      return;
+    }
+    likedSet.add(itemId);
+    likesRemaining--;
+  } else {
+    const { error } = await sb.from("likes").delete().eq("gallery_image_id", itemId).eq("visitor_id", visitorId);
+    if (error) { btn.disabled = false; return; }
+    likedSet.delete(itemId);
+    if (likesRemaining < 3) likesRemaining++;
+  }
+
+  await loadGalleryItems();
+  renderHomeFeed();
+  if (location.hash === "#/gallery") renderGallery();
+  updateQuotaBadges();
+  btn.disabled = false;
+}
+
+function galleryCardHTML(item, rank) {
+  const liked = likedSet.has(item.id);
+  return `
+    <article class="g-card">
+      ${rank ? `<div class="g-rank">#${rank}</div>` : ""}
+      <div class="g-image"><img src="${item.img}" alt="${item.desc}" loading="lazy"></div>
+      <div class="g-body">
+        <p class="g-desc">${item.desc}</p>
+        <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
+          <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
+          <span>${item.likes.toLocaleString("en-US")}</span>
+        </button>
+      </div>
+    </article>`;
+}
+
+function getHomeFeedItems() {
+  // Most-loved images first (galleryItems is already sorted by total_likes desc),
+  // then fill any remaining slots with the latest additions not already included,
+  // so new uploads don't get permanently buried behind old popular ones.
+  const loved = galleryItems.slice(0, HOME_FEED_LOVED_COUNT);
+  const lovedIds = new Set(loved.map(i => i.id));
+  const latestFirst = [...galleryItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const fill = latestFirst.filter(i => !lovedIds.has(i.id)).slice(0, HOME_FEED_TOTAL - loved.length);
+  return [...loved, ...fill];
+}
+
+function renderHomeFeed() {
+  const el = document.getElementById("topFiveList");
+  if (!galleryItems.length) {
+    el.innerHTML = `<p class="empty-note">No images in the gallery yet</p>`;
+    return;
+  }
+  el.innerHTML = getHomeFeedItems().map((item, i) => galleryCardHTML(item, i + 1)).join("");
+}
+
+function renderGallery() {
+  const el = document.getElementById("galleryGrid");
+  if (!galleryItems.length) {
+    el.innerHTML = `<p class="empty-note">No images in the gallery yet</p>`;
+    return;
+  }
+  el.innerHTML = galleryItems.map(item => galleryCardHTML(item, null)).join("");
+}
+
+async function initGallery() {
+  await Promise.all([loadGalleryItems(), loadLikedSet(), loadRemainingQuota()]);
+  renderHomeFeed();
+  updateQuotaBadges();
+  route();
+}
+initGallery();
+
+/* ---------------- Pool "coming soon" modal ---------------- */
+const poolModal = document.getElementById("poolModal");
+const modalFormView = document.getElementById("modalFormView");
+const modalSuccessView = document.getElementById("modalSuccessView");
+const modalEmailInput = document.getElementById("modalEmailInput");
+const modalErrorMsg = document.getElementById("modalErrorMsg");
+
+function openPoolModal() {
+  poolModal.classList.add("visible");
+  modalFormView.classList.remove("hidden");
+  modalSuccessView.classList.remove("visible");
+  modalErrorMsg.classList.remove("visible");
+  modalErrorMsg.textContent = "Please enter a valid email address";
+  modalEmailInput.value = "";
+}
+function closePoolModal() { poolModal.classList.remove("visible"); }
+
+document.getElementById("poolLinkBtn").addEventListener("click", openPoolModal);
+document.getElementById("modalCloseBtn").addEventListener("click", closePoolModal);
+document.getElementById("modalSuccessCloseBtn").addEventListener("click", closePoolModal);
+poolModal.addEventListener("click", (e) => { if (e.target === poolModal) closePoolModal(); });
+
+document.getElementById("poolForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const val = modalEmailInput.value.trim();
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  if (!valid) {
+    modalErrorMsg.textContent = "Please enter a valid email address";
+    modalErrorMsg.classList.add("visible");
+    modalEmailInput.focus();
+    return;
+  }
+  modalErrorMsg.classList.remove("visible");
+
+  const submitBtn = e.target.querySelector(".modal-submit");
+  submitBtn.disabled = true;
+  const { error } = await sb.from("waitlist_signups").insert({ email: val });
+  submitBtn.disabled = false;
+
+  if (error && error.code !== "23505") {
+    modalErrorMsg.textContent = "Something went wrong, please try again";
+    modalErrorMsg.classList.add("visible");
+    return;
+  }
+  modalFormView.classList.add("hidden");
+  modalSuccessView.classList.add("visible");
+});
+
+/* ---------------- Advertiser request modal ---------------- */
+const advertiserModal = document.getElementById("advertiserModal");
+const advertiserFormView = document.getElementById("advertiserFormView");
+const advertiserSuccessView = document.getElementById("advertiserSuccessView");
+const advName = document.getElementById("advName");
+const advCompany = document.getElementById("advCompany");
+const advEmail = document.getElementById("advEmail");
+const advPhone = document.getElementById("advPhone");
+const advMessage = document.getElementById("advMessage");
+const advErrorMsg = document.getElementById("advErrorMsg");
+
+function openAdvertiserModal() {
+  advertiserModal.classList.add("visible");
+  advertiserFormView.classList.remove("hidden");
+  advertiserSuccessView.classList.remove("visible");
+  advErrorMsg.classList.remove("visible");
+  [advName, advCompany, advEmail, advPhone, advMessage].forEach(el => el.value = "");
+}
+function closeAdvertiserModal() { advertiserModal.classList.remove("visible"); }
+
+document.getElementById("advertiserLinkBtn").addEventListener("click", openAdvertiserModal);
+document.getElementById("advertiserCloseBtn").addEventListener("click", closeAdvertiserModal);
+document.getElementById("advertiserSuccessCloseBtn").addEventListener("click", closeAdvertiserModal);
+advertiserModal.addEventListener("click", (e) => { if (e.target === advertiserModal) closeAdvertiserModal(); });
+
+document.getElementById("advertiserForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nameVal = advName.value.trim();
+  const emailVal = advEmail.value.trim();
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+
+  if (!nameVal || !validEmail) {
+    advErrorMsg.textContent = "Please fill in your name and a valid email address";
+    advErrorMsg.classList.add("visible");
+    return;
+  }
+  advErrorMsg.classList.remove("visible");
+
+  const submitBtn = e.target.querySelector(".modal-submit");
+  submitBtn.disabled = true;
+  const { error } = await sb.from("advertiser_requests").insert({
+    name: nameVal,
+    company: advCompany.value.trim() || null,
+    email: emailVal,
+    phone: advPhone.value.trim() || null,
+    message: advMessage.value.trim() || null
+  });
+  submitBtn.disabled = false;
+
+  if (error) {
+    advErrorMsg.textContent = "Something went wrong, please try again";
+    advErrorMsg.classList.add("visible");
+    return;
+  }
+  advertiserFormView.classList.add("hidden");
+  advertiserSuccessView.classList.add("visible");
+});
+
+/* ---------------- Escape closes any open modal ---------------- */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  closePoolModal();
+  closeAdvertiserModal();
+});
+
+/* ---------------- Image generation (via Supabase Edge Function) ---------------- */
+const DEFAULT_CONTINUATION = "with curly hair and a blue dress, on the beach";
+
+const SUGGESTION_POOL = [
+  "Long blonde hair, blue eyes, slim figure, sitting on a bench and holding a coffee, surrounded by trees.",
+  "Short dark hair, green eyes, athletic figure, walking down a city street while checking her phone.",
+  "Long black hair, brown eyes, petite figure, standing by a window and holding a glass, with a city view behind her.",
+  "Curly brown hair, hazel eyes, slim figure, walking on the beach while carrying a small bag.",
+  "Long auburn hair, green eyes, tall figure, sitting by a fountain and reading a book in a plaza.",
+  "Blonde hair, brown eyes, curvy figure, standing on a rooftop and taking a selfie, with the skyline behind her.",
+  "Curly black hair, dark eyes, athletic figure, walking along the shoreline while holding sunglasses.",
+  "Chestnut hair, gray-blue eyes, slim figure, sitting on stairs and drinking coffee in a modern lobby.",
+  "Long brown hair, green eyes, petite figure, standing by a pool and holding a cocktail, surrounded by tropical plants.",
+  "Wavy red hair, blue eyes, slender figure, walking through a field and holding wildflowers.",
+  "Straight blonde hair, green eyes, slim figure, standing in a kitchen and cutting fresh fruit.",
+  "Long brunette hair, brown eyes, athletic figure, jogging through a park while holding a water bottle.",
+  "Short blonde hair, blue eyes, petite figure, sitting at a café table and reading a newspaper.",
+  "Long curly hair, hazel eyes, slim figure, standing on a balcony and holding a cup of tea.",
+  "Dark brown hair, green eyes, tall figure, walking through a market while carrying a basket.",
+  "Wavy blonde hair, blue eyes, slim figure, sitting beside a lake and holding a camera.",
+  "Long black hair, dark eyes, petite figure, standing in a bookstore and browsing through a book.",
+  "Curly red hair, green eyes, slender figure, walking through a garden while holding a flower.",
+  "Brown hair, hazel eyes, athletic figure, sitting on a rock and drinking from a water bottle.",
+  "Long blonde hair, gray eyes, slim figure, standing near a waterfall and taking a photo.",
+  "Short brunette hair, brown eyes, petite figure, walking through an airport while pulling a suitcase.",
+  "Long black hair, green eyes, slim figure, sitting at an outdoor café and using a laptop.",
+  "Wavy brown hair, blue eyes, athletic figure, standing beside a bicycle and checking a map.",
+  "Long red hair, hazel eyes, tall figure, walking through a forest while carrying a backpack.",
+  "Blonde hair, green eyes, petite figure, sitting on a balcony and holding a book.",
+  "Dark curly hair, brown eyes, slim figure, standing beside a lake and throwing stones into the water.",
+  "Long brunette hair, blue eyes, athletic figure, walking across a bridge while holding a camera.",
+  "Short red hair, green eyes, slim figure, sitting in a park and sketching in a notebook.",
+  "Long blonde hair, brown eyes, tall figure, standing in a flower shop and holding a bouquet.",
+  "Black wavy hair, dark eyes, petite figure, walking through a hotel lobby while carrying a suitcase.",
+  "Chestnut hair, green eyes, slim figure, sitting near a fireplace and holding a warm drink.",
+  "Long blonde hair, blue eyes, athletic figure, standing beside a tennis court and holding a racket.",
+  "Curly brunette hair, hazel eyes, petite figure, walking through a museum while holding a brochure.",
+  "Straight black hair, brown eyes, slim figure, sitting beside a window and writing in a notebook.",
+  "Long auburn hair, green eyes, athletic figure, standing on a hiking trail and checking her phone.",
+  "Blonde wavy hair, gray eyes, slim figure, walking beside a river while holding a camera.",
+  "Dark brown hair, blue eyes, petite figure, sitting at a restaurant table and holding a menu.",
+  "Long black hair, hazel eyes, tall figure, standing in a garden and watering flowers.",
+  "Short blonde hair, green eyes, athletic figure, walking through a train station while carrying a backpack.",
+  "Wavy brunette hair, brown eyes, slim figure, sitting on a pier and holding a fishing rod.",
+  "Long red hair, blue eyes, petite figure, standing beside a vintage car and holding the keys.",
+  "Curly black hair, green eyes, slim figure, walking through a shopping street while holding a paper bag.",
+  "Blonde hair, hazel eyes, athletic figure, sitting on a picnic blanket and holding a basket.",
+  "Long brown hair, gray eyes, slender figure, standing beside a piano and holding sheet music.",
+  "Short dark hair, blue eyes, petite figure, walking through a rainy street while holding an umbrella.",
+  "Long blonde hair, green eyes, slim figure, sitting beside a swimming pool and reading a magazine.",
+  "Wavy auburn hair, brown eyes, athletic figure, standing on a mountain viewpoint and holding binoculars.",
+  "Long brunette hair, hazel eyes, petite figure, walking through an art gallery while holding a camera.",
+  "Straight black hair, green eyes, slim figure, sitting on a garden swing and holding a glass of lemonade.",
+  "Curly blonde hair, blue eyes, athletic figure, standing on a wooden dock and taking a photo of the lake."
+];
+
+function pickRandomSuggestions(n) {
+  const pool = [...SUGGESTION_POOL];
+  const picked = [];
+  while (picked.length < n && pool.length) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
+const promptForm = document.getElementById("promptForm");
+const promptInput = document.getElementById("promptInput");
+const generateBtn = document.getElementById("generateBtn");
+const generateBtnText = document.getElementById("generateBtnText");
+const generateBtnIcon = document.getElementById("generateBtnIcon");
+const loadingBox = document.getElementById("loadingBox");
+const errorBox = document.getElementById("errorBox");
+const resultArea = document.getElementById("resultArea");
+const resultImg = document.getElementById("resultImg");
+const retryBtn = document.getElementById("retryBtn");
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const suggestionPillsEl = document.getElementById("suggestionPills");
+
+function renderSuggestions() {
+  const picks = pickRandomSuggestions(3);
+  suggestionPillsEl.innerHTML = picks.map(text => `
+    <button type="button" class="suggestion-pill" data-text="${text}">
+      <span class="material-symbols-outlined" style="font-size:15px;">add</span>
+      "${text}"
+    </button>
+  `).join("");
+  suggestionPillsEl.querySelectorAll(".suggestion-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      promptInput.value = btn.dataset.text;
+      generateImage();
+    });
+  });
+}
+
+let isGenerating = false;
+let progressTimer = null;
+let currentProgress = 0;
+const ESTIMATED_DURATION_MS = 20000;
+
+function setProgress(pct) {
+  currentProgress = Math.max(currentProgress, Math.min(pct, 100));
+  progressBar.style.width = currentProgress + "%";
+  progressPercent.textContent = Math.round(currentProgress) + "%";
+}
+
+function startProgressAnimation() {
+  currentProgress = 0;
+  setProgress(0);
+  const startTime = Date.now();
+  clearInterval(progressTimer);
+  progressTimer = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    setProgress(Math.min(92, (elapsed / ESTIMATED_DURATION_MS) * 92));
+  }, 250);
+}
+
+function stopProgressAnimation() {
+  clearInterval(progressTimer);
+}
+
+function showState(name) {
+  [loadingBox, errorBox, resultArea].forEach(box => box.classList.remove("visible"));
+  if (name === "loading") loadingBox.classList.add("visible");
+  else if (name === "error") errorBox.classList.add("visible");
+  else if (name === "result") resultArea.classList.add("visible");
+}
+
+async function generateImage() {
+  if (isGenerating) return;
+  isGenerating = true;
+  generateBtn.disabled = true;
+  showState("loading");
+  startProgressAnimation();
+
+  const continuation = promptInput.value.trim() || DEFAULT_CONTINUATION;
+
+  try {
+    const res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "apikey": SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ prompt: continuation, visitor_id: visitorId })
+    });
+
+    const data = await res.json();
+    if (data.status !== "success" || !data.image_url) {
+      throw new Error(data.message || "An error occurred while creating the image");
+    }
+
+    stopProgressAnimation();
+    setProgress(100);
+
+    resultImg.src = data.image_url;
+    showState("result");
+    renderSuggestions();
+    generateBtnText.textContent = "Update Image";
+    generateBtnIcon.textContent = "refresh";
+
+  } catch (err) {
+    stopProgressAnimation();
+    showState("error");
+  } finally {
+    isGenerating = false;
+    generateBtn.disabled = false;
+  }
+}
+
+promptForm.addEventListener("submit", (e) => { e.preventDefault(); generateImage(); });
+retryBtn.addEventListener("click", generateImage);
+</script>
+</body>
+</html>
