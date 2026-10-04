@@ -1,0 +1,2997 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naked Woman — Prompt Wizard</title>
+<meta name="description" id="metaDescription" content="Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery and generate your photo on Naked Woman Site.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Naked Woman Site">
+<meta name="theme-color" content="#1a73e8">
+<link rel="canonical" id="canonicalLink" href="https://nakedwoman.site/index-wiz.html">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Naked Woman Site">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" id="ogUrl" content="https://nakedwoman.site/">
+<meta property="og:title" id="ogTitle" content="Naked Woman Site — Free AI Image Generator">
+<meta property="og:description" id="ogDescription" content="Create custom AI images free in ~20 seconds. No account required. Describe anyone you want and get a custom photo.">
+<meta property="og:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
+<meta property="og:image:alt" content="Naked Woman Site logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twitterTitle" content="Naked Woman Site — Free AI Image Generator">
+<meta name="twitter:description" id="twitterDescription" content="Create custom AI images free in ~20 seconds. No account required.">
+<meta name="twitter:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://nakedwoman.site/#website",
+      "url": "https://nakedwoman.site/",
+      "name": "Naked Woman Site",
+      "description": "Free AI image generator — describe who you want to see and get a custom photo in about 20 seconds.",
+      "inLanguage": "en-US",
+      "publisher": { "@id": "https://nakedwoman.site/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://nakedwoman.site/#organization",
+      "name": "Naked Woman Site",
+      "url": "https://nakedwoman.site/",
+      "email": "ai@nakedwoman.site",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nakedwoman.site/assets/logo.svg"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Naked Woman Site AI Generator",
+      "url": "https://nakedwoman.site/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "inLanguage": "en-US",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Generate custom AI images from a text prompt. Free to use with no signup."
+    }
+  ]
+}
+</script>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script src="posthog-config.js"></script>
+<script src="posthog-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --surface: #f7f9ff;
+    --surface-lowest: #ffffff;
+    --surface-container-low: #f1f4fa;
+    --surface-container: #ebeef4;
+    --surface-container-high: #e5e8ee;
+    --on-surface: #181c20;
+    --on-surface-variant: #414754;
+    --outline-variant: #dadce0;
+    --primary: #1a73e8;
+    --primary-hover: #185abc;
+    --primary-tint: #e8f0fe;
+    --secondary: #0051d5;
+    --error: #ba1a1a;
+    --on-error-container: #93000a;
+    --error-container: #ffdad6;
+    --success: #0f9d58;
+    --success-container: #d4f5e2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: "Rubik", Arial, sans-serif;
+  }
+  body.gated { overflow: hidden; }
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    height: 60px;
+    background: rgba(247, 249, 255, .92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 8px rgba(0,0,0,.04);
+    display: flex;
+    align-items: center;
+    z-index: 60;
+  }
+  .header-inner {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--on-surface);
+    cursor: pointer;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: block;
+  }
+  .brand:hover { color: var(--primary); }
+  nav { display: flex; gap: 22px; }
+  nav a {
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  nav a.active { color: var(--primary); border-color: var(--primary); }
+
+  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 70px; }
+
+  /* ---------- Prompt bar ---------- */
+  .prompt-shell {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding-top: 6px;
+  }
+  .prompt-hero { position: relative; }
+  .free-badge {
+    position: absolute;
+    top: 20px;
+    right: -34px;
+    z-index: 3;
+    padding: 6px 44px;
+    transform: rotate(45deg);
+    transform-origin: center;
+    background: var(--success);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 0 2px 8px rgba(15, 157, 88, 0.35);
+  }
+  .fixed-phrase,
+  h1.fixed-phrase {
+    display: block;
+    text-align: center;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.3;
+    color: var(--on-surface);
+    margin: 0 0 20px;
+  }
+  .fixed-phrase-desc {
+    display: block;
+    margin-top: 8px;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--on-surface-variant);
+  }
+  .prompt-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .prompt-bar {
+    background: var(--surface-lowest);
+    border: 1px solid var(--outline-variant);
+    border-radius: 28px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .prompt-bar:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(26,115,232,.18);
+  }
+  .prompt-bar.prominent {
+    border-width: 2px;
+    border-color: var(--primary);
+    box-shadow: 0 4px 16px rgba(26, 115, 232, .22);
+    padding: 10px 20px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .prompt-bar.prominent:focus-within {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(26, 115, 232, .25), 0 6px 20px rgba(26, 115, 232, .28);
+  }
+  .how-it-works {
+    text-align: center;
+    font-size: .9rem;
+    color: var(--on-surface-variant);
+    margin: 0 0 14px;
+    line-height: 1.55;
+    padding: 12px 16px;
+    background: var(--primary-tint);
+    border-radius: 16px;
+  }
+  .how-it-works strong { color: var(--primary); font-weight: 600; }
+  .how-it-works[hidden],
+  .how-it-works.is-dismissed {
+    display: none !important;
+  }
+  #loadingBox.hero-loading-slot,
+  #resultArea.hero-result-slot {
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+  #loadingBox.hero-loading-slot {
+    padding: 16px 12px 14px;
+    background: var(--primary-tint);
+    border-radius: 16px;
+  }
+  #resultArea.hero-result-slot .suggestions {
+    margin-top: 14px;
+  }
+  .start-here {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: .76rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+  .prompt-field-label {
+    display: block;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 8px;
+  }
+  .prompt-constraint {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .prompt-constraint-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    cursor: default;
+    user-select: none;
+    text-align: center;
+  }
+  .prompt-constraint-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--primary);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .prompt-constraint-text {
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    line-height: 1.45;
+  }
+  .browse-gallery-cta {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--outline-variant);
+  }
+  .browse-gallery-cta p {
+    margin: 0 0 14px;
+    font-size: .85rem;
+    color: var(--on-surface-variant);
+  }
+  .home-top-six {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 10px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 18px;
+  }
+  .home-top-six-item {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  .home-top-six-thumb {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(32, 33, 36, .1);
+  }
+  .home-top-six-thumb img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .home-top-six-desc {
+    margin: 6px 0 0;
+    font-size: .62rem;
+    line-height: 1.35;
+    color: var(--on-surface-variant);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .browse-gallery-cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: .92rem;
+  }
+  .browse-gallery-cta a:hover { text-decoration: underline; }
+  .example-demo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--surface-container-low);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .example-demo[hidden],
+  .example-demo.is-dismissed {
+    display: none !important;
+  }
+  .example-demo img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(32, 33, 36, .12);
+  }
+  .example-demo p {
+    margin: 0;
+    font-size: .78rem;
+    line-height: 1.45;
+    color: var(--on-surface-variant);
+  }
+  .example-demo em { color: var(--on-surface); font-style: normal; font-weight: 500; }
+  .onboarding-list {
+    text-align: left;
+    margin: 0 0 16px;
+    padding-left: 20px;
+    font-size: .88rem;
+    line-height: 1.55;
+    color: var(--on-surface-variant);
+  }
+  .onboarding-list li { margin-bottom: 8px; }
+  .onboarding-note {
+    font-size: .82rem;
+    color: var(--on-surface-variant);
+    margin: 0 0 18px;
+    line-height: 1.45;
+  }
+  .onboarding-note a { color: var(--primary); font-weight: 500; }
+  .prompt-bar.prominent { align-items: stretch; }
+  .prompt-bar-has-wizard {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .wizard-trigger {
+    flex-shrink: 0;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 4px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #fff8e1, #ffe082);
+    color: #b8860b;
+    font-family: inherit;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: lowercase;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(184, 134, 11, .25);
+    transition: transform .12s, box-shadow .15s;
+  }
+  .wizard-trigger:hover {
+    transform: scale(1.04);
+    box-shadow: 0 3px 12px rgba(184, 134, 11, .35);
+  }
+  .wizard-trigger .wizard-star {
+    font-size: 22px;
+    font-variation-settings: "FILL" 1, "wght" 600;
+    color: #f9a825;
+  }
+  .wizard-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    background: rgba(24, 28, 32, .55);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .wizard-overlay.visible { display: flex; }
+  .wizard-panel {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    padding: 24px 22px 20px;
+    box-shadow: 0 12px 40px rgba(32, 33, 36, .22);
+    margin: auto;
+  }
+  .wizard-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .wizard-close:hover { background: var(--surface-container); color: var(--on-surface); }
+  .wizard-head {
+    text-align: center;
+    padding: 0 36px 16px;
+  }
+  .wizard-head h2 {
+    margin: 0 0 6px;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .wizard-head p {
+    margin: 0;
+    font-size: .84rem;
+    color: var(--on-surface-variant);
+    line-height: 1.45;
+  }
+  .wizard-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 18px;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .wizard-step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--outline-variant);
+    transition: background .2s, transform .2s;
+  }
+  .wizard-step-dot.active {
+    background: var(--primary);
+    transform: scale(1.25);
+  }
+  .wizard-step-dot.done { background: var(--success); }
+  .wizard-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (min-width: 520px) {
+    .wizard-options { grid-template-columns: repeat(3, 1fr); }
+  }
+  .wizard-options.is-mini {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (min-width: 520px) {
+    .wizard-options.is-mini { grid-template-columns: repeat(4, 1fr); }
+  }
+  .wizard-options.is-mini .wizard-option img { aspect-ratio: 1; }
+  .wizard-options.is-focus-chest .wizard-option img,
+  .wizard-options.is-focus-butt .wizard-option img {
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .wizard-options.is-mini .wizard-option-label {
+    font-size: .7rem;
+    padding: 8px 6px 10px;
+    text-align: center;
+  }
+  .wizard-mini-tag {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--primary-tint);
+    color: var(--primary);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .wizard-option {
+    border: 2px solid transparent;
+    border-radius: 16px;
+    padding: 0;
+    background: var(--surface-container-low);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    overflow: hidden;
+    transition: border-color .15s, box-shadow .15s, transform .12s;
+  }
+  .wizard-option:hover {
+    border-color: var(--primary-tint);
+    box-shadow: 0 4px 14px rgba(26, 115, 232, .15);
+    transform: translateY(-2px);
+  }
+  .wizard-option.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, .2);
+  }
+  .wizard-option img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--surface-container), var(--primary-tint));
+  }
+  .wizard-option-label {
+    display: block;
+    padding: 10px 10px 12px;
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    line-height: 1.35;
+  }
+  .wizard-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--outline-variant);
+  }
+  .wizard-nav-back {
+    border: none;
+    background: transparent;
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .88rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px;
+  }
+  .wizard-nav-back:hover:not(:disabled) { color: var(--primary); }
+  .wizard-nav-back:disabled { opacity: .35; cursor: not-allowed; }
+  .wizard-nav-next {
+    margin-left: auto;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .wizard-nav-next:hover:not(:disabled) { background: var(--primary-hover); }
+  .wizard-nav-next:disabled { opacity: .45; cursor: not-allowed; }
+  #promptInput {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 1.02rem;
+    color: var(--on-surface);
+    padding: 6px 0;
+    min-height: 4.25rem;
+    max-height: 7.5rem;
+    line-height: 1.45;
+    resize: vertical;
+  }
+  #promptInput::placeholder { color: var(--on-surface-variant); opacity: .55; }
+
+  @media (max-width: 640px) {
+    main { padding: 22px 14px 56px; }
+    .header-inner { padding: 0 12px; }
+    .brand { font-size: .9rem; max-width: 42vw; line-height: 1.2; }
+    nav { gap: 12px; }
+    nav a { font-size: .8rem; }
+
+    .prompt-shell {
+      overflow: visible;
+      padding-top: 0;
+    }
+    .free-badge {
+      position: relative;
+      top: auto;
+      right: auto;
+      display: table;
+      margin: 0 auto 12px;
+      transform: rotate(-8deg);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .68rem;
+      box-shadow: 0 2px 6px rgba(15, 157, 88, 0.28);
+    }
+    .fixed-phrase {
+      font-size: 1.32rem;
+      margin-bottom: 12px;
+      padding-inline: 2px;
+    }
+    .fixed-phrase-desc {
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+    .prompt-note-below-title {
+      margin: 8px 0 16px;
+      padding-inline: 4px;
+      font-size: .84rem;
+    }
+    .prompt-bar { padding: 8px 14px; }
+    #promptInput {
+      text-align: left;
+      font-size: .88rem;
+      padding: 8px 0;
+    }
+    #promptInput::placeholder { font-size: .72rem; }
+    .wizard-trigger {
+      padding: 6px 8px;
+      font-size: .65rem;
+    }
+    .wizard-trigger .wizard-star { font-size: 18px; }
+    .prompt-example-label { text-align: left; }
+    .prompt-example-btn {
+      font-size: .76rem;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .pool-link-wrap { margin-top: 10px; padding-inline: 2px; }
+    .pool-link-row {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+    .pool-link { font-size: .8rem; }
+  }
+
+  .prompt-note {
+    text-align: center;
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin: 0;
+    line-height: 1.35;
+    letter-spacing: .01em;
+  }
+  .prompt-note .prompt-note-star {
+    color: var(--primary);
+    margin-inline-end: 4px;
+  }
+  .prompt-note-below-title {
+    margin: 10px 0 22px;
+  }
+  .prompt-example {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .prompt-example-label {
+    font-size: .78rem;
+    color: var(--on-surface-variant);
+  }
+  .prompt-example-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .82rem;
+    line-height: 1.45;
+    cursor: pointer;
+    text-align: left;
+    transition: background .15s, color .15s;
+  }
+  .prompt-example-btn .material-symbols-outlined {
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .prompt-example-text { flex: 1; min-width: 0; }
+  .prompt-example-btn:hover { background: var(--primary-tint); color: var(--primary); }
+  .pool-link-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+  .pool-link-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(156, 39, 176, 0.38);
+    background: var(--surface-lowest);
+    max-width: 100%;
+  }
+  .pro-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    cursor: default;
+    user-select: none;
+    pointer-events: none;
+  }
+  .pool-link {
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: .84rem;
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 4px 4px 4px 2px;
+    margin-inline-start: 4px;
+  }
+  .pool-link:hover { color: var(--secondary); }
+
+  button#generateBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 36px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .98rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(26,115,232,.3);
+    transition: background .15s, box-shadow .15s, transform .05s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  button#generateBtn:hover { background: var(--primary-hover); box-shadow: 0 2px 10px rgba(26,115,232,.4); }
+  button#generateBtn:active { transform: scale(.98); }
+  button#generateBtn:disabled { opacity: .55; cursor: not-allowed; box-shadow: none; }
+
+  /* ---------- Loading / error / result ---------- */
+  .state-box { display: none; margin-top: 32px; text-align: center; }
+  .state-box.visible { display: block; }
+  .progress-outer {
+    max-width: 320px;
+    margin: 0 auto 10px;
+    background: var(--surface-container);
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 999px;
+    transition: width .3s ease;
+  }
+  .progress-percent { font-size: .9rem; font-weight: 600; color: var(--primary); margin: 0 0 14px; }
+  .state-title { font-size: 1.02rem; font-weight: 500; margin: 0 0 4px; }
+  .state-sub { font-size: .85rem; color: var(--on-surface-variant); margin: 0; }
+
+  #errorBox .state-icon {
+    width: 44px; height: 44px; margin: 0 auto 12px;
+    border-radius: 50%;
+    background: var(--error-container);
+    color: var(--error);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #errorBox .state-title { color: var(--on-error-container); }
+  .retry-btn {
+    margin-top: 14px;
+    padding: 9px 26px;
+    border-radius: 999px;
+    border: none;
+    background: var(--error);
+    color: #fff;
+    font-family: inherit;
+    font-size: .86rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  #resultArea .result-frame {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(32,33,36,.12);
+    background: var(--surface-container);
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  #resultImg { width: 100%; display: block; }
+
+  .suggestions {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .suggestion-pills { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+  .suggestion-label { font-size: .78rem; color: var(--on-surface-variant); }
+  .suggestion-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .82rem;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .suggestion-pill:hover { background: var(--primary-tint); color: var(--primary); }
+
+  /* ---------- Top 5 / gallery cards ---------- */
+  .section-divider { height: 1px; background: var(--outline-variant); margin: 44px 0 28px; opacity: .6; }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title { font-size: 1.05rem; font-weight: 600; margin: 0; color: var(--on-surface); }
+
+  .quota-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-lowest);
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: .8rem;
+    font-weight: 500;
+  }
+  .quota-badge .material-symbols-outlined { font-size: 16px; color: var(--secondary); }
+  .quota-count { color: var(--primary); font-weight: 600; }
+  .quota-exhausted-msg { display: none; color: var(--error); font-size: .78rem; margin-top: 6px; }
+  .quota-exhausted-msg.visible { display: block; }
+
+  .top-five-list { display: flex; flex-direction: column; gap: 16px; }
+  .empty-note { color: var(--on-surface-variant); font-size: .88rem; text-align: center; padding: 20px; }
+
+  .g-card {
+    background: var(--surface-lowest);
+    border-radius: 18px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    overflow: hidden;
+    transition: box-shadow .15s;
+  }
+  .g-card:hover { box-shadow: 0 2px 10px rgba(32,33,36,.14); }
+
+  .top-five-list .g-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 16px;
+    padding: 12px;
+    position: relative;
+  }
+  .top-five-list .g-image { width: 180px; flex-shrink: 0; border-radius: 12px; overflow: hidden; background: var(--surface-container); }
+  .top-five-list .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3; }
+  .top-five-list .g-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+  .g-rank {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(24,28,32,.7); color: #fff;
+    font-size: .68rem; font-weight: 500;
+    padding: 2px 8px; border-radius: 999px;
+    z-index: 2;
+  }
+  .g-rank-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 4px 10px 4px 7px;
+    box-shadow: 0 2px 8px rgba(32, 33, 36, .22);
+  }
+  .g-rank-trophy {
+    font-size: 15px;
+    line-height: 1;
+    font-variation-settings: "FILL" 1;
+  }
+  .g-rank-1 { background: linear-gradient(135deg, #ffe082, #f5b301); color: #3d2e00; }
+  .g-rank-2 { background: linear-gradient(135deg, #f0f0f0, #b8b8b8); color: #2a2a2a; }
+  .g-rank-3 { background: linear-gradient(135deg, #e8b87a, #cd7f32); color: #3d2208; }
+  .g-card-top-1 {
+    box-shadow: 0 0 0 2px rgba(245, 179, 1, .55), 0 4px 16px rgba(245, 179, 1, .22);
+  }
+  .g-card-top-2 {
+    box-shadow: 0 0 0 2px rgba(184, 184, 184, .65), 0 4px 14px rgba(120, 120, 120, .18);
+  }
+  .g-card-top-3 {
+    box-shadow: 0 0 0 2px rgba(205, 127, 50, .55), 0 4px 14px rgba(205, 127, 50, .2);
+  }
+  @media (max-width: 560px) {
+    .top-five-list .g-card { flex-direction: column; }
+    .top-five-list .g-image { width: 100%; }
+  }
+
+  .g-desc { font-size: .92rem; color: var(--on-surface); margin: 0; line-height: 1.5; }
+
+  .like-btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .like-btn .heart { font-size: 18px; }
+  .like-btn.liked { background: var(--primary-tint); color: var(--primary); }
+  .like-btn:disabled { opacity: .55; cursor: not-allowed; }
+  .like-btn.shake { animation: shake .35s; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  .g-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .clone-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .clone-btn .material-symbols-outlined { font-size: 17px; }
+  .clone-btn:hover {
+    background: var(--primary-tint);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .view-all-row { text-align: center; margin-top: 26px; }
+  .view-all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 26px;
+    border-radius: 999px;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+  }
+  .view-all-link:hover { background: var(--surface-container); color: var(--primary); }
+
+  /* ---------- Gallery view ---------- */
+  #galleryView { display: none; }
+  .gallery-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .gallery-head h1 { font-size: 1.4rem; font-weight: 500; margin: 0; }
+  .back-link { font-size: .85rem; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .back-link:hover { color: var(--primary-hover); }
+
+  .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  .gallery-grid .g-card { display: flex; flex-direction: column; position: relative; }
+  .gallery-grid .g-image { aspect-ratio: 4/3; background: var(--surface-container); }
+  .gallery-grid .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .g-image-btn {
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    cursor: zoom-in;
+    font: inherit;
+    text-align: inherit;
+    background: none;
+    display: block;
+  }
+  .g-image-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  .gallery-lightbox-card {
+    max-width: min(96vw, 1100px);
+    width: 100%;
+    padding: 16px 16px 20px;
+    text-align: left;
+    margin: auto;
+  }
+  #galleryLightbox.modal-overlay {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  @media (min-width: 720px) {
+    #galleryLightbox.modal-overlay { align-items: center; padding: 16px; }
+    .gallery-lightbox-card { padding: 20px 22px 22px; }
+  }
+  .gallery-lightbox-frame {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    width: 100%;
+  }
+  .gallery-lightbox-frame img {
+    max-width: 100%;
+    max-height: min(88vh, 980px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .gallery-lightbox-desc {
+    margin: 14px 0 0;
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--on-surface-variant);
+  }
+  .gallery-lightbox-share-label {
+    margin: 18px 0 10px;
+    font-size: .78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--on-surface-variant);
+  }
+  .gallery-lightbox-actions { display: flex; flex-direction: column; gap: 10px; }
+  .gallery-lightbox-download {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-lightbox-download:hover { background: var(--primary-hover); }
+  .gallery-share-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  @media (min-width: 480px) {
+    .gallery-share-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .gallery-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .gallery-share-btn:hover {
+    background: var(--primary-tint);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .gallery-share-toast {
+    display: none;
+    margin-top: 8px;
+    font-size: .78rem;
+    color: var(--success);
+    text-align: center;
+  }
+  .gallery-share-toast.visible { display: block; }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .gallery-grid .g-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .gallery-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .gallery-sort {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px;
+    background: var(--surface-container-low);
+    border-radius: 999px;
+  }
+  .gallery-sort-btn {
+    border: none;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    transition: background .15s, color .15s, box-shadow .15s;
+  }
+  .gallery-sort-btn:hover { color: var(--on-surface); }
+  .gallery-sort-btn.active {
+    background: var(--surface-lowest);
+    color: var(--primary);
+    box-shadow: 0 1px 4px rgba(32, 33, 36, .12);
+  }
+  .gallery-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .gallery-search input[type="search"] {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    font-family: inherit;
+    font-size: .88rem;
+    outline: none;
+    box-shadow: 0 1px 6px rgba(32, 33, 36, .06);
+  }
+  .gallery-search input[type="search"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(26, 115, 232, .15);
+  }
+  .gallery-search-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .84rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-search-btn:hover { background: var(--surface-container); color: var(--primary); }
+  .gallery-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 8px;
+  }
+  .gallery-pager-info {
+    font-size: .82rem;
+    color: var(--on-surface-variant);
+  }
+  .gallery-pager-btns { display: flex; gap: 8px; }
+  .gallery-pager-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .84rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-pager-btn:hover:not(:disabled) { background: var(--primary-tint); color: var(--primary); }
+  .gallery-pager-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* ---------- Footer ---------- */
+  footer { text-align: center; padding: 10px 16px 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; }
+  .footer-link {
+    background: none; border: none; font-family: inherit;
+    font-size: .8rem; color: var(--on-surface-variant);
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+  }
+  .footer-link:hover { color: var(--primary); }
+  footer a.footer-link { text-decoration: underline; }
+
+  /* ---------- Modals (pool / advertiser) ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(24,28,32,.5);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 16px;
+    overflow-y: auto;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-card {
+    position: relative;
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    max-width: 380px;
+    width: 100%;
+    padding: 32px 26px 26px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(32,33,36,.2);
+    margin: auto;
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    border: none; border-radius: 50%;
+    background: transparent;
+    color: var(--on-surface-variant);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .modal-close:hover { background: var(--surface-container-low); }
+  .modal-icon {
+    width: 52px; height: 52px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--primary-tint);
+    color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-card h3 { font-size: 1.25rem; font-weight: 500; margin: 0 0 8px; }
+  .modal-card p { font-size: .88rem; color: var(--on-surface-variant); line-height: 1.5; margin: 0 0 20px; }
+  .modal-field { text-align: left; margin-bottom: 14px; }
+  .modal-field label { display: block; font-size: .78rem; color: var(--on-surface-variant); margin-bottom: 6px; font-weight: 500; }
+  .modal-field input, .modal-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-container-low);
+    font-family: inherit;
+    font-size: .92rem;
+    color: var(--on-surface);
+    outline: none;
+  }
+  .modal-field textarea { resize: vertical; min-height: 70px; }
+  .modal-field input:focus, .modal-field textarea:focus { border-color: var(--primary); background: var(--surface-lowest); }
+  .modal-error-msg { display: none; color: var(--error); font-size: .78rem; margin-top: 6px; margin-bottom: 10px; }
+  .modal-error-msg.visible { display: block; }
+  .modal-submit {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .92rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .modal-submit:hover { background: var(--primary-hover); }
+  .modal-submit:disabled { opacity: .6; cursor: not-allowed; }
+  .modal-success-view { display: none; }
+  .modal-success-view .modal-icon { background: #d4f5e2; color: #0f9d58; }
+  .modal-success-view.visible { display: block; }
+  .modal-form-view.hidden { display: none; }
+  .modal-close-secondary {
+    margin-top: 16px;
+    padding: 9px 22px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .85rem;
+    cursor: pointer;
+  }
+
+  /* ---------- Age gate ---------- */
+  #ageGate {
+    position: fixed; inset: 0;
+    background: rgba(24,28,32,.55);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 16px;
+  }
+  #ageGate.hidden { display: none; }
+  .age-card {
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    padding: 32px 28px;
+    max-width: 380px; width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(32,33,36,.2);
+  }
+  .age-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--primary-tint); font-weight: 700; font-size: 1.1rem; color: var(--primary);
+    margin-bottom: 16px;
+  }
+  .age-card h2 { margin: 0 0 8px; font-weight: 500; font-size: 1.3rem; }
+  .age-card p { color: var(--on-surface-variant); font-size: .88rem; margin: 0 0 22px; line-height: 1.5; }
+  .age-actions { display: flex; gap: 10px; }
+  .age-actions button { flex: 1; padding: 12px; border-radius: 999px; border: none; font-family: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; }
+  #ageConfirmBtn { background: var(--primary); color: #fff; box-shadow: 0 1px 6px rgba(26,115,232,.3); }
+  #ageConfirmBtn:hover { background: var(--primary-hover); }
+  #ageExitBtn { background: var(--surface-container-low); color: var(--on-surface-variant); }
+  #ageExitBtn:hover { background: var(--surface-container); }
+</style>
+</head>
+<body class="gated">
+
+<div id="ageGate">
+  <div class="age-card">
+    <div class="age-badge">18+</div>
+    <h2>Age Verification</h2>
+    <p>This site may display content unsuitable for minors. You must be 18 or older to continue.</p>
+    <div class="age-actions">
+      <button id="ageExitBtn">Exit</button>
+      <button id="ageConfirmBtn">I am 18+</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <a href="#/" class="brand">
+      <img class="brand-mark" src="assets/logo.svg" alt="Naked Woman" width="32" height="32">
+      <span>Naked Woman</span>
+    </a>
+    <nav>
+      <a href="#/" id="navHome">Generate</a>
+      <a href="#/gallery" id="navGallery">Gallery</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- ===================== HOME VIEW ===================== -->
+  <div id="homeView">
+    <form class="prompt-shell" id="promptForm">
+      <span class="free-badge">100% free</span>
+      <div class="prompt-hero">
+        <h1 class="fixed-phrase">
+          No need to fantasize anymore!
+          <span class="fixed-phrase-desc">Describe the naked woman you want to see</span>
+        </h1>
+      </div>
+      <p class="how-it-works" id="howItWorks">Type what you want → tap <strong>Create my image</strong> → your custom photo in about 20 seconds. <strong>No account needed.</strong></p>
+      <div class="state-box hero-loading-slot" id="loadingBox">
+        <p class="progress-percent" id="progressPercent">0%</p>
+        <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
+        <p class="state-title">Creating your image…</p>
+        <p class="state-sub">This may take a few seconds, please wait</p>
+      </div>
+      <div class="state-box hero-result-slot" id="resultArea">
+        <div class="result-frame">
+          <img id="resultImg" alt="Generated image">
+        </div>
+        <div class="suggestions">
+          <span class="suggestion-label">More ideas:</span>
+          <div class="suggestion-pills" id="suggestionPills"></div>
+        </div>
+      </div>
+      <div class="prompt-stack">
+        <p class="start-here"><span class="material-symbols-outlined" style="font-size:16px;">arrow_downward</span> Start here</p>
+        <div class="prompt-bar prominent prompt-bar-has-wizard">
+          <textarea id="promptInput" rows="3" placeholder="How she looks / What she is doing / Where she is"></textarea>
+          <button type="button" class="wizard-trigger" id="wizardOpenBtn" aria-label="Open prompt wizard">
+            <span class="material-symbols-outlined wizard-star" aria-hidden="true">star</span>
+            wizard
+          </button>
+        </div>
+        <div class="prompt-constraint">
+          <label class="prompt-constraint-row">
+            <input type="checkbox" checked disabled aria-checked="true" aria-disabled="true" tabindex="-1">
+            <span class="prompt-constraint-text">She must be alone, no sexual positions</span>
+          </label>
+        </div>
+        <div class="example-demo" id="exampleDemo">
+          <img src="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/c0a5265b-aed9-46d8-ba37-a3ace4bf1536-0.jpg" alt="Example AI-generated result" loading="lazy">
+          <p>This was made from a short text prompt like: <em>“brunette Huge breasts in poker room...”</em></p>
+        </div>
+        <button type="submit" id="generateBtn">
+          <span class="material-symbols-outlined" style="font-size:18px;" id="generateBtnIcon">auto_awesome</span>
+          <span id="generateBtnText">Create my image</span>
+        </button>
+      </div>
+
+      <div class="pool-link-wrap">
+        <div class="pool-link-row">
+          <span class="pro-badge">pro</span>
+          <button type="button" class="pool-link" id="poolLinkBtn">See sexual positions</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Error state -->
+    <div class="state-box" id="errorBox">
+      <div class="state-icon"><span class="material-symbols-outlined">error</span></div>
+      <p class="state-title">We couldn't create the image. Please try again</p>
+      <p class="state-sub">The server might be busy right now. Please try again in a few seconds.</p>
+      <button class="retry-btn" id="retryBtn">Try Again</button>
+    </div>
+
+    <div class="browse-gallery-cta">
+      <p>See what others have created.</p>
+      <div class="home-top-six" id="homeTopSix" aria-hidden="false"></div>
+      <a href="#/gallery">
+        <span>Open Gallery</span>
+        <span class="material-symbols-outlined" style="font-size:18px;">photo_library</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== GALLERY VIEW ===================== -->
+  <div id="galleryView">
+    <div class="gallery-head">
+      <h1>All Images</h1>
+      <a href="#/" class="back-link">
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+        Back to Generate
+      </a>
+    </div>
+    <div class="gallery-toolbar">
+      <div class="gallery-sort" role="tablist" aria-label="Sort gallery">
+        <button type="button" class="gallery-sort-btn active" data-sort="loved" role="tab" aria-selected="true">Most Loved Images</button>
+        <button type="button" class="gallery-sort-btn" data-sort="recent" role="tab" aria-selected="false">Recent</button>
+      </div>
+      <div class="quota-badge">
+        <span class="material-symbols-outlined">favorite</span>
+        <span>You have <span class="quota-count">3</span> likes left today</span>
+      </div>
+    </div>
+    <form class="gallery-search" id="gallerySearchForm">
+      <input type="search" id="gallerySearchInput" placeholder="Search description (words)…" autocomplete="off">
+      <button type="submit" class="gallery-search-btn">Search</button>
+      <button type="button" class="gallery-search-btn" id="gallerySearchClear">Clear</button>
+    </form>
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="gallery-pager" id="galleryPager"></div>
+  </div>
+</main>
+
+<footer>
+  <button type="button" class="footer-link" id="advertiserLinkBtn">Advertise with us</button>
+  <a class="footer-link" href="terms.html">Terms of Use</a>
+  <a class="footer-link" href="privacy.html">Privacy Policy</a>
+</footer>
+
+<!-- Pool "coming soon" modal -->
+<div class="wizard-overlay" id="wizardOverlay" aria-hidden="true" role="dialog" aria-labelledby="wizardTitle">
+  <div class="wizard-panel">
+    <button type="button" class="wizard-close" id="wizardCloseBtn" aria-label="Close wizard">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="wizard-head">
+      <span class="wizard-mini-tag" id="wizardMiniTag" hidden>Mini step</span>
+      <h2 id="wizardTitle">Prompt wizard</h2>
+      <p id="wizardSubtitle">Pick images — we build the prompt for you.</p>
+    </div>
+    <div class="wizard-steps" id="wizardStepDots" aria-hidden="true"></div>
+    <div class="wizard-options" id="wizardOptions"></div>
+    <div class="wizard-nav">
+      <button type="button" class="wizard-nav-back" id="wizardBackBtn">
+        <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span>
+        Back
+      </button>
+      <button type="button" class="wizard-nav-next" id="wizardNextBtn" disabled>Next</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="poolModal">
+  <div class="modal-card">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="modal-form-view" id="modalFormView">
+      <div class="modal-icon"><span class="material-symbols-outlined">pool</span></div>
+      <h3>Coming Soon</h3>
+      <p>Join the waitlist and get notified when this becomes available</p>
+      <form id="poolForm" novalidate>
+        <div class="modal-field">
+          <label for="modalEmailInput">Your email address</label>
+          <input type="email" id="modalEmailInput" placeholder="name@example.com">
+          <div class="modal-error-msg" id="modalErrorMsg">Please enter a valid email address</div>
+        </div>
+        <button type="submit" class="modal-submit">Join Waitlist</button>
+      </form>
+    </div>
+
+    <div class="modal-success-view" id="modalSuccessView">
+      <div class="modal-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>You're subscribed!</h3>
+      <p>We'll notify you when this becomes available</p>
+      <button class="modal-close-secondary" id="modalSuccessCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery image lightbox -->
+<div class="modal-overlay" id="galleryLightbox" aria-hidden="true">
+  <div class="modal-card gallery-lightbox-card" role="dialog" aria-modal="true" aria-labelledby="galleryLightboxTitle">
+    <button type="button" class="modal-close" id="galleryLightboxClose" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 id="galleryLightboxTitle" class="visually-hidden">Gallery image</h3>
+    <div class="gallery-lightbox-frame">
+      <img id="galleryLightboxImg" alt="">
+    </div>
+    <p class="gallery-lightbox-desc" id="galleryLightboxDesc"></p>
+    <p class="gallery-lightbox-share-label">Save or share</p>
+    <div class="gallery-lightbox-actions">
+      <button type="button" class="gallery-lightbox-download" id="galleryLightboxDownload">
+        <span class="material-symbols-outlined" style="font-size:20px;">download</span>
+        Save image
+      </button>
+      <div class="gallery-share-grid">
+        <button type="button" class="gallery-share-btn" data-share="native">Share…</button>
+        <button type="button" class="gallery-share-btn" data-share="whatsapp">WhatsApp</button>
+        <button type="button" class="gallery-share-btn" data-share="facebook">Facebook</button>
+        <button type="button" class="gallery-share-btn" data-share="x">X</button>
+        <button type="button" class="gallery-share-btn" data-share="telegram">Telegram</button>
+        <button type="button" class="gallery-share-btn" data-share="reddit">Reddit</button>
+        <button type="button" class="gallery-share-btn" data-share="email">Email</button>
+        <button type="button" class="gallery-share-btn" data-share="copy">Copy text</button>
+      </div>
+      <p class="gallery-share-toast" id="galleryShareToast">Copied to clipboard</p>
+    </div>
+  </div>
+</div>
+
+<!-- Advertiser request modal -->
+<div class="modal-overlay" id="advertiserModal">
+  <div class="modal-card">
+    <button class="modal-close" id="advertiserCloseBtn" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+
+    <div class="modal-form-view" id="advertiserFormView">
+      <div class="modal-icon"><span class="material-symbols-outlined">campaign</span></div>
+      <h3>Advertise with us</h3>
+      <p>Leave your details and we'll get back to you with advertising options</p>
+      <form id="advertiserForm" novalidate>
+        <div class="modal-field">
+          <label for="advName">Full name</label>
+          <input type="text" id="advName" placeholder="John Smith">
+        </div>
+        <div class="modal-field">
+          <label for="advCompany">Company name</label>
+          <input type="text" id="advCompany" placeholder="Your company (optional)">
+        </div>
+        <div class="modal-field">
+          <label for="advEmail">Email address</label>
+          <input type="email" id="advEmail" placeholder="name@example.com">
+        </div>
+        <div class="modal-field">
+          <label for="advPhone">Phone</label>
+          <input type="text" id="advPhone" placeholder="+1 555-0100 (optional)">
+        </div>
+        <div class="modal-field">
+          <label for="advMessage">Message</label>
+          <textarea id="advMessage" placeholder="Tell us a bit about what you're looking for... (optional)"></textarea>
+        </div>
+        <div class="modal-error-msg" id="advErrorMsg">Please fill in your name and a valid email address</div>
+        <button type="submit" class="modal-submit">Send Request</button>
+      </form>
+    </div>
+
+    <div class="modal-success-view" id="advertiserSuccessView">
+      <div class="modal-icon"><span class="material-symbols-outlined">check_circle</span></div>
+      <h3>Request sent!</h3>
+      <p>Thanks for reaching out, we'll be in touch soon</p>
+      <button class="modal-close-secondary" id="advertiserSuccessCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Supabase client ---------------- */
+const SUPABASE_URL = "https://mlrhoqapzmmjvtevclkf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UxZsUGPr7S3RjM6RRsy9Ig_sgUa0knv";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const EDGE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/generate-image`;
+
+function uuidv4() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    const v = c === "x" ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+const VISITOR_ID_KEY = "aiStudioVisitorId";
+let visitorId = localStorage.getItem(VISITOR_ID_KEY);
+if (!visitorId) {
+  visitorId = uuidv4();
+  localStorage.setItem(VISITOR_ID_KEY, visitorId);
+}
+window.__onPostHogReady = function () {
+  if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
+};
+if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
+
+/* ---------------- Age gate (once per calendar day, localStorage) ---------------- */
+const AGE_GATE_KEY = "ageVerified18Day";
+function isAgeVerifiedToday() {
+  return localStorage.getItem(AGE_GATE_KEY) === new Date().toDateString();
+}
+const ageGate = document.getElementById("ageGate");
+if (isAgeVerifiedToday()) {
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+}
+function shouldAutoFocusPrompt() {
+  return window.matchMedia("(min-width: 641px)").matches;
+}
+
+function focusPromptInput() {
+  if (location.hash === "#/gallery") return;
+  if (!isAgeVerifiedToday()) return;
+  if (!shouldAutoFocusPrompt()) return;
+  const input = document.getElementById("promptInput");
+  if (!input) return;
+  setTimeout(() => input.focus({ preventScroll: true }), 50);
+}
+
+document.getElementById("ageConfirmBtn").addEventListener("click", () => {
+  localStorage.setItem(AGE_GATE_KEY, new Date().toDateString());
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+  focusPromptInput();
+  if (typeof capturePostHogEvent === "function") capturePostHogEvent("age_gate_confirmed");
+});
+document.getElementById("ageExitBtn").addEventListener("click", () => {
+  window.location.href = "https://www.google.com";
+});
+if (isAgeVerifiedToday()) focusPromptInput();
+
+const EXAMPLE_DEMO_KEY = "v3ExampleDemoHidden";
+const HOW_IT_WORKS_KEY = "v3HowItWorksHidden";
+
+function syncExampleDemoVisibility() {
+  const el = document.getElementById("exampleDemo");
+  if (!el) return;
+  const dismissed = localStorage.getItem(EXAMPLE_DEMO_KEY) === "yes";
+  el.hidden = dismissed;
+  el.classList.toggle("is-dismissed", dismissed);
+}
+
+function hideExampleDemoPermanently() {
+  try {
+    localStorage.setItem(EXAMPLE_DEMO_KEY, "yes");
+  } catch (_) { /* still hide in UI */ }
+  const el = document.getElementById("exampleDemo");
+  if (el) {
+    el.hidden = true;
+    el.classList.add("is-dismissed");
+  }
+}
+
+syncExampleDemoVisibility();
+
+function syncHowItWorksVisibility() {
+  const el = document.getElementById("howItWorks");
+  if (!el) return;
+  const dismissed = localStorage.getItem(HOW_IT_WORKS_KEY) === "yes";
+  el.hidden = dismissed;
+  el.classList.toggle("is-dismissed", dismissed);
+}
+
+function hideHowItWorksPermanently() {
+  try {
+    localStorage.setItem(HOW_IT_WORKS_KEY, "yes");
+  } catch (_) {}
+  hideHowItWorksNow();
+}
+
+function hideHowItWorksNow() {
+  const el = document.getElementById("howItWorks");
+  if (el) {
+    el.hidden = true;
+    el.classList.add("is-dismissed");
+  }
+}
+
+function showHowItWorksIfAllowed() {
+  if (localStorage.getItem(HOW_IT_WORKS_KEY) === "yes") return;
+  const el = document.getElementById("howItWorks");
+  if (el) {
+    el.hidden = false;
+    el.classList.remove("is-dismissed");
+  }
+}
+
+syncHowItWorksVisibility();
+
+/* ---------------- Router ---------------- */
+const homeView = document.getElementById("homeView");
+const galleryView = document.getElementById("galleryView");
+const navHome = document.getElementById("navHome");
+const navGallery = document.getElementById("navGallery");
+
+const PAGE_SEO = {
+  home: {
+    title: "Naked Woman Site — Free AI Image Generator",
+    description: "Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery on Naked Woman Site.",
+    canonical: "https://nakedwoman.site/",
+    ogUrl: "https://nakedwoman.site/"
+  },
+  gallery: {
+    title: "AI Image Gallery — Naked Woman Site",
+    description: "Browse AI-generated images from the community. Sort by most loved or recent. Like favorites and get inspired for your next free custom photo.",
+    canonical: "https://nakedwoman.site/#/gallery",
+    ogUrl: "https://nakedwoman.site/#/gallery"
+  }
+};
+
+function updatePageSeo(view) {
+  const seo = PAGE_SEO[view] || PAGE_SEO.home;
+  document.title = seo.title;
+  const desc = document.getElementById("metaDescription");
+  if (desc) desc.setAttribute("content", seo.description);
+  const canonical = document.getElementById("canonicalLink");
+  if (canonical) canonical.setAttribute("href", seo.canonical);
+  ["ogUrl", "ogTitle", "ogDescription", "twitterTitle", "twitterDescription"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (id === "ogUrl") el.setAttribute("content", seo.ogUrl);
+    else if (id.includes("Title")) el.setAttribute("content", seo.title);
+    else el.setAttribute("content", seo.description);
+  });
+}
+
+const CLONE_PROMPT_KEY = "pendingClonePrompt";
+
+function startCloneFromGallery(description) {
+  if (!description) return;
+  sessionStorage.setItem(CLONE_PROMPT_KEY, description);
+  if (location.hash === "#/gallery") {
+    location.hash = "#/";
+  } else {
+    applyPendingClonePrompt();
+  }
+}
+
+function applyPendingClonePrompt() {
+  const pending = sessionStorage.getItem(CLONE_PROMPT_KEY);
+  if (!pending) return false;
+  sessionStorage.removeItem(CLONE_PROMPT_KEY);
+  const input = document.getElementById("promptInput");
+  if (!input) return false;
+  input.value = pending;
+  setTimeout(() => {
+    input.focus({ preventScroll: true });
+    const end = pending.length;
+    input.setSelectionRange(end, end);
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 50);
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("gallery_prompt_cloned");
+  }
+  return true;
+}
+
+function route() {
+  const isGallery = location.hash === "#/gallery";
+  homeView.style.display = isGallery ? "none" : "block";
+  galleryView.style.display = isGallery ? "block" : "none";
+  navHome.classList.toggle("active", !isGallery);
+  navGallery.classList.toggle("active", isGallery);
+  updatePageSeo(isGallery ? "gallery" : "home");
+  if (isGallery) renderGallery();
+  else if (!applyPendingClonePrompt()) focusPromptInput();
+  window.scrollTo(0, 0);
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent(isGallery ? "gallery_viewed" : "generate_viewed");
+  }
+}
+window.addEventListener("hashchange", route);
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".clone-btn");
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  startCloneFromGallery(btn.getAttribute("data-clone-desc") || "");
+});
+
+/* ---------------- Gallery data & likes quota (Supabase-backed) ---------------- */
+let galleryItems = [];
+let gallerySort = "loved";
+let galleryPage = 1;
+let gallerySearch = "";
+const GALLERY_PAGE_SIZE = 50;
+let likedSet = new Set();
+let likesRemaining = 3;
+const HOME_FEED_LOVED_COUNT = 5;
+const HOME_FEED_TOTAL = 8;
+
+async function loadGalleryItems() {
+  const { data, error } = await sb.rpc("get_gallery_images");
+  if (!error && data) {
+    galleryItems = data.map(row => ({
+      id: row.id,
+      img: row.image_url,
+      desc: row.description,
+      likes: Number(row.total_likes),
+      createdAt: row.created_at
+    }));
+  }
+}
+
+async function loadLikedSet() {
+  const { data, error } = await sb.from("likes").select("gallery_image_id").eq("visitor_id", visitorId);
+  if (!error && data) likedSet = new Set(data.map(r => r.gallery_image_id));
+}
+
+async function loadRemainingQuota() {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  const { count, error } = await sb
+    .from("likes")
+    .select("id", { count: "exact", head: true })
+    .eq("visitor_id", visitorId)
+    .gte("created_at", startOfDay.toISOString());
+  if (!error) likesRemaining = Math.max(0, 3 - (count || 0));
+}
+
+function updateQuotaBadges() {
+  document.querySelectorAll(".quota-count").forEach(el => el.textContent = likesRemaining);
+  document.querySelectorAll(".quota-exhausted-msg").forEach(el => el.classList.toggle("visible", likesRemaining <= 0));
+}
+
+async function toggleLike(itemId, btn) {
+  btn.disabled = true;
+  const isLiked = likedSet.has(itemId);
+
+  if (!isLiked) {
+    if (likesRemaining <= 0) {
+      btn.classList.add("shake");
+      setTimeout(() => btn.classList.remove("shake"), 350);
+      btn.disabled = false;
+      return;
+    }
+    const { error } = await sb.from("likes").insert({ gallery_image_id: itemId, visitor_id: visitorId });
+    if (error) {
+      await loadRemainingQuota();
+      updateQuotaBadges();
+      btn.classList.add("shake");
+      setTimeout(() => btn.classList.remove("shake"), 350);
+      btn.disabled = false;
+      return;
+    }
+    likedSet.add(itemId);
+    likesRemaining--;
+  } else {
+    const { error } = await sb.from("likes").delete().eq("gallery_image_id", itemId).eq("visitor_id", visitorId);
+    if (error) { btn.disabled = false; return; }
+    likedSet.delete(itemId);
+    if (likesRemaining < 3) likesRemaining++;
+  }
+
+  await loadGalleryItems();
+  renderHomeFeed();
+  renderHomeTopSix();
+  if (location.hash === "#/gallery") renderGallery();
+  updateQuotaBadges();
+  btn.disabled = false;
+}
+
+function galleryRankBadgeHTML(rank) {
+  if (!rank) return "";
+  if (rank <= 3) {
+    return `<div class="g-rank g-rank-top g-rank-${rank}" aria-label="Rank ${rank}"><span class="material-symbols-outlined g-rank-trophy" aria-hidden="true">emoji_events</span>#${rank}</div>`;
+  }
+  return `<div class="g-rank">#${rank}</div>`;
+}
+
+function galleryCardHTML(item, rank, openable = false) {
+  const liked = likedSet.has(item.id);
+  const descRaw = item.desc || "";
+  const img = escapeHtml(item.img);
+  const desc = escapeHtml(descRaw);
+  const descAttr = escapeAttr(descRaw);
+  const topCardClass = rank && rank <= 3 ? ` g-card-top-${rank}` : "";
+  const imageBlock = openable
+    ? `<button type="button" class="g-image g-image-btn" data-image-url="${img}" data-desc="${desc}" aria-label="View larger image">
+        <img src="${img}" alt="${desc}" loading="lazy">
+      </button>`
+    : `<div class="g-image"><img src="${img}" alt="${desc}" loading="lazy"></div>`;
+  return `
+    <article class="g-card${topCardClass}">
+      ${galleryRankBadgeHTML(rank)}
+      ${imageBlock}
+      <div class="g-body">
+        <p class="g-desc">${desc}</p>
+        <div class="g-actions">
+          <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
+            <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
+            <span>${item.likes.toLocaleString("en-US")}</span>
+          </button>
+          <button type="button" class="clone-btn" data-clone-desc="${descAttr}" aria-label="Clone prompt to generator">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+            Clone
+          </button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function getHomeFeedItems() {
+  // Most-loved images first (galleryItems is already sorted by total_likes desc),
+  // then fill any remaining slots with the latest additions not already included,
+  // so new uploads don't get permanently buried behind old popular ones.
+  const loved = galleryItems.slice(0, HOME_FEED_LOVED_COUNT);
+  const lovedIds = new Set(loved.map(i => i.id));
+  const latestFirst = [...galleryItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const fill = latestFirst.filter(i => !lovedIds.has(i.id)).slice(0, HOME_FEED_TOTAL - loved.length);
+  return [...loved, ...fill];
+}
+
+function renderHomeFeed() {
+  const el = document.getElementById("topFiveList");
+  if (!el) return;
+  if (!galleryItems.length) {
+    el.innerHTML = `<p class="empty-note">No images in the gallery yet</p>`;
+    return;
+  }
+  el.innerHTML = getHomeFeedItems().map((item, i) => galleryCardHTML(item, i + 1)).join("");
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+}
+
+function renderHomeTopSix() {
+  const el = document.getElementById("homeTopSix");
+  if (!el) return;
+  const top = [...galleryItems]
+    .sort((a, b) => {
+      const d = b.likes - a.likes;
+      if (d !== 0) return d;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    })
+    .slice(0, 6);
+  if (!top.length) {
+    el.innerHTML = "";
+    return;
+  }
+  el.innerHTML = top.map((item) => {
+    const src = escapeHtml(item.img);
+    const desc = escapeHtml(item.desc || "");
+    return `<a class="home-top-six-item" href="#/gallery">
+      <div class="home-top-six-thumb"><img src="${src}" alt="" loading="lazy"></div>
+      <p class="home-top-six-desc">${desc}</p>
+    </a>`;
+  }).join("");
+}
+
+function getSortedGalleryItems() {
+  if (gallerySort === "recent") {
+    return [...galleryItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+  return [...galleryItems].sort((a, b) => {
+    const likeDiff = b.likes - a.likes;
+    if (likeDiff !== 0) return likeDiff;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+
+function filterGalleryBySearch(items) {
+  const q = gallerySearch.trim().toLowerCase();
+  if (!q) return items;
+  const words = q.split(/\s+/).filter(Boolean);
+  return items.filter((item) => {
+    const hay = (item.desc || "").toLowerCase();
+    return words.every((word) => hay.includes(word));
+  });
+}
+
+function renderGalleryPager(totalCount) {
+  const pager = document.getElementById("galleryPager");
+  if (!pager) return;
+  const totalPages = Math.max(1, Math.ceil(totalCount / GALLERY_PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, galleryPage), totalPages);
+  galleryPage = safePage;
+
+  if (totalCount === 0) {
+    pager.innerHTML = gallerySearch.trim()
+      ? `<span class="gallery-pager-info">No images match your search</span>`
+      : "";
+    return;
+  }
+
+  pager.innerHTML = `
+    <span class="gallery-pager-info">${totalCount.toLocaleString("en-US")} images · Page ${safePage} of ${totalPages} (${GALLERY_PAGE_SIZE} per page)</span>
+    <div class="gallery-pager-btns">
+      <button type="button" class="gallery-pager-btn" id="galleryPrevBtn" ${safePage <= 1 ? "disabled" : ""}>Previous</button>
+      <button type="button" class="gallery-pager-btn" id="galleryNextBtn" ${safePage >= totalPages ? "disabled" : ""}>Next</button>
+    </div>`;
+
+  const prev = document.getElementById("galleryPrevBtn");
+  const next = document.getElementById("galleryNextBtn");
+  if (prev) prev.addEventListener("click", () => { galleryPage -= 1; renderGallery(); });
+  if (next) next.addEventListener("click", () => { galleryPage += 1; renderGallery(); });
+}
+
+function renderGallery() {
+  const el = document.getElementById("galleryGrid");
+  const filtered = filterGalleryBySearch(getSortedGalleryItems());
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / GALLERY_PAGE_SIZE));
+  if (galleryPage > totalPages) galleryPage = totalPages;
+  if (galleryPage < 1) galleryPage = 1;
+
+  renderGalleryPager(total);
+
+  if (!total) {
+    el.innerHTML = `<p class="empty-note">${gallerySearch.trim() ? "No matching images" : "No images in the gallery yet"}</p>`;
+    return;
+  }
+
+  const start = (galleryPage - 1) * GALLERY_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + GALLERY_PAGE_SIZE);
+  el.innerHTML = pageItems.map((item, i) => {
+    const rank = gallerySort === "loved" ? start + i + 1 : null;
+    return galleryCardHTML(item, rank, true);
+  }).join("");
+}
+
+document.querySelectorAll(".gallery-sort-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    gallerySort = btn.dataset.sort || "loved";
+    galleryPage = 1;
+    document.querySelectorAll(".gallery-sort-btn").forEach((b) => {
+      const active = b === btn;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
+    });
+    renderGallery();
+  });
+});
+
+document.getElementById("gallerySearchForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  gallerySearch = document.getElementById("gallerySearchInput").value;
+  galleryPage = 1;
+  renderGallery();
+});
+document.getElementById("gallerySearchClear").addEventListener("click", () => {
+  document.getElementById("gallerySearchInput").value = "";
+  gallerySearch = "";
+  galleryPage = 1;
+  renderGallery();
+});
+
+const SITE_URL = "https://nakedwoman.site/";
+const galleryLightbox = document.getElementById("galleryLightbox");
+const galleryLightboxImg = document.getElementById("galleryLightboxImg");
+const galleryLightboxDesc = document.getElementById("galleryLightboxDesc");
+const galleryShareToast = document.getElementById("galleryShareToast");
+let galleryLightboxImageUrl = "";
+
+function getGalleryShareMessage(imageUrl) {
+  const lines = [
+    "I created this image on Naked Woman Site.",
+    "Describe anyone you want and get a custom photo in about 20 seconds — 100% free, no account needed.",
+    SITE_URL
+  ];
+  if (imageUrl) lines.push(imageUrl);
+  return lines.join("\n");
+}
+
+function openGalleryLightbox(imageUrl, description) {
+  galleryLightboxImageUrl = imageUrl || "";
+  galleryLightboxImg.src = imageUrl;
+  galleryLightboxImg.alt = description || "Gallery image";
+  galleryLightboxDesc.textContent = description || "";
+  galleryShareToast.classList.remove("visible");
+  galleryLightbox.classList.add("visible");
+  galleryLightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("gated");
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("gallery_image_opened");
+  }
+}
+
+function closeGalleryLightbox() {
+  galleryLightbox.classList.remove("visible");
+  galleryLightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("gated");
+  galleryLightboxImg.removeAttribute("src");
+  galleryLightboxImageUrl = "";
+}
+
+document.getElementById("galleryGrid").addEventListener("click", (e) => {
+  const btn = e.target.closest(".g-image-btn");
+  if (!btn) return;
+  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
+});
+
+document.getElementById("galleryGrid").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const btn = e.target.closest(".g-image-btn");
+  if (!btn) return;
+  e.preventDefault();
+  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
+});
+
+document.getElementById("galleryLightboxClose").addEventListener("click", closeGalleryLightbox);
+galleryLightbox.addEventListener("click", (e) => {
+  if (e.target === galleryLightbox) closeGalleryLightbox();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && galleryLightbox.classList.contains("visible")) {
+    closeGalleryLightbox();
+  }
+});
+
+async function downloadGalleryImage() {
+  const url = galleryLightboxImageUrl;
+  if (!url) return;
+  const filename = "nakedwoman-site-" + Date.now() + ".jpg";
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    if (!res.ok) throw new Error("fetch failed");
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+    if (typeof capturePostHogEvent === "function") capturePostHogEvent("gallery_image_downloaded");
+  } catch {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+document.getElementById("galleryLightboxDownload").addEventListener("click", downloadGalleryImage);
+
+function showGalleryShareToast() {
+  galleryShareToast.classList.add("visible");
+  setTimeout(() => galleryShareToast.classList.remove("visible"), 2200);
+}
+
+async function shareGalleryImage(channel) {
+  const imageUrl = galleryLightboxImageUrl;
+  const message = getGalleryShareMessage(imageUrl);
+  const encodedText = encodeURIComponent(message);
+  const encodedUrl = encodeURIComponent(SITE_URL);
+  const encodedImage = encodeURIComponent(imageUrl || SITE_URL);
+  const title = encodeURIComponent("I created this image on Naked Woman Site");
+
+  if (channel === "native") {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Naked Woman Site",
+          text: message,
+          url: SITE_URL
+        });
+        if (typeof capturePostHogEvent === "function") {
+          capturePostHogEvent("gallery_image_shared", { channel: "native" });
+        }
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+    }
+    channel = "copy";
+  }
+
+  let shareUrl = "";
+  if (channel === "whatsapp") {
+    shareUrl = "https://api.whatsapp.com/send?text=" + encodedText;
+  } else if (channel === "facebook") {
+    shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl + "&quote=" + encodeURIComponent(message.split("\n")[0]);
+  } else if (channel === "x") {
+    shareUrl = "https://twitter.com/intent/tweet?text=" + encodedText;
+  } else if (channel === "telegram") {
+    shareUrl = "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodeURIComponent(message);
+  } else if (channel === "reddit") {
+    shareUrl = "https://www.reddit.com/submit?url=" + encodedImage + "&title=" + title;
+  } else if (channel === "email") {
+    shareUrl = "mailto:?subject=" + title + "&body=" + encodedText;
+  } else if (channel === "copy") {
+    try {
+      await navigator.clipboard.writeText(message);
+      showGalleryShareToast();
+      if (typeof capturePostHogEvent === "function") {
+        capturePostHogEvent("gallery_image_shared", { channel: "copy" });
+      }
+    } catch {
+      window.prompt("Copy this text:", message);
+    }
+    return;
+  }
+
+  if (shareUrl) {
+    window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=640");
+    if (typeof capturePostHogEvent === "function") {
+      capturePostHogEvent("gallery_image_shared", { channel });
+    }
+  }
+}
+
+document.querySelectorAll("#galleryLightbox .gallery-share-btn").forEach((btn) => {
+  btn.addEventListener("click", () => shareGalleryImage(btn.dataset.share));
+});
+
+async function initGallery() {
+  await Promise.all([loadGalleryItems(), loadLikedSet(), loadRemainingQuota()]);
+  renderHomeFeed();
+  renderHomeTopSix();
+  updateQuotaBadges();
+  route();
+}
+initGallery();
+
+/* ---------------- Pool "coming soon" modal ---------------- */
+const poolModal = document.getElementById("poolModal");
+const modalFormView = document.getElementById("modalFormView");
+const modalSuccessView = document.getElementById("modalSuccessView");
+const modalEmailInput = document.getElementById("modalEmailInput");
+const modalErrorMsg = document.getElementById("modalErrorMsg");
+
+function openPoolModal() {
+  poolModal.classList.add("visible");
+  modalFormView.classList.remove("hidden");
+  modalSuccessView.classList.remove("visible");
+  modalErrorMsg.classList.remove("visible");
+  modalErrorMsg.textContent = "Please enter a valid email address";
+  modalEmailInput.value = "";
+}
+function closePoolModal() { poolModal.classList.remove("visible"); }
+
+document.getElementById("poolLinkBtn").addEventListener("click", openPoolModal);
+document.getElementById("modalCloseBtn").addEventListener("click", closePoolModal);
+document.getElementById("modalSuccessCloseBtn").addEventListener("click", closePoolModal);
+poolModal.addEventListener("click", (e) => { if (e.target === poolModal) closePoolModal(); });
+
+document.getElementById("poolForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const val = modalEmailInput.value.trim();
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  if (!valid) {
+    modalErrorMsg.textContent = "Please enter a valid email address";
+    modalErrorMsg.classList.add("visible");
+    modalEmailInput.focus();
+    return;
+  }
+  modalErrorMsg.classList.remove("visible");
+
+  const submitBtn = e.target.querySelector(".modal-submit");
+  submitBtn.disabled = true;
+  const { error } = await sb.from("waitlist_signups").insert({ email: val });
+  submitBtn.disabled = false;
+
+  if (error && error.code !== "23505") {
+    modalErrorMsg.textContent = "Something went wrong, please try again";
+    modalErrorMsg.classList.add("visible");
+    return;
+  }
+  modalFormView.classList.add("hidden");
+  modalSuccessView.classList.add("visible");
+});
+
+/* ---------------- Advertiser request modal ---------------- */
+const advertiserModal = document.getElementById("advertiserModal");
+const advertiserFormView = document.getElementById("advertiserFormView");
+const advertiserSuccessView = document.getElementById("advertiserSuccessView");
+const advName = document.getElementById("advName");
+const advCompany = document.getElementById("advCompany");
+const advEmail = document.getElementById("advEmail");
+const advPhone = document.getElementById("advPhone");
+const advMessage = document.getElementById("advMessage");
+const advErrorMsg = document.getElementById("advErrorMsg");
+
+function openAdvertiserModal() {
+  advertiserModal.classList.add("visible");
+  advertiserFormView.classList.remove("hidden");
+  advertiserSuccessView.classList.remove("visible");
+  advErrorMsg.classList.remove("visible");
+  [advName, advCompany, advEmail, advPhone, advMessage].forEach(el => el.value = "");
+}
+function closeAdvertiserModal() { advertiserModal.classList.remove("visible"); }
+
+document.getElementById("advertiserLinkBtn").addEventListener("click", openAdvertiserModal);
+document.getElementById("advertiserCloseBtn").addEventListener("click", closeAdvertiserModal);
+document.getElementById("advertiserSuccessCloseBtn").addEventListener("click", closeAdvertiserModal);
+advertiserModal.addEventListener("click", (e) => { if (e.target === advertiserModal) closeAdvertiserModal(); });
+
+document.getElementById("advertiserForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nameVal = advName.value.trim();
+  const emailVal = advEmail.value.trim();
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+
+  if (!nameVal || !validEmail) {
+    advErrorMsg.textContent = "Please fill in your name and a valid email address";
+    advErrorMsg.classList.add("visible");
+    return;
+  }
+  advErrorMsg.classList.remove("visible");
+
+  const submitBtn = e.target.querySelector(".modal-submit");
+  submitBtn.disabled = true;
+  const { error } = await sb.from("advertiser_requests").insert({
+    name: nameVal,
+    company: advCompany.value.trim() || null,
+    email: emailVal,
+    phone: advPhone.value.trim() || null,
+    message: advMessage.value.trim() || null
+  });
+  submitBtn.disabled = false;
+
+  if (error) {
+    advErrorMsg.textContent = "Something went wrong, please try again";
+    advErrorMsg.classList.add("visible");
+    return;
+  }
+  advertiserFormView.classList.add("hidden");
+  advertiserSuccessView.classList.add("visible");
+});
+
+/* ---------------- Escape closes any open modal ---------------- */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  closePoolModal();
+  closeAdvertiserModal();
+});
+
+/* ---------------- Image generation (via Supabase Edge Function) ---------------- */
+const SUGGESTION_POOL = [
+  "Long blonde hair, blue eyes, slim figure, sitting on a bench and holding a coffee, surrounded by trees.",
+  "Short dark hair, green eyes, athletic figure, walking down a city street while checking her phone.",
+  "Long black hair, brown eyes, petite figure, standing by a window and holding a glass, with a city view behind her.",
+  "Curly brown hair, hazel eyes, slim figure, walking on the beach while carrying a small bag.",
+  "Long auburn hair, green eyes, tall figure, sitting by a fountain and reading a book in a plaza.",
+  "Blonde hair, brown eyes, curvy figure, standing on a rooftop and taking a selfie, with the skyline behind her.",
+  "Curly black hair, dark eyes, athletic figure, walking along the shoreline while holding sunglasses.",
+  "Chestnut hair, gray-blue eyes, slim figure, sitting on stairs and drinking coffee in a modern lobby.",
+  "Long brown hair, green eyes, petite figure, standing by a pool and holding a cocktail, surrounded by tropical plants.",
+  "Wavy red hair, blue eyes, slender figure, walking through a field and holding wildflowers.",
+  "Straight blonde hair, green eyes, slim figure, standing in a kitchen and cutting fresh fruit.",
+  "Long brunette hair, brown eyes, athletic figure, jogging through a park while holding a water bottle.",
+  "Short blonde hair, blue eyes, petite figure, sitting at a café table and reading a newspaper.",
+  "Long curly hair, hazel eyes, slim figure, standing on a balcony and holding a cup of tea.",
+  "Dark brown hair, green eyes, tall figure, walking through a market while carrying a basket.",
+  "Wavy blonde hair, blue eyes, slim figure, sitting beside a lake and holding a camera.",
+  "Long black hair, dark eyes, petite figure, standing in a bookstore and browsing through a book.",
+  "Curly red hair, green eyes, slender figure, walking through a garden while holding a flower.",
+  "Brown hair, hazel eyes, athletic figure, sitting on a rock and drinking from a water bottle.",
+  "Long blonde hair, gray eyes, slim figure, standing near a waterfall and taking a photo.",
+  "Short brunette hair, brown eyes, petite figure, walking through an airport while pulling a suitcase.",
+  "Long black hair, green eyes, slim figure, sitting at an outdoor café and using a laptop.",
+  "Wavy brown hair, blue eyes, athletic figure, standing beside a bicycle and checking a map.",
+  "Long red hair, hazel eyes, tall figure, walking through a forest while carrying a backpack.",
+  "Blonde hair, green eyes, petite figure, sitting on a balcony and holding a book.",
+  "Dark curly hair, brown eyes, slim figure, standing beside a lake and throwing stones into the water.",
+  "Long brunette hair, blue eyes, athletic figure, walking across a bridge while holding a camera.",
+  "Short red hair, green eyes, slim figure, sitting in a park and sketching in a notebook.",
+  "Long blonde hair, brown eyes, tall figure, standing in a flower shop and holding a bouquet.",
+  "Black wavy hair, dark eyes, petite figure, walking through a hotel lobby while carrying a suitcase.",
+  "Chestnut hair, green eyes, slim figure, sitting near a fireplace and holding a warm drink.",
+  "Long blonde hair, blue eyes, athletic figure, standing beside a tennis court and holding a racket.",
+  "Curly brunette hair, hazel eyes, petite figure, walking through a museum while holding a brochure.",
+  "Straight black hair, brown eyes, slim figure, sitting beside a window and writing in a notebook.",
+  "Long auburn hair, green eyes, athletic figure, standing on a hiking trail and checking her phone.",
+  "Blonde wavy hair, gray eyes, slim figure, walking beside a river while holding a camera.",
+  "Dark brown hair, blue eyes, petite figure, sitting at a restaurant table and holding a menu.",
+  "Long black hair, hazel eyes, tall figure, standing in a garden and watering flowers.",
+  "Short blonde hair, green eyes, athletic figure, walking through a train station while carrying a backpack.",
+  "Wavy brunette hair, brown eyes, slim figure, sitting on a pier and holding a fishing rod.",
+  "Long red hair, blue eyes, petite figure, standing beside a vintage car and holding the keys.",
+  "Curly black hair, green eyes, slim figure, walking through a shopping street while holding a paper bag.",
+  "Blonde hair, hazel eyes, athletic figure, sitting on a picnic blanket and holding a basket.",
+  "Long brown hair, gray eyes, slender figure, standing beside a piano and holding sheet music.",
+  "Short dark hair, blue eyes, petite figure, walking through a rainy street while holding an umbrella.",
+  "Long blonde hair, green eyes, slim figure, sitting beside a swimming pool and reading a magazine.",
+  "Wavy auburn hair, brown eyes, athletic figure, standing on a mountain viewpoint and holding binoculars.",
+  "Long brunette hair, hazel eyes, petite figure, walking through an art gallery while holding a camera.",
+  "Straight black hair, green eyes, slim figure, sitting on a garden swing and holding a glass of lemonade.",
+  "Curly blonde hair, blue eyes, athletic figure, standing on a wooden dock and taking a photo of the lake."
+];
+
+function pickRandomSuggestions(n) {
+  const pool = [...SUGGESTION_POOL];
+  const picked = [];
+  while (picked.length < n && pool.length) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
+const promptForm = document.getElementById("promptForm");
+const promptInput = document.getElementById("promptInput");
+const generateBtn = document.getElementById("generateBtn");
+const generateBtnText = document.getElementById("generateBtnText");
+const generateBtnIcon = document.getElementById("generateBtnIcon");
+const loadingBox = document.getElementById("loadingBox");
+const errorBox = document.getElementById("errorBox");
+const resultArea = document.getElementById("resultArea");
+const resultImg = document.getElementById("resultImg");
+const retryBtn = document.getElementById("retryBtn");
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const suggestionPillsEl = document.getElementById("suggestionPills");
+
+function renderSuggestions() {
+  const picks = pickRandomSuggestions(3);
+  suggestionPillsEl.innerHTML = picks.map(text => `
+    <button type="button" class="suggestion-pill" data-text="${text}">
+      <span class="material-symbols-outlined" style="font-size:15px;">add</span>
+      "${text}"
+    </button>
+  `).join("");
+  suggestionPillsEl.querySelectorAll(".suggestion-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      promptInput.value = btn.dataset.text;
+      generateImage();
+    });
+  });
+}
+
+let isGenerating = false;
+let progressTimer = null;
+let currentProgress = 0;
+const ESTIMATED_DURATION_MS = 20000;
+
+function setProgress(pct) {
+  currentProgress = Math.max(currentProgress, Math.min(pct, 100));
+  progressBar.style.width = currentProgress + "%";
+  progressPercent.textContent = Math.round(currentProgress) + "%";
+}
+
+function startProgressAnimation() {
+  currentProgress = 0;
+  setProgress(0);
+  const startTime = Date.now();
+  clearInterval(progressTimer);
+  progressTimer = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    setProgress(Math.min(92, (elapsed / ESTIMATED_DURATION_MS) * 92));
+  }, 250);
+}
+
+function stopProgressAnimation() {
+  clearInterval(progressTimer);
+}
+
+function showState(name) {
+  [loadingBox, errorBox, resultArea].forEach(box => box.classList.remove("visible"));
+  if (name === "loading") {
+    hideHowItWorksNow();
+    loadingBox.classList.add("visible");
+  } else if (name === "error") {
+    errorBox.classList.add("visible");
+    showHowItWorksIfAllowed();
+  } else if (name === "result") {
+    hideHowItWorksPermanently();
+    resultArea.classList.add("visible");
+  }
+}
+
+async function generateImage() {
+  if (isGenerating) return;
+
+  const continuation = promptInput.value.trim();
+  if (!continuation) {
+    promptInput.focus();
+    return;
+  }
+
+  isGenerating = true;
+  generateBtn.disabled = true;
+  hideExampleDemoPermanently();
+  showState("loading");
+  startProgressAnimation();
+
+  try {
+    const res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "apikey": SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ prompt: continuation, visitor_id: visitorId })
+    });
+
+    const data = await res.json();
+    if (data.status !== "success" || !data.image_url) {
+      throw new Error(data.message || "An error occurred while creating the image");
+    }
+
+    stopProgressAnimation();
+    setProgress(100);
+
+    resultImg.src = data.image_url;
+    showState("result");
+    if (typeof capturePostHogEvent === "function") {
+      capturePostHogEvent("image_generated", { prompt_length: continuation.length });
+    }
+    renderSuggestions();
+    generateBtnText.textContent = "Create another image";
+    generateBtnIcon.textContent = "refresh";
+
+  } catch (err) {
+    stopProgressAnimation();
+    showState("error");
+  } finally {
+    isGenerating = false;
+    generateBtn.disabled = false;
+  }
+}
+
+promptForm.addEventListener("submit", (e) => { e.preventDefault(); generateImage(); });
+retryBtn.addEventListener("click", generateImage);
+
+/* ---------- Prompt wizard ---------- */
+const WIZARD_GALLERY = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations";
+const WIZARD_STEPS = [
+  {
+    title: "How does she look?",
+    subtitle: "Choose hair, skin, and body type.",
+    options: [
+      {
+        label: "Blonde, sun-kissed",
+        prompt: "blonde hair, sun-kissed skin, soft natural smile",
+        img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Brunette, athletic",
+        prompt: "brunette hair, olive skin, athletic fit body, playful eyes",
+        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Redhead, freckles",
+        prompt: "red hair, pale freckled skin, curvy hourglass figure",
+        img: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Dark hair, confident",
+        prompt: "long dark wavy hair, tan skin, voluptuous figure, confident gaze",
+        img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Platinum, slim",
+        prompt: "platinum blonde hair, fair skin, slim toned body",
+        img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Caramel waves",
+        prompt: "dark wavy hair, caramel skin, full figure, warm smile",
+        img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=480&h=360&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    mini: true,
+    focus: "chest",
+    title: "Breast size",
+    subtitle: "Pick one — we go to the next step automatically.",
+    options: [
+      {
+        label: "Small & petite",
+        prompt: "small petite breasts, natural proportions",
+        img: "assets/wizard/breast-small.jpg"
+      },
+      {
+        label: "Medium natural",
+        prompt: "medium natural breasts, balanced figure",
+        img: "assets/wizard/breast-medium.jpg"
+      },
+      {
+        label: "Large & full",
+        prompt: "large full breasts, voluptuous chest",
+        img: "assets/wizard/breast-large.jpg"
+      },
+      {
+        label: "Huge",
+        prompt: "huge breasts, very large chest, dramatic curves",
+        img: "assets/wizard/breast-huge.jpg"
+      }
+    ]
+  },
+  {
+    mini: true,
+    focus: "butt",
+    title: "Butt size",
+    subtitle: "Choose her shape — next step loads on its own.",
+    options: [
+      {
+        label: "Slim & tight",
+        prompt: "slim tight butt, lean lower body",
+        img: "assets/wizard/butt-slim.jpg"
+      },
+      {
+        label: "Round medium",
+        prompt: "round medium butt, balanced hips",
+        img: "assets/wizard/butt-medium.jpg"
+      },
+      {
+        label: "Curvy & full",
+        prompt: "curvy full butt, wide hips, hourglass back view",
+        img: "assets/wizard/butt-curvy.jpg"
+      },
+      {
+        label: "Thick bubble",
+        prompt: "thick bubble butt, athletic glutes, pronounced curves",
+        img: "assets/wizard/butt-thick.jpg"
+      }
+    ]
+  },
+  {
+    mini: true,
+    title: "What is she doing?",
+    subtitle: "Pick a sexy solo action — we jump to the next step automatically.",
+    options: [
+      {
+        label: "Playing with breasts",
+        prompt: "sensually squeezing and playing with her bare breasts, seductive eye contact",
+        img: `${WIZARD_GALLERY}/73a4a1db-036a-42f7-a85e-1971b144a4f6-0.jpg`
+      },
+      {
+        label: "Legs spread",
+        prompt: "lying back with legs spread open, inviting seductive pose, solo",
+        img: `${WIZARD_GALLERY}/6621c373-c6db-465b-aafa-16d57f49c9c5-0.jpg`
+      },
+      {
+        label: "Steamy shower",
+        prompt: "naked in a steamy shower, water running over her body, hands gliding over skin",
+        img: `${WIZARD_GALLERY}/78c29de2-dfa2-4f6b-b45f-5e7669ddf124-0.jpg`
+      },
+      {
+        label: "Teasing on bed",
+        prompt: "on luxury bed sheets, arching back and teasing the camera, hungry expression",
+        img: `${WIZARD_GALLERY}/1f474b37-2832-4218-97a7-c2dc91422f89-0.jpg`
+      }
+    ]
+  },
+  {
+    title: "Where is she?",
+    subtitle: "Pick the scene and lighting.",
+    options: [
+      {
+        label: "Tropical beach",
+        prompt: "on a tropical beach at golden hour, ocean in background",
+        img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Luxury bedroom",
+        prompt: "in a modern luxury bedroom with white sheets, soft window light",
+        img: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Infinity pool",
+        prompt: "beside a private infinity pool overlooking the ocean",
+        img: "https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Marble bathroom",
+        prompt: "in an elegant marble bathroom with warm steam and soft lighting",
+        img: "https://images.unsplash.com/photo-1620626011761-996317b8d101?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "City penthouse",
+        prompt: "in a penthouse with floor-to-ceiling city skyline windows at dusk",
+        img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Cozy cabin",
+        prompt: "inside a rustic wooden cabin with fireplace glow",
+        img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=480&h=360&fit=crop&q=80"
+      }
+    ]
+  },
+  {
+    title: "More sexy action",
+    subtitle: "Choose how far she goes — solo only.",
+    options: [
+      {
+        label: "Fingering herself",
+        prompt: "masturbating solo, fingers between her thighs, eyes closed in pleasure",
+        img: `${WIZARD_GALLERY}/6621c373-c6db-465b-aafa-16d57f49c9c5-0.jpg`
+      },
+      {
+        label: "Hands on hips tease",
+        prompt: "standing naked, hands on hips, biting lip, daring the viewer",
+        img: `${WIZARD_GALLERY}/2e24eea8-b52e-4cf1-8e4a-affabd7c1fae-0.jpg`
+      },
+      {
+        label: "Bent over tease",
+        prompt: "bent forward showing ass and back, looking over shoulder seductively, solo",
+        img: `${WIZARD_GALLERY}/3803e0a8-df23-41d8-bf1d-e71bbeda2b05-0.jpg`
+      },
+      {
+        label: "Pool seduction",
+        prompt: "naked in the pool, wet skin glistening, sensual wet hair, inviting smile",
+        img: `${WIZARD_GALLERY}/f5edad0f-a37e-434c-947e-b4b81d4b24ba-0.jpg`
+      },
+      {
+        label: "Casino vixen",
+        prompt: "topless at a poker table, confident smirk, owning the room, solo",
+        img: `${WIZARD_GALLERY}/c0a5265b-aed9-46d8-ba37-a3ace4bf1536-0.jpg`
+      },
+      {
+        label: "Slow body caress",
+        prompt: "running both hands slowly over her naked body, head tilted back, moaning softly",
+        img: `${WIZARD_GALLERY}/73a4a1db-036a-42f7-a85e-1971b144a4f6-0.jpg`
+      }
+    ]
+  }
+];
+
+const wizardOverlay = document.getElementById("wizardOverlay");
+const wizardOpenBtn = document.getElementById("wizardOpenBtn");
+const wizardCloseBtn = document.getElementById("wizardCloseBtn");
+const wizardTitle = document.getElementById("wizardTitle");
+const wizardSubtitle = document.getElementById("wizardSubtitle");
+const wizardMiniTag = document.getElementById("wizardMiniTag");
+const wizardStepDots = document.getElementById("wizardStepDots");
+const wizardOptions = document.getElementById("wizardOptions");
+const wizardBackBtn = document.getElementById("wizardBackBtn");
+const wizardNextBtn = document.getElementById("wizardNextBtn");
+
+let wizardStepIndex = 0;
+const wizardSelections = [];
+let wizardAdvanceTimer = null;
+
+function wizardGoNextOrFinish() {
+  if (!wizardSelections[wizardStepIndex]) return;
+  if (wizardStepIndex < WIZARD_STEPS.length - 1) {
+    wizardStepIndex += 1;
+    renderWizardStep();
+  } else {
+    finishWizard();
+  }
+}
+
+function buildWizardPrompt() {
+  const core = wizardSelections.filter(Boolean).map(s => s.prompt).join(", ");
+  return `${core}, solo woman alone, photorealistic, natural lighting, high detail`;
+}
+
+function renderWizardStep() {
+  const step = WIZARD_STEPS[wizardStepIndex];
+  wizardTitle.textContent = step.title;
+  wizardSubtitle.textContent = step.subtitle;
+  if (wizardMiniTag) {
+    wizardMiniTag.hidden = !step.mini;
+  }
+  wizardOptions.classList.toggle("is-mini", !!step.mini);
+  wizardOptions.classList.toggle("is-focus-chest", step.focus === "chest");
+  wizardOptions.classList.toggle("is-focus-butt", step.focus === "butt");
+
+  wizardStepDots.innerHTML = WIZARD_STEPS.map((_, i) => {
+    let cls = "wizard-step-dot";
+    if (i === wizardStepIndex) cls += " active";
+    else if (i < wizardStepIndex) cls += " done";
+    return `<span class="${cls}"></span>`;
+  }).join("");
+
+  const selectedIdx = wizardSelections[wizardStepIndex]
+    ? step.options.indexOf(wizardSelections[wizardStepIndex])
+    : -1;
+
+  wizardOptions.innerHTML = step.options.map((opt, i) => `
+    <button type="button" class="wizard-option${i === selectedIdx ? " selected" : ""}" data-index="${i}">
+      <img src="${opt.img}" alt="" loading="lazy" width="480" height="360" referrerpolicy="no-referrer" decoding="async">
+      <span class="wizard-option-label">${opt.label}</span>
+    </button>
+  `).join("");
+
+  wizardOptions.querySelectorAll(".wizard-option").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.dataset.index);
+      wizardSelections[wizardStepIndex] = step.options[idx];
+      wizardOptions.querySelectorAll(".wizard-option").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+      wizardNextBtn.disabled = false;
+      clearTimeout(wizardAdvanceTimer);
+      wizardAdvanceTimer = setTimeout(wizardGoNextOrFinish, 350);
+    });
+  });
+
+  wizardBackBtn.disabled = wizardStepIndex === 0;
+  const isLast = wizardStepIndex === WIZARD_STEPS.length - 1;
+  wizardNextBtn.textContent = isLast ? "Create image" : "Next";
+  wizardNextBtn.disabled = !wizardSelections[wizardStepIndex];
+}
+
+function openWizard() {
+  clearTimeout(wizardAdvanceTimer);
+  wizardStepIndex = 0;
+  wizardSelections.length = 0;
+  renderWizardStep();
+  wizardOverlay.classList.add("visible");
+  wizardOverlay.setAttribute("aria-hidden", "false");
+  document.body.classList.add("gated");
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("wizard_opened");
+  }
+}
+
+function closeWizard() {
+  clearTimeout(wizardAdvanceTimer);
+  wizardOverlay.classList.remove("visible");
+  wizardOverlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("gated");
+}
+
+function finishWizard() {
+  const prompt = buildWizardPrompt();
+  closeWizard();
+  promptInput.value = prompt;
+  promptInput.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("wizard_completed");
+  }
+  generateImage();
+}
+
+wizardOpenBtn.addEventListener("click", openWizard);
+wizardCloseBtn.addEventListener("click", closeWizard);
+wizardOverlay.addEventListener("click", (e) => {
+  if (e.target === wizardOverlay) closeWizard();
+});
+wizardBackBtn.addEventListener("click", () => {
+  if (wizardStepIndex > 0) {
+    wizardStepIndex -= 1;
+    renderWizardStep();
+  }
+});
+wizardNextBtn.addEventListener("click", () => {
+  clearTimeout(wizardAdvanceTimer);
+  wizardGoNextOrFinish();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && wizardOverlay.classList.contains("visible")) {
+    closeWizard();
+  }
+});
+</script>
+</body>
+</html>
