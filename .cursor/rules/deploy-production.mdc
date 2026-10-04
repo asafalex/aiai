@@ -1,0 +1,24 @@
+---
+description: After completing user-requested changes, deploy everything to production
+alwaysApply: true
+---
+
+# Deploy to production after changes
+
+When the user asks you to implement, fix, or change something in this project, **finish by deploying to production** without waiting to be asked.
+
+## What to deploy
+
+| Changed area | Command (from repo root) |
+|--------------|---------------------------|
+| Static site (`*.html`, assets) | `vercel deploy --prod --yes` |
+| Edge Function (`supabase/functions/**`) | `supabase functions deploy generate-image --no-verify-jwt --project-ref mlrhoqapzmmjvtevclkf` |
+| DB schema / migrations | Apply via Supabase (SQL Editor or `supabase db push` if migrations exist) |
+
+Deploy only what actually changed. If both frontend and Edge Function changed, run both.
+
+## After deploy
+
+Briefly tell the user what was deployed and the production URL: https://api-kappa-dusky-81.vercel.app
+
+Do not skip deploy because the change seems small.

@@ -142,7 +142,7 @@
     display: block;
   }
   .brand:hover { color: var(--primary); }
-  nav { display: flex; gap: 22px; }
+  nav { display: flex; align-items: center; gap: 22px; }
   nav a {
     text-decoration: none;
     font-size: .88rem;
@@ -153,6 +153,38 @@
     transition: color .15s, border-color .15s;
   }
   nav a.active { color: var(--primary); border-color: var(--primary); }
+  .nav-wizard-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: inherit;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    padding: 8px 0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+  }
+  .nav-wizard-btn:hover { color: var(--primary); }
+  .nav-wizard-btn.active {
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+  .nav-new-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    line-height: 1.2;
+    color: #fff;
+    background: linear-gradient(135deg, #e53935, #ff7043);
+    box-shadow: 0 1px 4px rgba(229, 57, 53, .35);
+  }
 
   main { max-width: 720px; margin: 0 auto; padding: 40px 16px 70px; }
 
@@ -415,36 +447,57 @@
     align-items: flex-start;
     gap: 10px;
   }
+  @keyframes wizard-glow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.55), 0 2px 10px rgba(26, 115, 232, 0.25);
+      border-color: var(--primary);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(26, 115, 232, 0), 0 2px 14px rgba(26, 115, 232, 0.35);
+      border-color: var(--secondary);
+    }
+  }
+  @keyframes wizard-label-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.72; }
+  }
   .wizard-trigger {
     flex-shrink: 0;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    margin-top: 4px;
-    padding: 8px 12px;
-    border: none;
+    gap: 4px;
+    margin-top: 2px;
+    padding: 10px 11px;
+    max-width: 92px;
+    border: 2px solid var(--primary);
     border-radius: 16px;
-    background: linear-gradient(145deg, #fff8e1, #ffe082);
-    color: #b8860b;
+    background: linear-gradient(160deg, #e8f0fe 0%, #d2e3fc 100%);
+    color: var(--primary);
     font-family: inherit;
-    font-size: .72rem;
+    font-size: .62rem;
     font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: lowercase;
+    line-height: 1.25;
+    letter-spacing: .02em;
+    text-transform: none;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(184, 134, 11, .25);
-    transition: transform .12s, box-shadow .15s;
+    animation: wizard-glow-pulse 2.2s ease-in-out infinite;
+    transition: transform .12s;
   }
   .wizard-trigger:hover {
-    transform: scale(1.04);
-    box-shadow: 0 3px 12px rgba(184, 134, 11, .35);
+    transform: scale(1.05);
+    animation-play-state: paused;
   }
-  .wizard-trigger .wizard-star {
-    font-size: 22px;
-    font-variation-settings: "FILL" 1, "wght" 600;
-    color: #f9a825;
+  .wizard-trigger .wizard-trigger-icon {
+    font-size: 26px;
+    font-variation-settings: "FILL" 1, "wght" 500;
+    color: var(--primary);
+  }
+  .wizard-trigger .wizard-trigger-label {
+    display: block;
+    text-align: center;
+    animation: wizard-label-blink 2.2s ease-in-out infinite;
   }
   .wizard-overlay {
     position: fixed;
@@ -506,7 +559,7 @@
     gap: 5px;
     justify-content: center;
     margin-bottom: 18px;
-    max-width: 280px;
+    max-width: 320px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -537,11 +590,24 @@
   @media (min-width: 520px) {
     .wizard-options.is-mini { grid-template-columns: repeat(4, 1fr); }
   }
+  @media (min-width: 520px) {
+    .wizard-options.is-mini.is-mini-five { grid-template-columns: repeat(5, 1fr); }
+  }
   .wizard-options.is-mini .wizard-option img { aspect-ratio: 1; }
   .wizard-options.is-focus-chest .wizard-option img,
-  .wizard-options.is-focus-butt .wizard-option img {
+  .wizard-options.is-focus-butt .wizard-option img,
+  .wizard-options.is-focus-face .wizard-option img,
+  .wizard-options.is-focus-hair .wizard-option img {
     aspect-ratio: 1;
     object-fit: cover;
+  }
+  .wizard-options.is-wide-thumb .wizard-option img,
+  .wizard-options.is-wide-thumb .wizard-option-icon {
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
+  }
+  @media (min-width: 520px) {
+    .wizard-options.is-mini.is-mini-eight { grid-template-columns: repeat(4, 1fr); }
   }
   .wizard-options.is-mini .wizard-option-label {
     font-size: .7rem;
@@ -571,6 +637,13 @@
     overflow: hidden;
     transition: border-color .15s, box-shadow .15s, transform .12s;
   }
+  .wizard-option img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: linear-gradient(135deg, var(--surface-container), var(--primary-tint));
+  }
   .wizard-option:hover {
     border-color: var(--primary-tint);
     box-shadow: 0 4px 14px rgba(26, 115, 232, .15);
@@ -580,13 +653,6 @@
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(26, 115, 232, .2);
   }
-  .wizard-option img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    background: linear-gradient(135deg, var(--surface-container), var(--primary-tint));
-  }
   .wizard-option-label {
     display: block;
     padding: 10px 10px 12px;
@@ -594,6 +660,33 @@
     font-weight: 600;
     color: var(--on-surface);
     line-height: 1.35;
+  }
+  .wizard-options.is-icons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 520px) {
+    .wizard-options.is-icons { grid-template-columns: repeat(3, 1fr); }
+    .wizard-options.is-icons.is-mini-five { grid-template-columns: repeat(5, 1fr); }
+  }
+  .wizard-option-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    background: var(--primary-tint);
+    color: var(--primary);
+    transition: background .15s, color .15s;
+  }
+  .wizard-option-icon .material-symbols-outlined {
+    font-size: 46px;
+    font-variation-settings: "FILL" 0, "wght" 400;
+  }
+  .wizard-option.selected .wizard-option-icon {
+    background: var(--primary);
+    color: #fff;
+  }
+  .wizard-option.selected .wizard-option-icon .material-symbols-outlined {
+    font-variation-settings: "FILL" 1, "wght" 500;
   }
   .wizard-nav {
     display: flex;
@@ -696,10 +789,11 @@
     }
     #promptInput::placeholder { font-size: .72rem; }
     .wizard-trigger {
-      padding: 6px 8px;
-      font-size: .65rem;
+      padding: 8px 7px;
+      font-size: .58rem;
+      max-width: 78px;
     }
-    .wizard-trigger .wizard-star { font-size: 18px; }
+    .wizard-trigger .wizard-trigger-icon { font-size: 22px; }
     .prompt-example-label { text-align: left; }
     .prompt-example-btn {
       font-size: .76rem;
@@ -1002,6 +1096,28 @@
   }
 
   .g-desc { font-size: .92rem; color: var(--on-surface); margin: 0; line-height: 1.5; }
+  .g-desc-clamp { cursor: default; }
+  .g-desc-show-more {
+    color: var(--primary);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .gallery-desc-floater {
+    position: fixed;
+    z-index: 400;
+    max-width: min(340px, calc(100vw - 24px));
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--surface-container-high);
+    color: var(--on-surface);
+    font-size: .88rem;
+    font-weight: 500;
+    line-height: 1.45;
+    box-shadow: 0 8px 28px rgba(24, 28, 32, .22);
+    border: 1px solid var(--outline-variant);
+    pointer-events: none;
+  }
+  .gallery-desc-floater[hidden] { display: none !important; }
 
   .like-btn {
     align-self: flex-start;
@@ -1455,12 +1571,15 @@
 
 <header>
   <div class="header-inner">
-    <a href="#/" class="brand">
+    <a href="/" class="brand">
       <img class="brand-mark" src="assets/logo.svg" alt="Naked Woman" width="32" height="32">
       <span>Naked Woman</span>
     </a>
     <nav>
-      <a href="#/" id="navHome">Generate</a>
+      <a href="/" id="navHome">Generate</a>
+      <button type="button" class="nav-wizard-btn" id="navWizard">
+        Wizard <span class="nav-new-badge">NEW</span>
+      </button>
       <a href="#/gallery" id="navGallery">Gallery</a>
     </nav>
   </div>
@@ -1497,9 +1616,9 @@
         <p class="start-here"><span class="material-symbols-outlined" style="font-size:16px;">arrow_downward</span> Start here</p>
         <div class="prompt-bar prominent prompt-bar-has-wizard">
           <textarea id="promptInput" rows="3" placeholder="How she looks / What she is doing / Where she is"></textarea>
-          <button type="button" class="wizard-trigger" id="wizardOpenBtn" aria-label="Open prompt wizard">
-            <span class="material-symbols-outlined wizard-star" aria-hidden="true">star</span>
-            wizard
+          <button type="button" class="wizard-trigger" id="wizardOpenBtn" aria-label="Help me choose — step-by-step prompt builder">
+            <span class="material-symbols-outlined wizard-trigger-icon" aria-hidden="true">front_hand</span>
+            <span class="wizard-trigger-label">Help me choose</span>
           </button>
         </div>
         <div class="prompt-constraint">
@@ -1570,6 +1689,7 @@
     </form>
     <div class="gallery-grid" id="galleryGrid"></div>
     <div class="gallery-pager" id="galleryPager"></div>
+    <div id="galleryDescTooltip" class="gallery-desc-floater" hidden role="tooltip"></div>
   </div>
 </main>
 
@@ -1834,6 +1954,7 @@ const homeView = document.getElementById("homeView");
 const galleryView = document.getElementById("galleryView");
 const navHome = document.getElementById("navHome");
 const navGallery = document.getElementById("navGallery");
+const navWizard = document.getElementById("navWizard");
 
 const PAGE_SEO = {
   home: {
@@ -1901,8 +2022,9 @@ function route() {
   const isGallery = location.hash === "#/gallery";
   homeView.style.display = isGallery ? "none" : "block";
   galleryView.style.display = isGallery ? "block" : "none";
-  navHome.classList.toggle("active", !isGallery);
-  navGallery.classList.toggle("active", isGallery);
+  navHome.classList.remove("active");
+  navGallery.classList.remove("active");
+  if (navWizard) navWizard.classList.add("active");
   updatePageSeo(isGallery ? "gallery" : "home");
   if (isGallery) renderGallery();
   else if (!applyPendingClonePrompt()) focusPromptInput();
@@ -2011,7 +2133,71 @@ function galleryRankBadgeHTML(rank) {
   return `<div class="g-rank">#${rank}</div>`;
 }
 
-function galleryCardHTML(item, rank, openable = false) {
+const GALLERY_DESC_PREVIEW_LEN = 50;
+
+function galleryDescBlockHTML(descRaw, truncate) {
+  const full = escapeHtml(descRaw || "");
+  if (!truncate || !descRaw || descRaw.length <= GALLERY_DESC_PREVIEW_LEN) {
+    return `<p class="g-desc">${full}</p>`;
+  }
+  const preview = escapeHtml(descRaw.slice(0, GALLERY_DESC_PREVIEW_LEN));
+  return `<p class="g-desc g-desc-clamp" data-full-desc="${escapeAttr(descRaw)}">
+    ${preview}<span class="g-desc-show-more"> show more</span>
+  </p>`;
+}
+
+const galleryDescTooltipEl = document.getElementById("galleryDescTooltip");
+const galleryGridEl = document.getElementById("galleryGrid");
+
+function hideGalleryDescTooltip() {
+  if (!galleryDescTooltipEl) return;
+  galleryDescTooltipEl.hidden = true;
+  galleryDescTooltipEl.textContent = "";
+}
+
+function moveGalleryDescTooltip(clientX, clientY) {
+  if (!galleryDescTooltipEl) return;
+  const offsetX = 14;
+  const offsetY = 18;
+  galleryDescTooltipEl.style.left = "0px";
+  galleryDescTooltipEl.style.top = "0px";
+  galleryDescTooltipEl.hidden = false;
+
+  let x = clientX + offsetX;
+  let y = clientY + offsetY;
+  const rect = galleryDescTooltipEl.getBoundingClientRect();
+  const pad = 10;
+  if (x + rect.width > window.innerWidth - pad) {
+    x = Math.max(pad, clientX - rect.width - offsetX);
+  }
+  if (y + rect.height > window.innerHeight - pad) {
+    y = Math.max(pad, clientY - rect.height - offsetY);
+  }
+  galleryDescTooltipEl.style.left = `${x}px`;
+  galleryDescTooltipEl.style.top = `${y}px`;
+}
+
+if (galleryGridEl && galleryDescTooltipEl) {
+  galleryGridEl.addEventListener("mousemove", (e) => {
+    const clamp = e.target.closest(".g-desc-clamp[data-full-desc]");
+    if (!clamp || !galleryGridEl.contains(clamp)) {
+      hideGalleryDescTooltip();
+      return;
+    }
+    const full = clamp.getAttribute("data-full-desc");
+    if (!full) {
+      hideGalleryDescTooltip();
+      return;
+    }
+    if (galleryDescTooltipEl.textContent !== full) {
+      galleryDescTooltipEl.textContent = full;
+    }
+    moveGalleryDescTooltip(e.clientX, e.clientY);
+  });
+  galleryGridEl.addEventListener("mouseleave", hideGalleryDescTooltip);
+}
+
+function galleryCardHTML(item, rank, openable = false, truncateDesc = false) {
   const liked = likedSet.has(item.id);
   const descRaw = item.desc || "";
   const img = escapeHtml(item.img);
@@ -2028,7 +2214,7 @@ function galleryCardHTML(item, rank, openable = false) {
       ${galleryRankBadgeHTML(rank)}
       ${imageBlock}
       <div class="g-body">
-        <p class="g-desc">${desc}</p>
+        ${galleryDescBlockHTML(descRaw, truncateDesc)}
         <div class="g-actions">
           <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
             <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
@@ -2168,7 +2354,7 @@ function renderGallery() {
   const pageItems = filtered.slice(start, start + GALLERY_PAGE_SIZE);
   el.innerHTML = pageItems.map((item, i) => {
     const rank = gallerySort === "loved" ? start + i + 1 : null;
-    return galleryCardHTML(item, rank, true);
+    return galleryCardHTML(item, rank, true, true);
   }).join("");
 }
 
@@ -2672,46 +2858,102 @@ retryBtn.addEventListener("click", generateImage);
 const WIZARD_GALLERY = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations";
 const WIZARD_STEPS = [
   {
-    title: "How does she look?",
-    subtitle: "Choose hair, skin, and body type.",
+    mini: true,
+    miniFive: true,
+    icons: true,
+    title: "Choose age range",
+    subtitle: "Pick an age band — she is always 21 or older.",
     options: [
       {
-        label: "Blonde, sun-kissed",
-        prompt: "blonde hair, sun-kissed skin, soft natural smile",
-        img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=480&h=360&fit=crop&q=80"
+        label: "21 – 25",
+        icon: "face_2",
+        prompt: "21 to 25 years old, youthful adult woman"
       },
       {
-        label: "Brunette, athletic",
-        prompt: "brunette hair, olive skin, athletic fit body, playful eyes",
-        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=480&h=360&fit=crop&q=80"
+        label: "26 – 30",
+        icon: "face_3",
+        prompt: "26 to 30 years old, young adult woman"
       },
       {
-        label: "Redhead, freckles",
-        prompt: "red hair, pale freckled skin, curvy hourglass figure",
-        img: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=480&h=360&fit=crop&q=80"
+        label: "31 – 38",
+        icon: "face_4",
+        prompt: "31 to 38 years old, mature adult woman"
       },
       {
-        label: "Dark hair, confident",
-        prompt: "long dark wavy hair, tan skin, voluptuous figure, confident gaze",
-        img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=480&h=360&fit=crop&q=80"
+        label: "39 – 50",
+        icon: "face_5",
+        prompt: "39 to 50 years old, confident mature woman"
       },
       {
-        label: "Platinum, slim",
-        prompt: "platinum blonde hair, fair skin, slim toned body",
-        img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=480&h=360&fit=crop&q=80"
-      },
-      {
-        label: "Caramel waves",
-        prompt: "dark wavy hair, caramel skin, full figure, warm smile",
-        img: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=480&h=360&fit=crop&q=80"
+        label: "51 – 60",
+        icon: "elderly_woman",
+        prompt: "51 to 60 years old, elegant mature woman"
       }
     ]
   },
   {
     mini: true,
+    focus: "face",
+    title: "Ethnicity",
+    subtitle: "Face only — pick the look that fits.",
+    options: [
+      {
+        label: "Caucasian",
+        prompt: "caucasian woman, fair to light skin",
+        img: "assets/wizard/eth-caucasian.jpg"
+      },
+      {
+        label: "Latina",
+        prompt: "latina woman, warm tan skin, latin features",
+        img: "assets/wizard/eth-latina.jpg"
+      },
+      {
+        label: "Black",
+        prompt: "black woman, rich brown skin, african features",
+        img: "assets/wizard/eth-black.jpg"
+      },
+      {
+        label: "Asian",
+        prompt: "asian woman, east asian features",
+        img: "assets/wizard/eth-asian.jpg"
+      }
+    ]
+  },
+  {
+    mini: true,
+    thumbWide: true,
+    focus: "hair",
+    title: "Choose hair color",
+    subtitle: "Back of head — hair color swatch.",
+    options: [
+      {
+        label: "Blonde",
+        prompt: "blonde hair",
+        img: "assets/wizard/hair-blonde.jpg"
+      },
+      {
+        label: "Brunette",
+        prompt: "brunette brown hair",
+        img: "assets/wizard/hair-brunette.jpg"
+      },
+      {
+        label: "Black",
+        prompt: "black dark hair",
+        img: "assets/wizard/hair-black.jpg"
+      },
+      {
+        label: "Red / Auburn",
+        prompt: "red auburn hair, freckles optional",
+        img: "assets/wizard/hair-red.jpg"
+      }
+    ]
+  },
+  {
+    mini: true,
+    thumbWide: true,
     focus: "chest",
     title: "Breast size",
-    subtitle: "Pick one — we go to the next step automatically.",
+    subtitle: "Chest in a bra — pick a size preview.",
     options: [
       {
         label: "Small & petite",
@@ -2764,33 +3006,6 @@ const WIZARD_STEPS = [
     ]
   },
   {
-    mini: true,
-    title: "What is she doing?",
-    subtitle: "Pick a sexy solo action — we jump to the next step automatically.",
-    options: [
-      {
-        label: "Playing with breasts",
-        prompt: "sensually squeezing and playing with her bare breasts, seductive eye contact",
-        img: `${WIZARD_GALLERY}/73a4a1db-036a-42f7-a85e-1971b144a4f6-0.jpg`
-      },
-      {
-        label: "Legs spread",
-        prompt: "lying back with legs spread open, inviting seductive pose, solo",
-        img: `${WIZARD_GALLERY}/6621c373-c6db-465b-aafa-16d57f49c9c5-0.jpg`
-      },
-      {
-        label: "Steamy shower",
-        prompt: "naked in a steamy shower, water running over her body, hands gliding over skin",
-        img: `${WIZARD_GALLERY}/78c29de2-dfa2-4f6b-b45f-5e7669ddf124-0.jpg`
-      },
-      {
-        label: "Teasing on bed",
-        prompt: "on luxury bed sheets, arching back and teasing the camera, hungry expression",
-        img: `${WIZARD_GALLERY}/1f474b37-2832-4218-97a7-c2dc91422f89-0.jpg`
-      }
-    ]
-  },
-  {
     title: "Where is she?",
     subtitle: "Pick the scene and lighting.",
     options: [
@@ -2823,42 +3038,83 @@ const WIZARD_STEPS = [
         label: "Cozy cabin",
         prompt: "inside a rustic wooden cabin with fireplace glow",
         img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Home gym",
+        prompt: "in a modern home gym with mirrors and soft lighting",
+        img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Rooftop bar",
+        prompt: "on a rooftop bar at sunset, city lights in the background",
+        img: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Night club",
+        prompt: "inside a stylish night club with neon lights and dance floor glow",
+        img: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=480&h=360&fit=crop&q=80"
+      },
+      {
+        label: "Spa sauna",
+        prompt: "in a wooden spa sauna with warm steam and soft amber light",
+        img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=480&h=360&fit=crop&q=80"
       }
     ]
   },
   {
-    title: "More sexy action",
-    subtitle: "Choose how far she goes — solo only.",
+    icons: true,
+    title: "What is she doing?",
+    subtitle: "Tap an icon — pose or action, solo.",
     options: [
       {
-        label: "Fingering herself",
-        prompt: "masturbating solo, fingers between her thighs, eyes closed in pleasure",
-        img: `${WIZARD_GALLERY}/6621c373-c6db-465b-aafa-16d57f49c9c5-0.jpg`
+        label: "Standing",
+        icon: "accessibility_new",
+        prompt: "standing naked, facing camera, relaxed natural posture"
       },
       {
-        label: "Hands on hips tease",
-        prompt: "standing naked, hands on hips, biting lip, daring the viewer",
-        img: `${WIZARD_GALLERY}/2e24eea8-b52e-4cf1-8e4a-affabd7c1fae-0.jpg`
+        label: "Lying down",
+        icon: "bed",
+        prompt: "lying down on her back, naked, looking at camera"
       },
       {
-        label: "Bent over tease",
-        prompt: "bent forward showing ass and back, looking over shoulder seductively, solo",
-        img: `${WIZARD_GALLERY}/3803e0a8-df23-41d8-bf1d-e71bbeda2b05-0.jpg`
+        label: "Sitting",
+        icon: "event_seat",
+        prompt: "sitting naked, legs together or slightly apart, looking at viewer"
       },
       {
-        label: "Pool seduction",
-        prompt: "naked in the pool, wet skin glistening, sensual wet hair, inviting smile",
-        img: `${WIZARD_GALLERY}/f5edad0f-a37e-434c-947e-b4b81d4b24ba-0.jpg`
+        label: "Leaning",
+        icon: "door_front",
+        prompt: "leaning against wall or window frame, naked, casual sensual pose"
       },
       {
-        label: "Casino vixen",
-        prompt: "topless at a poker table, confident smirk, owning the room, solo",
-        img: `${WIZARD_GALLERY}/c0a5265b-aed9-46d8-ba37-a3ace4bf1536-0.jpg`
+        label: "Running",
+        icon: "directions_run",
+        prompt: "running naked along the beach, hair flowing, dynamic motion"
       },
       {
-        label: "Slow body caress",
-        prompt: "running both hands slowly over her naked body, head tilted back, moaning softly",
-        img: `${WIZARD_GALLERY}/73a4a1db-036a-42f7-a85e-1971b144a4f6-0.jpg`
+        label: "Jumping",
+        icon: "sports_gymnastics",
+        prompt: "jumping in the air naked, joyful energetic motion, hair flying"
+      },
+      {
+        label: "Dancing",
+        icon: "nightlife",
+        prompt: "dancing naked solo, rhythmic hip movement, playful energy"
+      },
+      {
+        label: "Swimming",
+        icon: "pool",
+        prompt: "swimming naked in clear water, wet skin glistening"
+      },
+      {
+        label: "Yoga stretch",
+        icon: "self_improvement",
+        prompt: "naked yoga stretch pose, flexible calm body, solo"
+      },
+      {
+        label: "Showering",
+        icon: "shower",
+        prompt: "showering naked, water streaming over body, steamy bathroom"
       }
     ]
   }
@@ -2902,8 +3158,14 @@ function renderWizardStep() {
     wizardMiniTag.hidden = !step.mini;
   }
   wizardOptions.classList.toggle("is-mini", !!step.mini);
+  wizardOptions.classList.toggle("is-mini-five", !!step.miniFive);
+  wizardOptions.classList.toggle("is-mini-eight", !!step.miniEight);
+  wizardOptions.classList.toggle("is-wide-thumb", !!step.thumbWide);
   wizardOptions.classList.toggle("is-focus-chest", step.focus === "chest");
   wizardOptions.classList.toggle("is-focus-butt", step.focus === "butt");
+  wizardOptions.classList.toggle("is-focus-face", step.focus === "face");
+  wizardOptions.classList.toggle("is-focus-hair", step.focus === "hair");
+  wizardOptions.classList.toggle("is-icons", !!step.icons);
 
   wizardStepDots.innerHTML = WIZARD_STEPS.map((_, i) => {
     let cls = "wizard-step-dot";
@@ -2916,12 +3178,16 @@ function renderWizardStep() {
     ? step.options.indexOf(wizardSelections[wizardStepIndex])
     : -1;
 
-  wizardOptions.innerHTML = step.options.map((opt, i) => `
+  wizardOptions.innerHTML = step.options.map((opt, i) => {
+    const visual = opt.icon
+      ? `<span class="wizard-option-icon"><span class="material-symbols-outlined">${opt.icon}</span></span>`
+      : `<img src="${opt.img}" alt="" loading="lazy" width="480" height="360" referrerpolicy="no-referrer" decoding="async">`;
+    return `
     <button type="button" class="wizard-option${i === selectedIdx ? " selected" : ""}" data-index="${i}">
-      <img src="${opt.img}" alt="" loading="lazy" width="480" height="360" referrerpolicy="no-referrer" decoding="async">
+      ${visual}
       <span class="wizard-option-label">${opt.label}</span>
-    </button>
-  `).join("");
+    </button>`;
+  }).join("");
 
   wizardOptions.querySelectorAll(".wizard-option").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -2973,6 +3239,14 @@ function finishWizard() {
 }
 
 wizardOpenBtn.addEventListener("click", openWizard);
+if (navWizard) navWizard.addEventListener("click", openWizard);
+
+if (new URLSearchParams(location.search).get("wizard") === "1") {
+  const cleanUrl = new URL(location.href);
+  cleanUrl.searchParams.delete("wizard");
+  history.replaceState(null, "", cleanUrl.pathname + cleanUrl.search + cleanUrl.hash);
+  openWizard();
+}
 wizardCloseBtn.addEventListener("click", closeWizard);
 wizardOverlay.addEventListener("click", (e) => {
   if (e.target === wizardOverlay) closeWizard();

@@ -58,10 +58,9 @@ async function logGeneration(row: {
   error_message: string | null;
   duration_ms: number;
 }) {
-  try {
-    await supabase.from("generations").insert(row);
-  } catch (_e) {
-    // logging failure shouldn't break the user-facing response
+  const { error } = await supabase.from("generations").insert(row);
+  if (error) {
+    console.error("generations insert failed:", error.message);
   }
 }
 
@@ -139,6 +138,23 @@ Deno.serve(async (req) => {
       (finalData.proxy_links && finalData.proxy_links[0]);
 
     if (!imageUrl) throw new Error("לא התקבלה תמונה מהשרת");
+
+    try {
+      const { data: existing } = await supabase
+        .from("gallery_images")
+        .select("id")
+        .eq("image_url", imageUrl)
+        .maybeSingle();
+      if (!existing) {
+        await supabase.from("gallery_images").insert({
+          image_url: imageUrl,
+          description: prompt.slice(0, 500),
+          base_likes: 0,
+        });
+      }
+    } catch (_e) {
+      // gallery insert failure shouldn't break the user-facing response
+    }
 
     await logGeneration({
       visitor_id: visitorId,

@@ -3,71 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naked Woman Site — Free AI Image Generator</title>
-<meta name="description" id="metaDescription" content="Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery and generate your photo on Naked Woman Site.">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="author" content="Naked Woman Site">
-<meta name="theme-color" content="#1a73e8">
-<link rel="canonical" id="canonicalLink" href="https://nakedwoman.site/">
-<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Naked Woman Site">
-<meta property="og:locale" content="en_US">
-<meta property="og:url" id="ogUrl" content="https://nakedwoman.site/">
-<meta property="og:title" id="ogTitle" content="Naked Woman Site — Free AI Image Generator">
-<meta property="og:description" id="ogDescription" content="Create custom AI images free in ~20 seconds. No account required. Describe anyone you want and get a custom photo.">
-<meta property="og:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
-<meta property="og:image:alt" content="Naked Woman Site logo">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twitterTitle" content="Naked Woman Site — Free AI Image Generator">
-<meta name="twitter:description" id="twitterDescription" content="Create custom AI images free in ~20 seconds. No account required.">
-<meta name="twitter:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://nakedwoman.site/#website",
-      "url": "https://nakedwoman.site/",
-      "name": "Naked Woman Site",
-      "description": "Free AI image generator — describe who you want to see and get a custom photo in about 20 seconds.",
-      "inLanguage": "en-US",
-      "publisher": { "@id": "https://nakedwoman.site/#organization" }
-    },
-    {
-      "@type": "Organization",
-      "@id": "https://nakedwoman.site/#organization",
-      "name": "Naked Woman Site",
-      "url": "https://nakedwoman.site/",
-      "email": "ai@nakedwoman.site",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://nakedwoman.site/assets/logo.svg"
-      }
-    },
-    {
-      "@type": "WebApplication",
-      "name": "Naked Woman Site AI Generator",
-      "url": "https://nakedwoman.site/",
-      "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "Any",
-      "browserRequirements": "Requires JavaScript. Requires HTML5.",
-      "inLanguage": "en-US",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "Generate custom AI images from a text prompt. Free to use with no signup."
-    }
-  ]
-}
-</script>
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script src="posthog-config.js"></script>
-<script src="posthog-init.js"></script>
+<title>Naked Woman Site — V2 Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -126,23 +62,14 @@
     justify-content: space-between;
   }
   .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
     color: var(--on-surface);
     cursor: pointer;
   }
-  .brand-mark {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    display: block;
-  }
   .brand:hover { color: var(--primary); }
-  nav { display: flex; align-items: center; gap: 22px; }
+  nav { display: flex; gap: 22px; }
   nav a {
     text-decoration: none;
     font-size: .88rem;
@@ -153,24 +80,6 @@
     transition: color .15s, border-color .15s;
   }
   nav a.active { color: var(--primary); border-color: var(--primary); }
-  .nav-wizard-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .nav-wizard-link:hover { color: var(--primary); }
-  .nav-new-badge {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: .58rem;
-    font-weight: 800;
-    letter-spacing: .05em;
-    line-height: 1.2;
-    color: #fff;
-    background: linear-gradient(135deg, #e53935, #ff7043);
-    box-shadow: 0 1px 4px rgba(229, 57, 53, .35);
-  }
 
   main { max-width: 720px; margin: 0 auto; padding: 40px 16px 70px; }
 
@@ -201,8 +110,7 @@
     border: none;
     box-shadow: 0 2px 8px rgba(15, 157, 88, 0.35);
   }
-  .fixed-phrase,
-  h1.fixed-phrase {
+  .fixed-phrase {
     display: block;
     text-align: center;
     font-weight: 700;
@@ -243,11 +151,6 @@
     border-color: var(--primary);
     box-shadow: 0 4px 16px rgba(26, 115, 232, .22);
     padding: 10px 20px;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .prompt-bar.prominent:focus-within {
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(26, 115, 232, .25), 0 6px 20px rgba(26, 115, 232, .28);
   }
   .how-it-works {
     text-align: center;
@@ -260,23 +163,6 @@
     border-radius: 16px;
   }
   .how-it-works strong { color: var(--primary); font-weight: 600; }
-  .how-it-works[hidden],
-  .how-it-works.is-dismissed {
-    display: none !important;
-  }
-  #loadingBox.hero-loading-slot,
-  #resultArea.hero-result-slot {
-    margin-top: 0;
-    margin-bottom: 14px;
-  }
-  #loadingBox.hero-loading-slot {
-    padding: 16px 12px 14px;
-    background: var(--primary-tint);
-    border-radius: 16px;
-  }
-  #resultArea.hero-result-slot .suggestions {
-    margin-top: 14px;
-  }
   .start-here {
     display: flex;
     align-items: center;
@@ -296,36 +182,6 @@
     color: var(--on-surface);
     margin-bottom: 8px;
   }
-  .prompt-constraint {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-  }
-  .prompt-constraint-row {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 0;
-    cursor: default;
-    user-select: none;
-    text-align: center;
-  }
-  .prompt-constraint-row input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    flex-shrink: 0;
-    accent-color: var(--primary);
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-  .prompt-constraint-text {
-    font-size: .78rem;
-    font-weight: 500;
-    color: var(--on-surface-variant);
-    line-height: 1.45;
-  }
   .browse-gallery-cta {
     text-align: center;
     margin-top: 40px;
@@ -333,44 +189,9 @@
     border-top: 1px solid var(--outline-variant);
   }
   .browse-gallery-cta p {
-    margin: 0 0 14px;
+    margin: 0 0 10px;
     font-size: .85rem;
     color: var(--on-surface-variant);
-  }
-  .home-top-six {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px 10px;
-    width: 100%;
-    max-width: 420px;
-    margin: 0 auto 18px;
-  }
-  .home-top-six-item {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-  }
-  .home-top-six-thumb {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 1px 5px rgba(32, 33, 36, .1);
-  }
-  .home-top-six-thumb img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-  }
-  .home-top-six-desc {
-    margin: 6px 0 0;
-    font-size: .62rem;
-    line-height: 1.35;
-    color: var(--on-surface-variant);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
   .browse-gallery-cta a {
     display: inline-flex;
@@ -382,52 +203,6 @@
     font-size: .92rem;
   }
   .browse-gallery-cta a:hover { text-decoration: underline; }
-  .example-demo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 14px;
-    background: var(--surface-container-low);
-    border-radius: 16px;
-    margin-bottom: 12px;
-    text-align: left;
-  }
-  .example-demo[hidden],
-  .example-demo.is-dismissed {
-    display: none !important;
-  }
-  .example-demo img {
-    width: 88px;
-    height: 88px;
-    object-fit: cover;
-    border-radius: 12px;
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(32, 33, 36, .12);
-  }
-  .example-demo p {
-    margin: 0;
-    font-size: .78rem;
-    line-height: 1.45;
-    color: var(--on-surface-variant);
-  }
-  .example-demo em { color: var(--on-surface); font-style: normal; font-weight: 500; }
-  .onboarding-list {
-    text-align: left;
-    margin: 0 0 16px;
-    padding-left: 20px;
-    font-size: .88rem;
-    line-height: 1.55;
-    color: var(--on-surface-variant);
-  }
-  .onboarding-list li { margin-bottom: 8px; }
-  .onboarding-note {
-    font-size: .82rem;
-    color: var(--on-surface-variant);
-    margin: 0 0 18px;
-    line-height: 1.45;
-  }
-  .onboarding-note a { color: var(--primary); font-weight: 500; }
-  .prompt-bar.prominent { align-items: stretch; }
   #promptInput {
     flex: 1;
     min-width: 0;
@@ -438,11 +213,7 @@
     font-family: inherit;
     font-size: 1.02rem;
     color: var(--on-surface);
-    padding: 6px 0;
-    min-height: 4.25rem;
-    max-height: 7.5rem;
-    line-height: 1.45;
-    resize: vertical;
+    padding: 10px 0;
   }
   #promptInput::placeholder { color: var(--on-surface-variant); opacity: .55; }
 
@@ -557,14 +328,14 @@
   .pool-link-wrap {
     display: flex;
     justify-content: center;
-    margin-top: 28px;
+    margin-top: 12px;
   }
   .pool-link-row {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 10px;
     padding: 8px 18px;
     border-radius: 999px;
     border: 1.5px solid rgba(156, 39, 176, 0.38);
@@ -597,8 +368,7 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
-    padding: 4px 4px 4px 2px;
-    margin-inline-start: 4px;
+    padding: 4px;
   }
   .pool-link:hover { color: var(--secondary); }
 
@@ -627,6 +397,7 @@
   /* ---------- Loading / error / result ---------- */
   .state-box { display: none; margin-top: 32px; text-align: center; }
   .state-box.visible { display: block; }
+
   .progress-outer {
     max-width: 320px;
     margin: 0 auto 10px;
@@ -760,32 +531,6 @@
     padding: 2px 8px; border-radius: 999px;
     z-index: 2;
   }
-  .g-rank-top {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: .72rem;
-    font-weight: 700;
-    padding: 4px 10px 4px 7px;
-    box-shadow: 0 2px 8px rgba(32, 33, 36, .22);
-  }
-  .g-rank-trophy {
-    font-size: 15px;
-    line-height: 1;
-    font-variation-settings: "FILL" 1;
-  }
-  .g-rank-1 { background: linear-gradient(135deg, #ffe082, #f5b301); color: #3d2e00; }
-  .g-rank-2 { background: linear-gradient(135deg, #f0f0f0, #b8b8b8); color: #2a2a2a; }
-  .g-rank-3 { background: linear-gradient(135deg, #e8b87a, #cd7f32); color: #3d2208; }
-  .g-card-top-1 {
-    box-shadow: 0 0 0 2px rgba(245, 179, 1, .55), 0 4px 16px rgba(245, 179, 1, .22);
-  }
-  .g-card-top-2 {
-    box-shadow: 0 0 0 2px rgba(184, 184, 184, .65), 0 4px 14px rgba(120, 120, 120, .18);
-  }
-  .g-card-top-3 {
-    box-shadow: 0 0 0 2px rgba(205, 127, 50, .55), 0 4px 14px rgba(205, 127, 50, .2);
-  }
   @media (max-width: 560px) {
     .top-five-list .g-card { flex-direction: column; }
     .top-five-list .g-image { width: 100%; }
@@ -815,34 +560,6 @@
   .like-btn.shake { animation: shake .35s; }
   @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
-  .g-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-  }
-  .clone-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 7px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--outline-variant);
-    background: var(--surface-lowest);
-    color: var(--on-surface-variant);
-    font-family: inherit;
-    font-size: .85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .15s, color .15s, border-color .15s;
-  }
-  .clone-btn .material-symbols-outlined { font-size: 17px; }
-  .clone-btn:hover {
-    background: var(--primary-tint);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-
   .view-all-row { text-align: center; margin-top: 26px; }
   .view-all-link {
     display: inline-flex;
@@ -869,132 +586,6 @@
   .gallery-grid .g-card { display: flex; flex-direction: column; position: relative; }
   .gallery-grid .g-image { aspect-ratio: 4/3; background: var(--surface-container); }
   .gallery-grid .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .g-image-btn {
-    border: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    cursor: zoom-in;
-    font: inherit;
-    text-align: inherit;
-    background: none;
-    display: block;
-  }
-  .g-image-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-
-  .gallery-lightbox-card {
-    max-width: min(96vw, 1100px);
-    width: 100%;
-    padding: 16px 16px 20px;
-    text-align: left;
-    margin: auto;
-  }
-  #galleryLightbox.modal-overlay {
-    padding: 10px;
-    align-items: flex-start;
-  }
-  @media (min-width: 720px) {
-    #galleryLightbox.modal-overlay { align-items: center; padding: 16px; }
-    .gallery-lightbox-card { padding: 20px 22px 22px; }
-  }
-  .gallery-lightbox-frame {
-    border-radius: 16px;
-    overflow: hidden;
-    background: var(--surface-container);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 120px;
-    width: 100%;
-  }
-  .gallery-lightbox-frame img {
-    max-width: 100%;
-    max-height: min(88vh, 980px);
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    display: block;
-  }
-  .gallery-lightbox-desc {
-    margin: 14px 0 0;
-    font-size: .9rem;
-    line-height: 1.5;
-    color: var(--on-surface-variant);
-  }
-  .gallery-lightbox-share-label {
-    margin: 18px 0 10px;
-    font-size: .78rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--on-surface-variant);
-  }
-  .gallery-lightbox-actions { display: flex; flex-direction: column; gap: 10px; }
-  .gallery-lightbox-download {
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 18px;
-    border: none;
-    border-radius: 999px;
-    background: var(--primary);
-    color: #fff;
-    font-family: inherit;
-    font-size: .9rem;
-    font-weight: 500;
-    cursor: pointer;
-  }
-  .gallery-lightbox-download:hover { background: var(--primary-hover); }
-  .gallery-share-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  @media (min-width: 480px) {
-    .gallery-share-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  .gallery-share-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 8px;
-    border-radius: 12px;
-    border: 1px solid var(--outline-variant);
-    background: var(--surface-lowest);
-    color: var(--on-surface);
-    font-family: inherit;
-    font-size: .78rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background .15s, border-color .15s, color .15s;
-  }
-  .gallery-share-btn:hover {
-    background: var(--primary-tint);
-    border-color: var(--primary);
-    color: var(--primary);
-  }
-  .gallery-share-toast {
-    display: none;
-    margin-top: 8px;
-    font-size: .78rem;
-    color: var(--success);
-    text-align: center;
-  }
-  .gallery-share-toast.visible { display: block; }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
   .gallery-grid .g-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 960px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -1245,15 +836,9 @@
 
 <header>
   <div class="header-inner">
-    <a href="#/" class="brand">
-      <img class="brand-mark" src="assets/logo.svg" alt="Naked Woman" width="32" height="32">
-      <span>Naked Woman</span>
-    </a>
+    <a href="#/" class="brand">Naked Woman Site</a>
     <nav>
       <a href="#/" id="navHome">Generate</a>
-      <a href="index-wiz.html?wizard=1" class="nav-wizard-link" id="navWizard">
-        Wizard <span class="nav-new-badge">NEW</span>
-      </a>
       <a href="#/gallery" id="navGallery">Gallery</a>
     </nav>
   </div>
@@ -1265,41 +850,28 @@
     <form class="prompt-shell" id="promptForm">
       <span class="free-badge">100% free</span>
       <div class="prompt-hero">
-        <h1 class="fixed-phrase">
+        <span class="fixed-phrase">
           No need to fantasize anymore!
           <span class="fixed-phrase-desc">Describe the naked woman you want to see</span>
-        </h1>
+        </span>
+        <p class="prompt-note prompt-note-below-title">
+          <span class="prompt-note-star" aria-hidden="true">*</span>
+          She must be alone, no sexual positions
+        </p>
       </div>
-      <p class="how-it-works" id="howItWorks">Type what you want → tap <strong>Create my image</strong> → your custom photo in about 20 seconds. <strong>No account needed.</strong></p>
-      <div class="state-box hero-loading-slot" id="loadingBox">
-        <p class="progress-percent" id="progressPercent">0%</p>
-        <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
-        <p class="state-title">Creating your image…</p>
-        <p class="state-sub">This may take a few seconds, please wait</p>
-      </div>
-      <div class="state-box hero-result-slot" id="resultArea">
-        <div class="result-frame">
-          <img id="resultImg" alt="Generated image">
-        </div>
-        <div class="suggestions">
-          <span class="suggestion-label">More ideas:</span>
-          <div class="suggestion-pills" id="suggestionPills"></div>
-        </div>
-      </div>
+      <p class="how-it-works">Type what you want → tap <strong>Create my image</strong> → your custom photo in about 20 seconds. <strong>No account needed.</strong></p>
       <div class="prompt-stack">
         <p class="start-here"><span class="material-symbols-outlined" style="font-size:16px;">arrow_downward</span> Start here</p>
+        <label class="prompt-field-label" for="promptInput">Your prompt</label>
         <div class="prompt-bar prominent">
-          <textarea id="promptInput" rows="3" placeholder="How she looks / What she is doing / Where she is"></textarea>
+          <input type="text" id="promptInput" placeholder="How she looks / What she is doing / Where she is">
         </div>
-        <div class="prompt-constraint">
-          <label class="prompt-constraint-row">
-            <input type="checkbox" checked disabled aria-checked="true" aria-disabled="true" tabindex="-1">
-            <span class="prompt-constraint-text">She must be alone, no sexual positions</span>
-          </label>
-        </div>
-        <div class="example-demo" id="exampleDemo">
-          <img src="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/c0a5265b-aed9-46d8-ba37-a3ace4bf1536-0.jpg" alt="Example AI-generated result" loading="lazy">
-          <p>This was made from a short text prompt like: <em>“brunette Huge breasts in poker room...”</em></p>
+        <div class="prompt-example">
+          <span class="prompt-example-label">Example (tap to create):</span>
+          <button type="button" class="prompt-example-btn" id="promptExampleBtn">
+            <span class="material-symbols-outlined">add</span>
+            <span class="prompt-example-text"></span>
+          </button>
         </div>
         <button type="submit" id="generateBtn">
           <span class="material-symbols-outlined" style="font-size:18px;" id="generateBtnIcon">auto_awesome</span>
@@ -1315,6 +887,14 @@
       </div>
     </form>
 
+    <!-- Loading state -->
+    <div class="state-box" id="loadingBox">
+      <p class="progress-percent" id="progressPercent">0%</p>
+      <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
+      <p class="state-title">Creating your image…</p>
+      <p class="state-sub">This may take a few seconds, please wait</p>
+    </div>
+
     <!-- Error state -->
     <div class="state-box" id="errorBox">
       <div class="state-icon"><span class="material-symbols-outlined">error</span></div>
@@ -1323,9 +903,19 @@
       <button class="retry-btn" id="retryBtn">Try Again</button>
     </div>
 
+    <!-- Result state -->
+    <div class="state-box" id="resultArea">
+      <div class="result-frame">
+        <img id="resultImg" alt="Generated image">
+      </div>
+      <div class="suggestions">
+        <span class="suggestion-label">More ideas:</span>
+        <div class="suggestion-pills" id="suggestionPills"></div>
+      </div>
+    </div>
+
     <div class="browse-gallery-cta">
-      <p>See what others have created.</p>
-      <div class="home-top-six" id="homeTopSix" aria-hidden="false"></div>
+      <p>Already created by others? Browse — don’t confuse it with making your own.</p>
       <a href="#/gallery">
         <span>Open Gallery</span>
         <span class="material-symbols-outlined" style="font-size:18px;">photo_library</span>
@@ -1398,38 +988,6 @@
   </div>
 </div>
 
-<!-- Gallery image lightbox -->
-<div class="modal-overlay" id="galleryLightbox" aria-hidden="true">
-  <div class="modal-card gallery-lightbox-card" role="dialog" aria-modal="true" aria-labelledby="galleryLightboxTitle">
-    <button type="button" class="modal-close" id="galleryLightboxClose" aria-label="Close">
-      <span class="material-symbols-outlined">close</span>
-    </button>
-    <h3 id="galleryLightboxTitle" class="visually-hidden">Gallery image</h3>
-    <div class="gallery-lightbox-frame">
-      <img id="galleryLightboxImg" alt="">
-    </div>
-    <p class="gallery-lightbox-desc" id="galleryLightboxDesc"></p>
-    <p class="gallery-lightbox-share-label">Save or share</p>
-    <div class="gallery-lightbox-actions">
-      <button type="button" class="gallery-lightbox-download" id="galleryLightboxDownload">
-        <span class="material-symbols-outlined" style="font-size:20px;">download</span>
-        Save image
-      </button>
-      <div class="gallery-share-grid">
-        <button type="button" class="gallery-share-btn" data-share="native">Share…</button>
-        <button type="button" class="gallery-share-btn" data-share="whatsapp">WhatsApp</button>
-        <button type="button" class="gallery-share-btn" data-share="facebook">Facebook</button>
-        <button type="button" class="gallery-share-btn" data-share="x">X</button>
-        <button type="button" class="gallery-share-btn" data-share="telegram">Telegram</button>
-        <button type="button" class="gallery-share-btn" data-share="reddit">Reddit</button>
-        <button type="button" class="gallery-share-btn" data-share="email">Email</button>
-        <button type="button" class="gallery-share-btn" data-share="copy">Copy text</button>
-      </div>
-      <p class="gallery-share-toast" id="galleryShareToast">Copied to clipboard</p>
-    </div>
-  </div>
-</div>
-
 <!-- Advertiser request modal -->
 <div class="modal-overlay" id="advertiserModal">
   <div class="modal-card">
@@ -1498,10 +1056,6 @@ if (!visitorId) {
   visitorId = uuidv4();
   localStorage.setItem(VISITOR_ID_KEY, visitorId);
 }
-window.__onPostHogReady = function () {
-  if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
-};
-if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
 
 /* ---------------- Age gate (once per calendar day, localStorage) ---------------- */
 const AGE_GATE_KEY = "ageVerified18Day";
@@ -1513,88 +1067,14 @@ if (isAgeVerifiedToday()) {
   ageGate.classList.add("hidden");
   document.body.classList.remove("gated");
 }
-function shouldAutoFocusPrompt() {
-  return window.matchMedia("(min-width: 641px)").matches;
-}
-
-function focusPromptInput() {
-  if (location.hash === "#/gallery") return;
-  if (!isAgeVerifiedToday()) return;
-  if (!shouldAutoFocusPrompt()) return;
-  const input = document.getElementById("promptInput");
-  if (!input) return;
-  setTimeout(() => input.focus({ preventScroll: true }), 50);
-}
-
 document.getElementById("ageConfirmBtn").addEventListener("click", () => {
   localStorage.setItem(AGE_GATE_KEY, new Date().toDateString());
   ageGate.classList.add("hidden");
   document.body.classList.remove("gated");
-  focusPromptInput();
-  if (typeof capturePostHogEvent === "function") capturePostHogEvent("age_gate_confirmed");
 });
 document.getElementById("ageExitBtn").addEventListener("click", () => {
   window.location.href = "https://www.google.com";
 });
-if (isAgeVerifiedToday()) focusPromptInput();
-
-const EXAMPLE_DEMO_KEY = "v3ExampleDemoHidden";
-const HOW_IT_WORKS_KEY = "v3HowItWorksHidden";
-
-function syncExampleDemoVisibility() {
-  const el = document.getElementById("exampleDemo");
-  if (!el) return;
-  const dismissed = localStorage.getItem(EXAMPLE_DEMO_KEY) === "yes";
-  el.hidden = dismissed;
-  el.classList.toggle("is-dismissed", dismissed);
-}
-
-function hideExampleDemoPermanently() {
-  try {
-    localStorage.setItem(EXAMPLE_DEMO_KEY, "yes");
-  } catch (_) { /* still hide in UI */ }
-  const el = document.getElementById("exampleDemo");
-  if (el) {
-    el.hidden = true;
-    el.classList.add("is-dismissed");
-  }
-}
-
-syncExampleDemoVisibility();
-
-function syncHowItWorksVisibility() {
-  const el = document.getElementById("howItWorks");
-  if (!el) return;
-  const dismissed = localStorage.getItem(HOW_IT_WORKS_KEY) === "yes";
-  el.hidden = dismissed;
-  el.classList.toggle("is-dismissed", dismissed);
-}
-
-function hideHowItWorksPermanently() {
-  try {
-    localStorage.setItem(HOW_IT_WORKS_KEY, "yes");
-  } catch (_) {}
-  hideHowItWorksNow();
-}
-
-function hideHowItWorksNow() {
-  const el = document.getElementById("howItWorks");
-  if (el) {
-    el.hidden = true;
-    el.classList.add("is-dismissed");
-  }
-}
-
-function showHowItWorksIfAllowed() {
-  if (localStorage.getItem(HOW_IT_WORKS_KEY) === "yes") return;
-  const el = document.getElementById("howItWorks");
-  if (el) {
-    el.hidden = false;
-    el.classList.remove("is-dismissed");
-  }
-}
-
-syncHowItWorksVisibility();
 
 /* ---------------- Router ---------------- */
 const homeView = document.getElementById("homeView");
@@ -1602,91 +1082,16 @@ const galleryView = document.getElementById("galleryView");
 const navHome = document.getElementById("navHome");
 const navGallery = document.getElementById("navGallery");
 
-const PAGE_SEO = {
-  home: {
-    title: "Naked Woman Site — Free AI Image Generator",
-    description: "Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery on Naked Woman Site.",
-    canonical: "https://nakedwoman.site/",
-    ogUrl: "https://nakedwoman.site/"
-  },
-  gallery: {
-    title: "AI Image Gallery — Naked Woman Site",
-    description: "Browse AI-generated images from the community. Sort by most loved or recent. Like favorites and get inspired for your next free custom photo.",
-    canonical: "https://nakedwoman.site/#/gallery",
-    ogUrl: "https://nakedwoman.site/#/gallery"
-  }
-};
-
-function updatePageSeo(view) {
-  const seo = PAGE_SEO[view] || PAGE_SEO.home;
-  document.title = seo.title;
-  const desc = document.getElementById("metaDescription");
-  if (desc) desc.setAttribute("content", seo.description);
-  const canonical = document.getElementById("canonicalLink");
-  if (canonical) canonical.setAttribute("href", seo.canonical);
-  ["ogUrl", "ogTitle", "ogDescription", "twitterTitle", "twitterDescription"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (id === "ogUrl") el.setAttribute("content", seo.ogUrl);
-    else if (id.includes("Title")) el.setAttribute("content", seo.title);
-    else el.setAttribute("content", seo.description);
-  });
-}
-
-const CLONE_PROMPT_KEY = "pendingClonePrompt";
-
-function startCloneFromGallery(description) {
-  if (!description) return;
-  sessionStorage.setItem(CLONE_PROMPT_KEY, description);
-  if (location.hash === "#/gallery") {
-    location.hash = "#/";
-  } else {
-    applyPendingClonePrompt();
-  }
-}
-
-function applyPendingClonePrompt() {
-  const pending = sessionStorage.getItem(CLONE_PROMPT_KEY);
-  if (!pending) return false;
-  sessionStorage.removeItem(CLONE_PROMPT_KEY);
-  const input = document.getElementById("promptInput");
-  if (!input) return false;
-  input.value = pending;
-  setTimeout(() => {
-    input.focus({ preventScroll: true });
-    const end = pending.length;
-    input.setSelectionRange(end, end);
-    input.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, 50);
-  if (typeof capturePostHogEvent === "function") {
-    capturePostHogEvent("gallery_prompt_cloned");
-  }
-  return true;
-}
-
 function route() {
   const isGallery = location.hash === "#/gallery";
   homeView.style.display = isGallery ? "none" : "block";
   galleryView.style.display = isGallery ? "block" : "none";
   navHome.classList.toggle("active", !isGallery);
   navGallery.classList.toggle("active", isGallery);
-  updatePageSeo(isGallery ? "gallery" : "home");
   if (isGallery) renderGallery();
-  else if (!applyPendingClonePrompt()) focusPromptInput();
   window.scrollTo(0, 0);
-  if (typeof capturePostHogEvent === "function") {
-    capturePostHogEvent(isGallery ? "gallery_viewed" : "generate_viewed");
-  }
 }
 window.addEventListener("hashchange", route);
-
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".clone-btn");
-  if (!btn) return;
-  e.preventDefault();
-  e.stopPropagation();
-  startCloneFromGallery(btn.getAttribute("data-clone-desc") || "");
-});
 
 /* ---------------- Gallery data & likes quota (Supabase-backed) ---------------- */
 let galleryItems = [];
@@ -1764,48 +1169,23 @@ async function toggleLike(itemId, btn) {
 
   await loadGalleryItems();
   renderHomeFeed();
-  renderHomeTopSix();
   if (location.hash === "#/gallery") renderGallery();
   updateQuotaBadges();
   btn.disabled = false;
 }
 
-function galleryRankBadgeHTML(rank) {
-  if (!rank) return "";
-  if (rank <= 3) {
-    return `<div class="g-rank g-rank-top g-rank-${rank}" aria-label="Rank ${rank}"><span class="material-symbols-outlined g-rank-trophy" aria-hidden="true">emoji_events</span>#${rank}</div>`;
-  }
-  return `<div class="g-rank">#${rank}</div>`;
-}
-
-function galleryCardHTML(item, rank, openable = false) {
+function galleryCardHTML(item, rank) {
   const liked = likedSet.has(item.id);
-  const descRaw = item.desc || "";
-  const img = escapeHtml(item.img);
-  const desc = escapeHtml(descRaw);
-  const descAttr = escapeAttr(descRaw);
-  const topCardClass = rank && rank <= 3 ? ` g-card-top-${rank}` : "";
-  const imageBlock = openable
-    ? `<button type="button" class="g-image g-image-btn" data-image-url="${img}" data-desc="${desc}" aria-label="View larger image">
-        <img src="${img}" alt="${desc}" loading="lazy">
-      </button>`
-    : `<div class="g-image"><img src="${img}" alt="${desc}" loading="lazy"></div>`;
   return `
-    <article class="g-card${topCardClass}">
-      ${galleryRankBadgeHTML(rank)}
-      ${imageBlock}
+    <article class="g-card">
+      ${rank ? `<div class="g-rank">#${rank}</div>` : ""}
+      <div class="g-image"><img src="${item.img}" alt="${item.desc}" loading="lazy"></div>
       <div class="g-body">
-        <p class="g-desc">${desc}</p>
-        <div class="g-actions">
-          <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
-            <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
-            <span>${item.likes.toLocaleString("en-US")}</span>
-          </button>
-          <button type="button" class="clone-btn" data-clone-desc="${descAttr}" aria-label="Clone prompt to generator">
-            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
-            Clone
-          </button>
-        </div>
+        <p class="g-desc">${item.desc}</p>
+        <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
+          <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
+          <span>${item.likes.toLocaleString("en-US")}</span>
+        </button>
       </div>
     </article>`;
 }
@@ -1829,43 +1209,6 @@ function renderHomeFeed() {
     return;
   }
   el.innerHTML = getHomeFeedItems().map((item, i) => galleryCardHTML(item, i + 1)).join("");
-}
-
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str ?? "";
-  return div.innerHTML;
-}
-
-function escapeAttr(str) {
-  return String(str ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;");
-}
-
-function renderHomeTopSix() {
-  const el = document.getElementById("homeTopSix");
-  if (!el) return;
-  const top = [...galleryItems]
-    .sort((a, b) => {
-      const d = b.likes - a.likes;
-      if (d !== 0) return d;
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    })
-    .slice(0, 6);
-  if (!top.length) {
-    el.innerHTML = "";
-    return;
-  }
-  el.innerHTML = top.map((item) => {
-    const src = escapeHtml(item.img);
-    const desc = escapeHtml(item.desc || "");
-    return `<a class="home-top-six-item" href="#/gallery">
-      <div class="home-top-six-thumb"><img src="${src}" alt="" loading="lazy"></div>
-      <p class="home-top-six-desc">${desc}</p>
-    </a>`;
-  }).join("");
 }
 
 function getSortedGalleryItems() {
@@ -1935,7 +1278,7 @@ function renderGallery() {
   const pageItems = filtered.slice(start, start + GALLERY_PAGE_SIZE);
   el.innerHTML = pageItems.map((item, i) => {
     const rank = gallerySort === "loved" ? start + i + 1 : null;
-    return galleryCardHTML(item, rank, true);
+    return galleryCardHTML(item, rank);
   }).join("");
 }
 
@@ -1965,169 +1308,9 @@ document.getElementById("gallerySearchClear").addEventListener("click", () => {
   renderGallery();
 });
 
-const SITE_URL = "https://nakedwoman.site/";
-const galleryLightbox = document.getElementById("galleryLightbox");
-const galleryLightboxImg = document.getElementById("galleryLightboxImg");
-const galleryLightboxDesc = document.getElementById("galleryLightboxDesc");
-const galleryShareToast = document.getElementById("galleryShareToast");
-let galleryLightboxImageUrl = "";
-
-function getGalleryShareMessage(imageUrl) {
-  const lines = [
-    "I created this image on Naked Woman Site.",
-    "Describe anyone you want and get a custom photo in about 20 seconds — 100% free, no account needed.",
-    SITE_URL
-  ];
-  if (imageUrl) lines.push(imageUrl);
-  return lines.join("\n");
-}
-
-function openGalleryLightbox(imageUrl, description) {
-  galleryLightboxImageUrl = imageUrl || "";
-  galleryLightboxImg.src = imageUrl;
-  galleryLightboxImg.alt = description || "Gallery image";
-  galleryLightboxDesc.textContent = description || "";
-  galleryShareToast.classList.remove("visible");
-  galleryLightbox.classList.add("visible");
-  galleryLightbox.setAttribute("aria-hidden", "false");
-  document.body.classList.add("gated");
-  if (typeof capturePostHogEvent === "function") {
-    capturePostHogEvent("gallery_image_opened");
-  }
-}
-
-function closeGalleryLightbox() {
-  galleryLightbox.classList.remove("visible");
-  galleryLightbox.setAttribute("aria-hidden", "true");
-  document.body.classList.remove("gated");
-  galleryLightboxImg.removeAttribute("src");
-  galleryLightboxImageUrl = "";
-}
-
-document.getElementById("galleryGrid").addEventListener("click", (e) => {
-  const btn = e.target.closest(".g-image-btn");
-  if (!btn) return;
-  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
-});
-
-document.getElementById("galleryGrid").addEventListener("keydown", (e) => {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  const btn = e.target.closest(".g-image-btn");
-  if (!btn) return;
-  e.preventDefault();
-  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
-});
-
-document.getElementById("galleryLightboxClose").addEventListener("click", closeGalleryLightbox);
-galleryLightbox.addEventListener("click", (e) => {
-  if (e.target === galleryLightbox) closeGalleryLightbox();
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && galleryLightbox.classList.contains("visible")) {
-    closeGalleryLightbox();
-  }
-});
-
-async function downloadGalleryImage() {
-  const url = galleryLightboxImageUrl;
-  if (!url) return;
-  const filename = "nakedwoman-site-" + Date.now() + ".jpg";
-  try {
-    const res = await fetch(url, { mode: "cors" });
-    if (!res.ok) throw new Error("fetch failed");
-    const blob = await res.blob();
-    const objectUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = objectUrl;
-    a.download = filename;
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(objectUrl);
-    if (typeof capturePostHogEvent === "function") capturePostHogEvent("gallery_image_downloaded");
-  } catch {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-}
-
-document.getElementById("galleryLightboxDownload").addEventListener("click", downloadGalleryImage);
-
-function showGalleryShareToast() {
-  galleryShareToast.classList.add("visible");
-  setTimeout(() => galleryShareToast.classList.remove("visible"), 2200);
-}
-
-async function shareGalleryImage(channel) {
-  const imageUrl = galleryLightboxImageUrl;
-  const message = getGalleryShareMessage(imageUrl);
-  const encodedText = encodeURIComponent(message);
-  const encodedUrl = encodeURIComponent(SITE_URL);
-  const encodedImage = encodeURIComponent(imageUrl || SITE_URL);
-  const title = encodeURIComponent("I created this image on Naked Woman Site");
-
-  if (channel === "native") {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Naked Woman Site",
-          text: message,
-          url: SITE_URL
-        });
-        if (typeof capturePostHogEvent === "function") {
-          capturePostHogEvent("gallery_image_shared", { channel: "native" });
-        }
-        return;
-      } catch (err) {
-        if (err && err.name === "AbortError") return;
-      }
-    }
-    channel = "copy";
-  }
-
-  let shareUrl = "";
-  if (channel === "whatsapp") {
-    shareUrl = "https://api.whatsapp.com/send?text=" + encodedText;
-  } else if (channel === "facebook") {
-    shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl + "&quote=" + encodeURIComponent(message.split("\n")[0]);
-  } else if (channel === "x") {
-    shareUrl = "https://twitter.com/intent/tweet?text=" + encodedText;
-  } else if (channel === "telegram") {
-    shareUrl = "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodeURIComponent(message);
-  } else if (channel === "reddit") {
-    shareUrl = "https://www.reddit.com/submit?url=" + encodedImage + "&title=" + title;
-  } else if (channel === "email") {
-    shareUrl = "mailto:?subject=" + title + "&body=" + encodedText;
-  } else if (channel === "copy") {
-    try {
-      await navigator.clipboard.writeText(message);
-      showGalleryShareToast();
-      if (typeof capturePostHogEvent === "function") {
-        capturePostHogEvent("gallery_image_shared", { channel: "copy" });
-      }
-    } catch {
-      window.prompt("Copy this text:", message);
-    }
-    return;
-  }
-
-  if (shareUrl) {
-    window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=640");
-    if (typeof capturePostHogEvent === "function") {
-      capturePostHogEvent("gallery_image_shared", { channel });
-    }
-  }
-}
-
-document.querySelectorAll("#galleryLightbox .gallery-share-btn").forEach((btn) => {
-  btn.addEventListener("click", () => shareGalleryImage(btn.dataset.share));
-});
-
 async function initGallery() {
   await Promise.all([loadGalleryItems(), loadLikedSet(), loadRemainingQuota()]);
   renderHomeFeed();
-  renderHomeTopSix();
   updateQuotaBadges();
   route();
 }
@@ -2310,6 +1493,21 @@ function pickRandomSuggestions(n) {
   return picked;
 }
 
+const promptExampleBtn = document.getElementById("promptExampleBtn");
+
+function renderPromptExample() {
+  const text = pickRandomSuggestions(1)[0] || "";
+  promptExampleBtn.dataset.text = text;
+  promptExampleBtn.querySelector(".prompt-example-text").textContent = `"${text}"`;
+}
+
+promptExampleBtn.addEventListener("click", () => {
+  promptInput.value = promptExampleBtn.dataset.text || "";
+  generateImage();
+});
+
+renderPromptExample();
+
 const promptForm = document.getElementById("promptForm");
 const promptInput = document.getElementById("promptInput");
 const generateBtn = document.getElementById("generateBtn");
@@ -2368,16 +1566,9 @@ function stopProgressAnimation() {
 
 function showState(name) {
   [loadingBox, errorBox, resultArea].forEach(box => box.classList.remove("visible"));
-  if (name === "loading") {
-    hideHowItWorksNow();
-    loadingBox.classList.add("visible");
-  } else if (name === "error") {
-    errorBox.classList.add("visible");
-    showHowItWorksIfAllowed();
-  } else if (name === "result") {
-    hideHowItWorksPermanently();
-    resultArea.classList.add("visible");
-  }
+  if (name === "loading") loadingBox.classList.add("visible");
+  else if (name === "error") errorBox.classList.add("visible");
+  else if (name === "result") resultArea.classList.add("visible");
 }
 
 async function generateImage() {
@@ -2391,7 +1582,6 @@ async function generateImage() {
 
   isGenerating = true;
   generateBtn.disabled = true;
-  hideExampleDemoPermanently();
   showState("loading");
   startProgressAnimation();
 
@@ -2416,10 +1606,8 @@ async function generateImage() {
 
     resultImg.src = data.image_url;
     showState("result");
-    if (typeof capturePostHogEvent === "function") {
-      capturePostHogEvent("image_generated", { prompt_length: continuation.length });
-    }
     renderSuggestions();
+    renderPromptExample();
     generateBtnText.textContent = "Create another image";
     generateBtnIcon.textContent = "refresh";
 

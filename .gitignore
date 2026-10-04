@@ -2,3 +2,4 @@
 .claude
 stitch_design/
 stitch_ai_image_generator_website.zip
+.env*
