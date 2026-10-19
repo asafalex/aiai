@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Naked Woman">
+  <rect width="32" height="32" rx="8" fill="#E8F0FE"/>
+  <path fill="#1A73E8" d="M9.5 8h3.4v9.8L20.8 8H24v16h-3.4V14.2L12.7 24H9.5V8z"/>
+  <circle cx="24.5" cy="7.5" r="2.75" fill="#7C4DFF"/>
+</svg>

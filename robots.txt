@@ -4,5 +4,6 @@ Disallow: /admin.html
 Disallow: /index-v1.html
 Disallow: /index-v2.html
 Disallow: /index-wiz.html
+Disallow: /video.html
 
 Sitemap: https://nakedwoman.site/sitemap.xml

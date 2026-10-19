@@ -33,6 +33,20 @@ create table if not exists waitlist_signups (
 create unique index if not exists waitlist_signups_email_lower_idx
   on waitlist_signups (lower(email));
 
+-- ---------- dmca_notices ----------
+create table if not exists dmca_notices (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  phone text,
+  copyrighted_work text not null,
+  infringing_urls text not null,
+  additional_info text,
+  signature text not null,
+  status text not null default 'new' check (status in ('new','reviewing','resolved','rejected')),
+  created_at timestamptz not null default now()
+);
+
 -- ---------- advertiser_requests ----------
 create table if not exists advertiser_requests (
   id uuid primary key default gen_random_uuid(),
@@ -152,6 +166,7 @@ alter table gallery_images enable row level security;
 alter table likes enable row level security;
 alter table waitlist_signups enable row level security;
 alter table advertiser_requests enable row level security;
+alter table dmca_notices enable row level security;
 alter table generations enable row level security;
 alter table admin_users enable row level security;
 alter table app_settings enable row level security;
@@ -200,10 +215,27 @@ drop policy if exists "admin update advertiser requests" on advertiser_requests;
 create policy "admin update advertiser requests" on advertiser_requests
   for update using (is_admin()) with check (is_admin());
 
+-- dmca_notices: public insert only; admin reads/updates
+drop policy if exists "public submit dmca notice" on dmca_notices;
+create policy "public submit dmca notice" on dmca_notices
+  for insert with check (true);
+
+drop policy if exists "admin read dmca notices" on dmca_notices;
+create policy "admin read dmca notices" on dmca_notices
+  for select using (is_admin());
+
+drop policy if exists "admin update dmca notices" on dmca_notices;
+create policy "admin update dmca notices" on dmca_notices
+  for update using (is_admin()) with check (is_admin());
+
 -- generations: no public access at all; only the Edge Function (service role, bypasses RLS) writes; admins read
 drop policy if exists "admin read generations" on generations;
 create policy "admin read generations" on generations
   for select using (is_admin());
+
+drop policy if exists "admin delete generations" on generations;
+create policy "admin delete generations" on generations
+  for delete using (is_admin());
 
 -- admin_users: admins can see the admin list
 drop policy if exists "admin read admin_users" on admin_users;

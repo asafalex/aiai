@@ -130,6 +130,7 @@
   .pill-btn.on { background: var(--success-container); color: var(--success); }
   .pill-btn.off { background: var(--surface-container); color: var(--on-surface-variant); }
   .pill-btn.danger { background: var(--error-container); color: var(--on-error-container); }
+  .actions-cell { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .status-badge { padding: 4px 10px; border-radius: 999px; font-size: .72rem; font-weight: 500; }
   .status-badge.success { background: var(--success-container); color: var(--success); }
   .status-badge.error, .status-badge.timeout { background: var(--error-container); color: var(--on-error-container); }
@@ -545,10 +546,24 @@ async function loadHistoryTab() {
       <td><span class="status-badge ${row.status}">${statusLabels[row.status] || row.status}</span></td>
       <td>${row.duration_ms ? Math.round(row.duration_ms / 1000) + "s" : "-"}</td>
       <td>${new Date(row.created_at).toLocaleString("en-US")}</td>
-      <td>${row.image_url ? `<button class="pill-btn on" onclick="addToGallery('${row.image_url.replace(/'/g, "\\'")}', '${(row.prompt || "").replace(/'/g, "\\'")}')">Add to Gallery</button>` : "-"}</td>
+      <td class="actions-cell">
+        ${row.image_url ? `<button type="button" class="pill-btn on" onclick="addToGallery('${row.image_url.replace(/'/g, "\\'")}', '${(row.prompt || "").replace(/'/g, "\\'")}')">Add to Gallery</button>` : ""}
+        <button type="button" class="pill-btn danger" onclick="deleteGenerationHistory('${row.id}')">Delete</button>
+      </td>
     </tr>`).join("");
 }
 document.getElementById("refreshHistoryBtn").addEventListener("click", loadHistoryTab);
+
+async function deleteGenerationHistory(id) {
+  if (!confirm("Remove this entry from generation history?")) return;
+  const { error } = await sb.from("generations").delete().eq("id", id);
+  if (error) {
+    alert("Error deleting: " + error.message);
+    return;
+  }
+  loadHistoryTab();
+  loadStatsTab();
+}
 
 async function addToGallery(image_url, prompt) {
   const description = prompt.length > 120 ? prompt.slice(0, 120) + "…" : prompt;

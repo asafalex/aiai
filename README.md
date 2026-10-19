@@ -30,6 +30,9 @@ assets/gallery/                         Seed gallery images bundled with the sit
 supabase/schema.sql                     Full DB schema: tables, RLS policies, SQL functions, seed data
 supabase/functions/generate-image/      Edge Function: the only place that talks to ModelsLab
   index.ts
+supabase/functions/telegram-bot/        Telegram webhook: prompt in chat → image reply
+  index.ts
+scripts/telegram-set-webhook.sh         Register webhook with Telegram after deploy
 .vercelignore                           Excludes non-site files (this repo's supabase/ folder, design refs) from Vercel deploys
 ```
 
@@ -129,6 +132,30 @@ All in one `<script>` block, roughly in this order:
    ```
 5. Update `SUPABASE_URL` / `SUPABASE_ANON_KEY` constants at the top of `index.html` and `admin.html` if pointing at a different project.
 6. Deploy the static files to Vercel (or any static host).
+
+## Telegram bot
+
+Users send a text **prompt** in Telegram; the bot calls the same `generate-image` Edge Function and replies with the photo.
+
+1. Create a bot via [@BotFather](https://t.me/BotFather) and copy the token.
+2. Deploy the function:
+   ```bash
+   supabase functions deploy telegram-bot --no-verify-jwt --project-ref mlrhoqapzmmjvtevclkf
+   ```
+3. In Supabase → Edge Functions → Secrets, set:
+   - `TELEGRAM_BOT_TOKEN` — from BotFather
+   - `TELEGRAM_WEBHOOK_SECRET` — long random string (you choose)
+   - `SUPABASE_ANON_KEY` — project anon/publishable key (to call `generate-image`)
+4. Register the webhook:
+   ```bash
+   chmod +x scripts/telegram-set-webhook.sh
+   export TELEGRAM_BOT_TOKEN="..."
+   export TELEGRAM_WEBHOOK_SECRET="..."
+   ./scripts/telegram-set-webhook.sh
+   ```
+5. Open the bot in Telegram, send `/start`, then send an English prompt.
+
+Generation can take up to ~90 seconds; the bot sends a “creating…” message first.
 
 ## Known limitations
 

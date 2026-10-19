@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DMCA Policy — Naked Woman Site</title>
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nakedwoman.site/dmca.html">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+  :root {
+    --surface: #f7f9ff;
+    --surface-lowest: #ffffff;
+    --surface-container-low: #f1f4fa;
+    --on-surface: #181c20;
+    --on-surface-variant: #414754;
+    --outline-variant: #dadce0;
+    --primary: #1a73e8;
+    --primary-hover: #185abc;
+    --error: #ba1a1a;
+    --error-container: #ffdad6;
+    --success: #0f9d58;
+    --success-container: #d4f5e2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: "Rubik", Arial, sans-serif;
+  }
+  a { color: var(--primary); }
+  header {
+    position: sticky; top: 0; height: 60px;
+    background: rgba(247,249,255,.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 8px rgba(0,0,0,.04);
+    display: flex; align-items: center; z-index: 60;
+  }
+  .header-inner {
+    width: 100%; max-width: 780px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand { font-weight: 600; font-size: 1rem; text-decoration: none; color: var(--on-surface); }
+  .back-link { font-size: .85rem; text-decoration: none; color: var(--on-surface-variant); }
+  .back-link:hover { color: var(--primary); }
+  main { max-width: 780px; margin: 0 auto; padding: 40px 20px 80px; }
+  .doc-card {
+    background: var(--surface-lowest);
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 1px 6px rgba(32,33,36,.08);
+    margin-bottom: 24px;
+  }
+  h1 { font-size: 1.6rem; font-weight: 600; margin: 0 0 6px; }
+  .updated { font-size: .82rem; color: var(--on-surface-variant); margin: 0 0 28px; }
+  h2 { font-size: 1.08rem; font-weight: 600; margin: 28px 0 10px; }
+  p, li { font-size: .92rem; line-height: 1.7; color: var(--on-surface-variant); }
+  ul, ol { padding-left: 20px; margin: 8px 0; }
+  li { margin-bottom: 6px; }
+  strong { color: var(--on-surface); }
+  label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--on-surface-variant);
+  }
+  input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--outline-variant);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: .9rem;
+    background: var(--surface-lowest);
+    margin-bottom: 14px;
+  }
+  textarea { min-height: 88px; resize: vertical; line-height: 1.45; }
+  .check-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .check-row input { width: 18px; height: 18px; margin-top: 3px; flex-shrink: 0; accent-color: var(--primary); }
+  .check-row label { margin: 0; font-size: .88rem; line-height: 1.5; color: var(--on-surface-variant); }
+  button[type="submit"] {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  button[type="submit"]:hover { background: var(--primary-hover); }
+  button[type="submit"]:disabled { opacity: .55; cursor: not-allowed; }
+  .form-error {
+    display: none;
+    background: var(--error-container);
+    color: var(--error);
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: .88rem;
+    margin-bottom: 14px;
+  }
+  .form-error.visible { display: block; }
+  .form-success {
+    display: none;
+    background: var(--success-container);
+    color: var(--success);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: .9rem;
+  }
+  .form-success.visible { display: block; }
+  .contact-box {
+    background: var(--surface-container-low);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin: 16px 0;
+    font-size: .92rem;
+    color: var(--on-surface-variant);
+  }
+  footer { text-align: center; padding: 10px 16px 32px; font-size: .8rem; color: var(--on-surface-variant); }
+  footer a { color: var(--on-surface-variant); text-decoration: underline; text-underline-offset: 3px; margin: 0 8px; }
+  footer a:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="brand">Naked Woman Site</a>
+    <a href="/" class="back-link">← Back to site</a>
+  </div>
+</header>
+
+<main>
+  <div class="doc-card">
+    <h1>DMCA Copyright Policy</h1>
+    <p class="updated">Last updated: October 10, 2026</p>
+
+    <p>Naked Woman Site respects intellectual property rights and responds to notices of alleged copyright infringement in accordance with the Digital Millennium Copyright Act (“DMCA”), 17 U.S.C. § 512. You may submit a complaint directly to us using the form below or by email — you do not need to contact our ad network to reach us.</p>
+
+    <div class="contact-box">
+      <strong>Designated DMCA agent (direct contact)</strong><br>
+      Email: <a href="mailto:dmca@nakedwoman.site">dmca@nakedwoman.site</a><br>
+      Alternate: <a href="mailto:ads@mobile-brain.net">ads@mobile-brain.net</a><br>
+      Subject line: <strong>DMCA Takedown Notice</strong>
+    </div>
+
+    <h2>1. Notification of claimed infringement</h2>
+    <p>If you believe content on this website infringes your copyright, please provide a written notice that includes all of the following (17 U.S.C. § 512(c)(3)):</p>
+    <ol>
+      <li>Your physical or electronic signature;</li>
+      <li>Identification of the copyrighted work you claim has been infringed;</li>
+      <li>Identification of the material you claim is infringing, with enough detail for us to locate it (e.g. exact URL on nakedwoman.site);</li>
+      <li>Your contact information (address, telephone number, and email);</li>
+      <li>A statement that you have a good-faith belief that use of the material is not authorized by the copyright owner, its agent, or the law;</li>
+      <li>A statement, under penalty of perjury, that the information in the notice is accurate and that you are the copyright owner or authorized to act on the owner’s behalf.</li>
+    </ol>
+
+    <h2>2. Counter-notification</h2>
+    <p>If you believe material was removed or disabled by mistake or misidentification, you may send a counter-notification to the same email address containing the information required by 17 U.S.C. § 512(g)(3). We may restore material in accordance with the DMCA after receiving a valid counter-notification.</p>
+
+    <h2>3. Repeat infringers</h2>
+    <p>We may terminate access for users who are repeat infringers in appropriate circumstances.</p>
+
+    <h2>4. Misrepresentations</h2>
+    <p>Anyone who knowingly materially misrepresents that material is infringing, or that material was removed by mistake, may be liable for damages under the DMCA.</p>
+
+    <h2>5. Related</h2>
+    <ul>
+      <li><a href="/2257.html">18 U.S.C. § 2257 Compliance Statement</a></li>
+      <li><a href="/terms.html">Terms of Use</a></li>
+      <li><a href="/privacy.html">Privacy Policy</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-card">
+    <h2 style="margin-top:0;">DMCA complaint form</h2>
+    <p>Submit the form below to send a takedown notice to our team. Fields marked with * are required.</p>
+
+    <div class="form-success" id="formSuccess">
+      Your notice was received. We will review it and respond at the email address you provided.
+    </div>
+
+    <form id="dmcaForm" novalidate>
+      <div class="form-error" id="formError"></div>
+
+      <label for="name">Your full name *</label>
+      <input type="text" id="name" name="name" required autocomplete="name">
+
+      <label for="email">Email address *</label>
+      <input type="email" id="email" name="email" required autocomplete="email">
+
+      <label for="phone">Phone (optional)</label>
+      <input type="text" id="phone" name="phone" autocomplete="tel">
+
+      <label for="copyrighted_work">Copyrighted work you claim is infringed *</label>
+      <textarea id="copyrighted_work" name="copyrighted_work" required placeholder="Title, description, or registration number of your work"></textarea>
+
+      <label for="infringing_urls">URL(s) of infringing material on this site *</label>
+      <textarea id="infringing_urls" name="infringing_urls" required placeholder="https://nakedwoman.site/... (one URL per line)"></textarea>
+
+      <label for="additional_info">Additional information (optional)</label>
+      <textarea id="additional_info" name="additional_info" placeholder="Any other details that help us locate the material"></textarea>
+
+      <div class="check-row">
+        <input type="checkbox" id="good_faith" required>
+        <label for="good_faith">I have a good-faith belief that use of the material described above is not authorized by the copyright owner, its agent, or the law. *</label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="accuracy" required>
+        <label for="accuracy">Under penalty of perjury, I declare that the information in this notice is accurate and that I am the copyright owner or authorized to act on the owner’s behalf. *</label>
+      </div>
+
+      <label for="signature">Electronic signature (type your full legal name) *</label>
+      <input type="text" id="signature" name="signature" required>
+
+      <button type="submit" id="submitBtn">Submit DMCA notice</button>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <a href="/">Home</a>
+  <a href="/2257.html">2257 Compliance</a>
+  <a href="/dmca.html">DMCA</a>
+  <a href="/terms.html">Terms of Use</a>
+  <a href="/privacy.html">Privacy Policy</a>
+</footer>
+
+<script>
+const SUPABASE_URL = "https://mlrhoqapzmmjvtevclkf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UxZsUGPr7S3RjM6RRsy9Ig_sgUa0knv";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const form = document.getElementById("dmcaForm");
+const formError = document.getElementById("formError");
+const formSuccess = document.getElementById("formSuccess");
+const submitBtn = document.getElementById("submitBtn");
+
+function showError(msg) {
+  formError.textContent = msg;
+  formError.classList.add("visible");
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  formError.classList.remove("visible");
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const copyrightedWork = document.getElementById("copyrighted_work").value.trim();
+  const infringingUrls = document.getElementById("infringing_urls").value.trim();
+  const additionalInfo = document.getElementById("additional_info").value.trim();
+  const signature = document.getElementById("signature").value.trim();
+
+  if (!name || !email || !copyrightedWork || !infringingUrls || !signature) {
+    showError("Please complete all required fields.");
+    return;
+  }
+  if (!document.getElementById("good_faith").checked || !document.getElementById("accuracy").checked) {
+    showError("Please confirm both required legal statements.");
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError("Please enter a valid email address.");
+    return;
+  }
+
+  submitBtn.disabled = true;
+  const { error } = await sb.from("dmca_notices").insert({
+    name,
+    email,
+    phone: phone || null,
+    copyrighted_work: copyrightedWork,
+    infringing_urls: infringingUrls,
+    additional_info: additionalInfo || null,
+    signature,
+  });
+
+  submitBtn.disabled = false;
+
+  if (error) {
+    showError("Could not submit your notice. Please email dmca@nakedwoman.site directly.");
+    return;
+  }
+
+  form.reset();
+  form.style.display = "none";
+  formSuccess.classList.add("visible");
+});
+</script>
+</body>
+</html>

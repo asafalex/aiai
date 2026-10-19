@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text to Video — Wan 2.2</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1a73e8">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+  :root {
+    --surface: #f7f9ff;
+    --surface-lowest: #ffffff;
+    --surface-container-low: #f1f4fa;
+    --on-surface: #181c20;
+    --on-surface-variant: #414754;
+    --outline-variant: #dadce0;
+    --primary: #1a73e8;
+    --primary-hover: #185abc;
+    --error: #ba1a1a;
+    --error-container: #ffdad6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--surface);
+    color: var(--on-surface);
+    font-family: "Rubik", Arial, sans-serif;
+  }
+  body.gated { overflow: hidden; }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 20px 48px;
+  }
+  h1 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .sub {
+    color: var(--on-surface-variant);
+    font-size: .88rem;
+    margin: 0 0 24px;
+    line-height: 1.45;
+  }
+  label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--on-surface-variant);
+  }
+  textarea, input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--outline-variant);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: .9rem;
+    background: var(--surface-lowest);
+    color: var(--on-surface);
+  }
+  textarea { min-height: 120px; resize: vertical; line-height: 1.45; }
+  .field { margin-bottom: 16px; }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .check-row input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .check-row label { margin: 0; font-size: .9rem; color: var(--on-surface); }
+  details {
+    background: var(--surface-container-low);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+  details summary {
+    cursor: pointer;
+    font-weight: 500;
+    font-size: .9rem;
+  }
+  details .field { margin-top: 12px; margin-bottom: 0; }
+  details .field + .field { margin-top: 12px; }
+  button#generateBtn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(26,115,232,.35);
+  }
+  button#generateBtn:hover { background: var(--primary-hover); }
+  button#generateBtn:disabled { opacity: .55; cursor: not-allowed; }
+  .state { display: none; margin-top: 28px; text-align: center; }
+  .state.visible { display: block; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--outline-variant);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state p { color: var(--on-surface-variant); font-size: .88rem; margin: 0; }
+  .error-box {
+    background: var(--error-container);
+    color: var(--error);
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: .88rem;
+    text-align: left;
+  }
+  video {
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 16px;
+    background: #000;
+    margin-bottom: 12px;
+  }
+  .dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    font-size: .88rem;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  #ageGate {
+    position: fixed; inset: 0;
+    background: rgba(24,28,32,.55);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 16px;
+  }
+  #ageGate.hidden { display: none; }
+  .age-card {
+    background: var(--surface-lowest);
+    border-radius: 24px;
+    padding: 32px 28px;
+    max-width: 380px; width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(32,33,36,.2);
+  }
+  .age-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #e8f0fe; font-weight: 700; font-size: 1.1rem; color: var(--primary);
+    margin-bottom: 16px;
+  }
+  .age-card h2 { margin: 0 0 8px; font-weight: 500; font-size: 1.3rem; }
+  .age-card p { color: var(--on-surface-variant); font-size: .88rem; margin: 0 0 22px; line-height: 1.5; }
+  .age-actions { display: flex; gap: 10px; }
+  .age-actions button { flex: 1; padding: 12px; border-radius: 999px; border: none; font-family: inherit; font-size: .9rem; font-weight: 500; cursor: pointer; }
+  #ageConfirmBtn { background: var(--primary); color: #fff; }
+  #ageExitBtn { background: var(--surface-container-low); color: var(--on-surface-variant); }
+</style>
+</head>
+<body class="gated">
+
+<div id="ageGate">
+  <div class="age-card">
+    <div class="age-badge">18+</div>
+    <h2>Age Verification</h2>
+    <p>You must be 18 or older to continue.</p>
+    <div class="age-actions">
+      <button type="button" id="ageExitBtn">Exit</button>
+      <button type="button" id="ageConfirmBtn">I am 18+</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <h1>Text to video</h1>
+  <p class="sub">ModelsLab <code>text2video_ultra</code> (Wan 2.2). Generation often takes several minutes.</p>
+
+  <form id="videoForm">
+    <div class="field">
+      <label for="prompt">Prompt</label>
+      <textarea id="prompt" name="prompt" required></textarea>
+    </div>
+
+    <details open>
+      <summary>Request parameters</summary>
+      <div class="field">
+        <label for="model_id">model_id</label>
+        <input type="text" id="model_id" value="wan2.2" autocomplete="off">
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="portrait" checked>
+        <label for="portrait">portrait</label>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="num_frames">num_frames</label>
+          <input type="text" id="num_frames" value="81" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label for="fps">fps</label>
+          <input type="text" id="fps" value="16" inputmode="numeric">
+        </div>
+      </div>
+      <div class="field">
+        <label for="negative_prompt">negative_prompt</label>
+        <textarea id="negative_prompt" rows="4"></textarea>
+      </div>
+    </details>
+
+    <button type="submit" id="generateBtn">
+      <span class="material-symbols-outlined" style="font-size:20px;">movie</span>
+      <span id="generateBtnText">Generate video</span>
+    </button>
+  </form>
+
+  <div class="state" id="loadingBox">
+    <div class="spinner"></div>
+    <p id="loadingMsg">Starting…</p>
+  </div>
+  <div class="state" id="errorBox">
+    <div class="error-box" id="errorText"></div>
+  </div>
+  <div class="state" id="resultBox">
+    <video id="resultVideo" controls playsinline></video>
+    <a class="dl" id="downloadLink" href="#" download="generated.mp4" target="_blank" rel="noopener">
+      <span class="material-symbols-outlined" style="font-size:18px;">download</span>
+      Download
+    </a>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://mlrhoqapzmmjvtevclkf.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_UxZsUGPr7S3RjM6RRsy9Ig_sgUa0knv";
+const EDGE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/generate-video`;
+
+const DEFAULT_PROMPT =
+  "A completely nude and naked young woman standing in a sunlit meadow, her pale skin glowing under soft natural light with zero clothing covering any part of her body from toes to neck, delicate features sharp and defined, long flowing hair cascading down bare shoulders, slight breeze ruffling her skin creating realistic micro-movements, cinematic depth-of-field focusing entirely on her exposed form, hyper-realistic texture showing pores and moisture on flesh, slow graceful turn of the head towards camera, 4k resolution --ar 16:9 --style raw --q 2";
+
+const DEFAULT_NEGATIVE =
+  "blurry, low quality, distorted, extra limbs, missing limbs, broken fingers, deformed, glitch, artifacts, unrealistic, low resolution, bad anatomy, duplicate, cropped, watermark, text, logo, jpeg artifacts, noisy, oversaturated, underexposed, overexposed, flicker, unstable motion, motion blur, stretched, mutated, out of frame, bad proportions";
+
+document.getElementById("prompt").value = DEFAULT_PROMPT;
+document.getElementById("negative_prompt").value = DEFAULT_NEGATIVE;
+
+const AGE_GATE_KEY = "ageVerified18Day";
+const ageGate = document.getElementById("ageGate");
+function isAgeVerifiedToday() {
+  return localStorage.getItem(AGE_GATE_KEY) === new Date().toDateString();
+}
+if (isAgeVerifiedToday()) {
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+}
+document.getElementById("ageConfirmBtn").addEventListener("click", () => {
+  localStorage.setItem(AGE_GATE_KEY, new Date().toDateString());
+  ageGate.classList.add("hidden");
+  document.body.classList.remove("gated");
+});
+document.getElementById("ageExitBtn").addEventListener("click", () => {
+  window.location.href = "https://www.google.com";
+});
+
+const loadingBox = document.getElementById("loadingBox");
+const errorBox = document.getElementById("errorBox");
+const resultBox = document.getElementById("resultBox");
+const loadingMsg = document.getElementById("loadingMsg");
+const errorText = document.getElementById("errorText");
+const generateBtn = document.getElementById("generateBtn");
+const generateBtnText = document.getElementById("generateBtnText");
+const resultVideo = document.getElementById("resultVideo");
+const downloadLink = document.getElementById("downloadLink");
+
+let isGenerating = false;
+
+function showState(name) {
+  loadingBox.classList.toggle("visible", name === "loading");
+  errorBox.classList.toggle("visible", name === "error");
+  resultBox.classList.toggle("visible", name === "result");
+}
+
+function apiHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    "apikey": SUPABASE_ANON_KEY,
+  };
+}
+
+async function callVideoApi(body) {
+  const res = await fetch(EDGE_FUNCTION_URL, {
+    method: "POST",
+    headers: apiHeaders(),
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok && data.status !== "processing") {
+    throw new Error(data.message || `Request failed (${res.status})`);
+  }
+  return data;
+}
+
+const POLL_MS = 5000;
+const MAX_POLL_MS = 15 * 60 * 1000;
+
+async function generateVideo() {
+  if (isGenerating) return;
+
+  const prompt = document.getElementById("prompt").value.trim();
+  if (!prompt) return;
+
+  isGenerating = true;
+  generateBtn.disabled = true;
+  showState("loading");
+  loadingMsg.textContent = "Submitting to ModelsLab…";
+
+  const payload = {
+    prompt,
+    model_id: document.getElementById("model_id").value.trim() || "wan2.2",
+    portrait: document.getElementById("portrait").checked,
+    negative_prompt: document.getElementById("negative_prompt").value.trim(),
+    num_frames: document.getElementById("num_frames").value.trim() || "81",
+    fps: document.getElementById("fps").value.trim() || "16",
+  };
+
+  const started = Date.now();
+  let polls = 0;
+
+  try {
+    let data = await callVideoApi(payload);
+
+    while (data.status === "processing") {
+      if (Date.now() - started > MAX_POLL_MS) {
+        throw new Error("Timed out waiting for video (15 min). Try again later.");
+      }
+      polls += 1;
+      loadingMsg.textContent = `Rendering video… (${polls * (POLL_MS / 1000)}s)`;
+      await new Promise((r) => setTimeout(r, POLL_MS));
+      data = await callVideoApi({ fetch_result: data.fetch_result });
+    }
+
+    if (data.status !== "success" || !data.video_url) {
+      throw new Error(data.message || "No video returned");
+    }
+
+    resultVideo.src = data.video_url;
+    downloadLink.href = data.video_url;
+    showState("result");
+    generateBtnText.textContent = "Generate another";
+  } catch (err) {
+    errorText.textContent = err instanceof Error ? err.message : "Generation failed";
+    showState("error");
+  } finally {
+    isGenerating = false;
+    generateBtn.disabled = false;
+  }
+}
+
+document.getElementById("videoForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  generateVideo();
+});
+</script>
+</body>
+</html>

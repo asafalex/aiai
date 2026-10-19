@@ -3,7 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Image Studio</title>
+<title>Naked Woman Site — Free AI Image Generator</title>
+<meta name="description" id="metaDescription" content="Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery and generate your photo on Naked Woman Site.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Naked Woman Site">
+<meta name="theme-color" content="#1a73e8">
+<link rel="canonical" id="canonicalLink" href="https://nakedwoman.site/">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Naked Woman Site">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" id="ogUrl" content="https://nakedwoman.site/">
+<meta property="og:title" id="ogTitle" content="Naked Woman Site — Free AI Image Generator">
+<meta property="og:description" id="ogDescription" content="Create custom AI images free in ~20 seconds. No account required. Describe anyone you want and get a custom photo.">
+<meta property="og:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
+<meta property="og:image:alt" content="Naked Woman Site logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twitterTitle" content="Naked Woman Site — Free AI Image Generator">
+<meta name="twitter:description" id="twitterDescription" content="Create custom AI images free in ~20 seconds. No account required.">
+<meta name="twitter:image" content="https://nakedwoman.site/assets/logo-mark.jpg">
+<link rel="dns-prefetch" href="https://a.magsrv.com">
+<link rel="preconnect" href="https://a.magsrv.com" crossorigin>
+<link rel="preload" href="https://a.magsrv.com/ad-provider.js" as="script">
+<script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://nakedwoman.site/#website",
+      "url": "https://nakedwoman.site/",
+      "name": "Naked Woman Site",
+      "description": "Free AI image generator — describe who you want to see and get a custom photo in about 20 seconds.",
+      "inLanguage": "en-US",
+      "publisher": { "@id": "https://nakedwoman.site/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://nakedwoman.site/#organization",
+      "name": "Naked Woman Site",
+      "url": "https://nakedwoman.site/",
+      "email": "ai@nakedwoman.site",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nakedwoman.site/assets/logo.svg"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Naked Woman Site AI Generator",
+      "url": "https://nakedwoman.site/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "inLanguage": "en-US",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "Generate custom AI images from a text prompt. Free to use with no signup."
+    }
+  ]
+}
+</script>
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script src="posthog-config.js"></script>
+<script src="posthog-init.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,11 +95,19 @@
     --error: #ba1a1a;
     --on-error-container: #93000a;
     --error-container: #ffdad6;
+    --success: #0f9d58;
+    --success-container: #d4f5e2;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
   body {
     min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
     background: var(--surface);
     color: var(--on-surface);
     font-family: "Rubik", Arial, sans-serif;
@@ -59,8 +136,24 @@
     align-items: center;
     justify-content: space-between;
   }
-  .brand { font-weight: 600; font-size: 1rem; }
-  nav { display: flex; gap: 22px; }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    color: var(--on-surface);
+    cursor: pointer;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    display: block;
+  }
+  .brand:hover { color: var(--primary); }
+  nav { display: flex; align-items: center; gap: 22px; }
   nav a {
     text-decoration: none;
     font-size: .88rem;
@@ -71,27 +164,81 @@
     transition: color .15s, border-color .15s;
   }
   nav a.active { color: var(--primary); border-color: var(--primary); }
+  .nav-wizard-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-wizard-link:hover { color: var(--primary); }
+  .nav-new-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    line-height: 1.2;
+    color: #fff;
+    background: linear-gradient(135deg, #e53935, #ff7043);
+    box-shadow: 0 1px 4px rgba(229, 57, 53, .35);
+  }
 
-  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 70px; }
+  main {
+    max-width: min(720px, 100%);
+    margin: 0 auto;
+    padding: 40px 16px 70px;
+    overflow-x: clip;
+  }
 
   /* ---------- Prompt bar ---------- */
-  .prompt-shell { max-width: 700px; margin: 0 auto; }
-  .fixed-phrase {
+  .prompt-shell {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    padding-top: 6px;
+  }
+  .prompt-hero { position: relative; }
+  .free-badge {
+    position: absolute;
+    top: 20px;
+    right: -34px;
+    z-index: 3;
+    padding: 6px 44px;
+    transform: rotate(45deg);
+    transform-origin: center;
+    background: var(--success);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 0 2px 8px rgba(15, 157, 88, 0.35);
+  }
+  .fixed-phrase,
+  h1.fixed-phrase {
     display: block;
     text-align: center;
     font-weight: 700;
     font-size: 2rem;
-    line-height: 1.25;
+    line-height: 1.3;
     color: var(--on-surface);
     margin: 0 0 20px;
   }
-  .prompt-row { display: flex; align-items: center; gap: 12px; }
-  .prompt-row .prompt-bar { flex: 1; min-width: 0; }
-  .prompt-row button#generateBtn { flex-shrink: 0; }
-  @media (max-width: 640px) {
-    .fixed-phrase { font-size: 1.5rem; }
-    .prompt-row { flex-direction: column; align-items: stretch; }
-    .prompt-row button#generateBtn { width: 100%; justify-content: center; }
+  .fixed-phrase-desc {
+    display: block;
+    margin-top: 8px;
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--on-surface-variant);
+  }
+  .prompt-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
   }
   .prompt-bar {
     background: var(--surface-lowest);
@@ -107,6 +254,225 @@
     border-color: var(--primary);
     box-shadow: 0 2px 10px rgba(26,115,232,.18);
   }
+  .prompt-bar.prominent {
+    border-width: 2px;
+    border-color: var(--primary);
+    box-shadow: 0 4px 16px rgba(26, 115, 232, .22);
+    padding: 10px 20px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .prompt-bar.prominent:focus-within {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px rgba(26, 115, 232, .25), 0 6px 20px rgba(26, 115, 232, .28);
+  }
+  .how-it-works {
+    text-align: center;
+    font-size: .9rem;
+    color: var(--on-surface-variant);
+    margin: 0 0 14px;
+    line-height: 1.55;
+    padding: 12px 16px;
+    background: var(--primary-tint);
+    border-radius: 16px;
+  }
+  .how-it-works strong { color: var(--primary); font-weight: 600; }
+  .how-it-works[hidden],
+  .how-it-works.is-dismissed {
+    display: none !important;
+  }
+  #loadingBox.hero-loading-slot,
+  #resultArea.hero-result-slot {
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+  #loadingBox.hero-loading-slot {
+    padding: 16px 12px 14px;
+    background: var(--primary-tint);
+    border-radius: 16px;
+  }
+  .outstream-ad-wrap {
+    display: none;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto 14px;
+    overflow: hidden;
+    contain: layout;
+  }
+  .outstream-ad-wrap.is-active {
+    display: block;
+  }
+  .outstream-ad-slot {
+    width: 100%;
+    max-width: 100%;
+    min-height: 180px;
+    overflow: hidden;
+  }
+  .outstream-ad-slot :is(div, ins) {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .outstream-ad-slot video {
+    max-width: 100% !important;
+    width: 100% !important;
+    object-fit: contain;
+  }
+  .outstream-ad-slot iframe {
+    max-width: 100% !important;
+  }
+  #resultArea.hero-result-slot .suggestions {
+    margin-top: 14px;
+  }
+  .start-here {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: .76rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+  .prompt-field-label {
+    display: block;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    margin-bottom: 8px;
+  }
+  .prompt-constraint {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+  .prompt-constraint-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 0;
+    cursor: default;
+    user-select: none;
+    text-align: center;
+  }
+  .prompt-constraint-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--primary);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .prompt-constraint-text {
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    line-height: 1.45;
+  }
+  .browse-gallery-cta {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--outline-variant);
+  }
+  .browse-gallery-cta p {
+    margin: 0 0 14px;
+    font-size: .85rem;
+    color: var(--on-surface-variant);
+  }
+  .home-top-six {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 10px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 18px;
+  }
+  .home-top-six-item {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+  }
+  .home-top-six-thumb {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(32, 33, 36, .1);
+  }
+  .home-top-six-thumb img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .home-top-six-desc {
+    margin: 6px 0 0;
+    font-size: .62rem;
+    line-height: 1.35;
+    color: var(--on-surface-variant);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .browse-gallery-cta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    font-size: .92rem;
+  }
+  .browse-gallery-cta a:hover { text-decoration: underline; }
+  .example-demo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--surface-container-low);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .example-demo[hidden],
+  .example-demo.is-dismissed {
+    display: none !important;
+  }
+  .example-demo img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(32, 33, 36, .12);
+  }
+  .example-demo p {
+    margin: 0;
+    font-size: .78rem;
+    line-height: 1.45;
+    color: var(--on-surface-variant);
+  }
+  .example-demo em { color: var(--on-surface); font-style: normal; font-weight: 500; }
+  .onboarding-list {
+    text-align: left;
+    margin: 0 0 16px;
+    padding-left: 20px;
+    font-size: .88rem;
+    line-height: 1.55;
+    color: var(--on-surface-variant);
+  }
+  .onboarding-list li { margin-bottom: 8px; }
+  .onboarding-note {
+    font-size: .82rem;
+    color: var(--on-surface-variant);
+    margin: 0 0 18px;
+    line-height: 1.45;
+  }
+  .onboarding-note a { color: var(--primary); font-weight: 500; }
+  .prompt-bar.prominent { align-items: stretch; }
   #promptInput {
     flex: 1;
     min-width: 0;
@@ -117,20 +483,157 @@
     font-family: inherit;
     font-size: 1.02rem;
     color: var(--on-surface);
-    padding: 10px 0;
+    padding: 6px 0;
+    min-height: 4.25rem;
+    max-height: 7.5rem;
+    line-height: 1.45;
+    resize: vertical;
   }
   #promptInput::placeholder { color: var(--on-surface-variant); opacity: .55; }
+
   @media (max-width: 640px) {
-    #promptInput { text-align: center; }
+    main { padding: 22px 14px 56px; }
+    .header-inner { padding: 0 12px; }
+    .brand { font-size: .9rem; max-width: 42vw; line-height: 1.2; }
+    nav { gap: 12px; }
+    nav a { font-size: .8rem; }
+
+    .prompt-shell {
+      overflow-x: clip;
+      overflow-y: visible;
+      padding-top: 0;
+    }
+    .free-badge {
+      position: relative;
+      top: auto;
+      right: auto;
+      display: table;
+      margin: 0 auto 12px;
+      transform: rotate(-8deg);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .68rem;
+      box-shadow: 0 2px 6px rgba(15, 157, 88, 0.28);
+    }
+    .fixed-phrase {
+      font-size: 1.32rem;
+      margin-bottom: 12px;
+      padding-inline: 2px;
+    }
+    .fixed-phrase-desc {
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+    .prompt-note-below-title {
+      margin: 8px 0 16px;
+      padding-inline: 4px;
+      font-size: .84rem;
+    }
+    .prompt-bar { padding: 8px 14px; }
+    #promptInput {
+      text-align: left;
+      font-size: .88rem;
+      padding: 8px 0;
+    }
+    #promptInput::placeholder { font-size: .72rem; }
+    .prompt-example-label { text-align: left; }
+    .prompt-example-btn {
+      font-size: .76rem;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .pool-link-wrap { margin-top: 10px; padding-inline: 2px; }
+    .pool-link-row {
+      padding: 8px 12px;
+      gap: 8px;
+    }
+    .pool-link { font-size: .8rem; }
   }
 
   .prompt-note {
     text-align: center;
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    margin: 0;
+    line-height: 1.35;
+    letter-spacing: .01em;
+  }
+  .prompt-note .prompt-note-star {
+    color: var(--primary);
+    margin-inline-end: 4px;
+  }
+  .prompt-note-below-title {
+    margin: 10px 0 22px;
+  }
+  .prompt-example {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .prompt-example-label {
     font-size: .78rem;
     color: var(--on-surface-variant);
-    margin: 10px 0 0;
   }
-  .pool-link-row { text-align: center; margin-top: 12px; }
+  .prompt-example-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .82rem;
+    line-height: 1.45;
+    cursor: pointer;
+    text-align: left;
+    transition: background .15s, color .15s;
+  }
+  .prompt-example-btn .material-symbols-outlined {
+    font-size: 15px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .prompt-example-text { flex: 1; min-width: 0; }
+  .prompt-example-btn:hover { background: var(--primary-tint); color: var(--primary); }
+  .pool-link-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+  .pool-link-row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(156, 39, 176, 0.38);
+    background: var(--surface-lowest);
+    max-width: 100%;
+  }
+  .pro-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    cursor: default;
+    user-select: none;
+    pointer-events: none;
+  }
   .pool-link {
     background: none;
     border: none;
@@ -140,11 +643,14 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
-    padding: 4px;
+    padding: 4px 4px 4px 2px;
+    margin-inline-start: 4px;
   }
   .pool-link:hover { color: var(--secondary); }
 
   button#generateBtn {
+    width: 100%;
+    justify-content: center;
     padding: 13px 36px;
     border: none;
     border-radius: 999px;
@@ -167,7 +673,6 @@
   /* ---------- Loading / error / result ---------- */
   .state-box { display: none; margin-top: 32px; text-align: center; }
   .state-box.visible { display: block; }
-
   .progress-outer {
     max-width: 320px;
     margin: 0 auto 10px;
@@ -301,6 +806,32 @@
     padding: 2px 8px; border-radius: 999px;
     z-index: 2;
   }
+  .g-rank-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: .72rem;
+    font-weight: 700;
+    padding: 4px 10px 4px 7px;
+    box-shadow: 0 2px 8px rgba(32, 33, 36, .22);
+  }
+  .g-rank-trophy {
+    font-size: 15px;
+    line-height: 1;
+    font-variation-settings: "FILL" 1;
+  }
+  .g-rank-1 { background: linear-gradient(135deg, #ffe082, #f5b301); color: #3d2e00; }
+  .g-rank-2 { background: linear-gradient(135deg, #f0f0f0, #b8b8b8); color: #2a2a2a; }
+  .g-rank-3 { background: linear-gradient(135deg, #e8b87a, #cd7f32); color: #3d2208; }
+  .g-card-top-1 {
+    box-shadow: 0 0 0 2px rgba(245, 179, 1, .55), 0 4px 16px rgba(245, 179, 1, .22);
+  }
+  .g-card-top-2 {
+    box-shadow: 0 0 0 2px rgba(184, 184, 184, .65), 0 4px 14px rgba(120, 120, 120, .18);
+  }
+  .g-card-top-3 {
+    box-shadow: 0 0 0 2px rgba(205, 127, 50, .55), 0 4px 14px rgba(205, 127, 50, .2);
+  }
   @media (max-width: 560px) {
     .top-five-list .g-card { flex-direction: column; }
     .top-five-list .g-image { width: 100%; }
@@ -330,6 +861,34 @@
   .like-btn.shake { animation: shake .35s; }
   @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
+  .g-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .clone-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .clone-btn .material-symbols-outlined { font-size: 17px; }
+  .clone-btn:hover {
+    background: var(--primary-tint);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
   .view-all-row { text-align: center; margin-top: 26px; }
   .view-all-link {
     display: inline-flex;
@@ -353,12 +912,235 @@
   .back-link:hover { color: var(--primary-hover); }
 
   .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
-  .gallery-grid .g-card { display: flex; flex-direction: column; }
+  .gallery-grid .g-card { display: flex; flex-direction: column; position: relative; }
   .gallery-grid .g-image { aspect-ratio: 4/3; background: var(--surface-container); }
   .gallery-grid .g-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .g-image-btn {
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    cursor: zoom-in;
+    font: inherit;
+    text-align: inherit;
+    background: none;
+    display: block;
+  }
+  .g-image-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  .gallery-lightbox-card {
+    max-width: min(96vw, 1100px);
+    width: 100%;
+    padding: 16px 16px 20px;
+    text-align: left;
+    margin: auto;
+  }
+  #galleryLightbox.modal-overlay {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  @media (min-width: 720px) {
+    #galleryLightbox.modal-overlay { align-items: center; padding: 16px; }
+    .gallery-lightbox-card { padding: 20px 22px 22px; }
+  }
+  .gallery-lightbox-frame {
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    width: 100%;
+  }
+  .gallery-lightbox-frame img {
+    max-width: 100%;
+    max-height: min(88vh, 980px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .gallery-lightbox-desc {
+    margin: 14px 0 0;
+    font-size: .9rem;
+    line-height: 1.5;
+    color: var(--on-surface-variant);
+  }
+  .gallery-lightbox-share-label {
+    margin: 18px 0 10px;
+    font-size: .78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--on-surface-variant);
+  }
+  .gallery-lightbox-actions { display: flex; flex-direction: column; gap: 10px; }
+  .gallery-lightbox-download {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-family: inherit;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-lightbox-download:hover { background: var(--primary-hover); }
+  .gallery-share-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  @media (min-width: 480px) {
+    .gallery-share-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .gallery-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .gallery-share-btn:hover {
+    background: var(--primary-tint);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+  .gallery-share-toast {
+    display: none;
+    margin-top: 8px;
+    font-size: .78rem;
+    color: var(--success);
+    text-align: center;
+  }
+  .gallery-share-toast.visible { display: block; }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
   .gallery-grid .g-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
   @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (min-width: 960px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .gallery-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .gallery-sort {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px;
+    background: var(--surface-container-low);
+    border-radius: 999px;
+  }
+  .gallery-sort-btn {
+    border: none;
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--on-surface-variant);
+    cursor: pointer;
+    transition: background .15s, color .15s, box-shadow .15s;
+  }
+  .gallery-sort-btn:hover { color: var(--on-surface); }
+  .gallery-sort-btn.active {
+    background: var(--surface-lowest);
+    color: var(--primary);
+    box-shadow: 0 1px 4px rgba(32, 33, 36, .12);
+  }
+  .gallery-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .gallery-search input[type="search"] {
+    flex: 1;
+    min-width: 180px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-lowest);
+    font-family: inherit;
+    font-size: .88rem;
+    outline: none;
+    box-shadow: 0 1px 6px rgba(32, 33, 36, .06);
+  }
+  .gallery-search input[type="search"]:focus {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(26, 115, 232, .15);
+  }
+  .gallery-search-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface-variant);
+    font-family: inherit;
+    font-size: .84rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-search-btn:hover { background: var(--surface-container); color: var(--primary); }
+  .gallery-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 8px;
+  }
+  .gallery-pager-info {
+    font-size: .82rem;
+    color: var(--on-surface-variant);
+  }
+  .gallery-pager-btns { display: flex; gap: 8px; }
+  .gallery-pager-btn {
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: none;
+    background: var(--surface-container-low);
+    color: var(--on-surface);
+    font-family: inherit;
+    font-size: .84rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .gallery-pager-btn:hover:not(:disabled) { background: var(--primary-tint); color: var(--primary); }
+  .gallery-pager-btn:disabled { opacity: .45; cursor: not-allowed; }
 
   /* ---------- Footer ---------- */
   footer { text-align: center; padding: 10px 16px 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; }
@@ -369,6 +1151,17 @@
   }
   .footer-link:hover { color: var(--primary); }
   footer a.footer-link { text-decoration: underline; }
+  .footer-compliance {
+    width: 100%;
+    flex-basis: 100%;
+    max-width: 640px;
+    margin: 0 auto 4px;
+    font-size: .72rem;
+    line-height: 1.45;
+    color: var(--on-surface-variant);
+    text-align: center;
+  }
+  .footer-compliance a { color: var(--on-surface-variant); }
 
   /* ---------- Modals (pool / advertiser) ---------- */
   .modal-overlay {
@@ -509,10 +1302,16 @@
 
 <header>
   <div class="header-inner">
-    <div class="brand">AI Studio</div>
+    <a href="#/" class="brand">
+      <img class="brand-mark" src="/assets/logo.svg" alt="Naked Woman" width="32" height="32" decoding="async">
+      <span>Naked Woman</span>
+    </a>
     <nav>
-      <a href="#/" id="navHome">Create</a>
-      <a href="#/gallery" id="navGallery">All Images</a>
+      <a href="#/" id="navHome">Generate</a>
+      <a href="/index-wiz.html?wizard=1" class="nav-wizard-link" id="navWizard">
+        Wizard <span class="nav-new-badge">NEW</span>
+      </a>
+      <a href="/gallery" id="navGallery">Gallery</a>
     </nav>
   </div>
 </header>
@@ -521,31 +1320,60 @@
   <!-- ===================== HOME VIEW ===================== -->
   <div id="homeView">
     <form class="prompt-shell" id="promptForm">
-      <span class="fixed-phrase">Create a photo of a girl</span>
-      <div class="prompt-row">
-        <div class="prompt-bar">
-          <input type="text" id="promptInput" placeholder="with curly hair and a blue dress, on the beach">
+      <span class="free-badge">100% free</span>
+      <div class="prompt-hero">
+        <h1 class="fixed-phrase">
+          No need to fantasize anymore!
+          <span class="fixed-phrase-desc">Describe the naked woman you want to see</span>
+        </h1>
+      </div>
+      <p class="how-it-works" id="howItWorks">Type what you want → tap <strong>Create my image</strong> → your custom photo in about 20 seconds. <strong>No account needed.</strong></p>
+      <div class="outstream-ad-wrap" id="outstreamAdWrap" aria-hidden="true">
+        <div class="outstream-ad-slot" id="outstreamAdSlot"></div>
+      </div>
+      <div class="state-box hero-loading-slot" id="loadingBox">
+        <p class="progress-percent" id="progressPercent">0%</p>
+        <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
+        <p class="state-title">Creating your image…</p>
+        <p class="state-sub">This may take a few seconds, please wait</p>
+      </div>
+      <div class="state-box hero-result-slot" id="resultArea">
+        <div class="result-frame">
+          <img id="resultImg" alt="Generated image">
+        </div>
+        <div class="suggestions">
+          <span class="suggestion-label">More ideas:</span>
+          <div class="suggestion-pills" id="suggestionPills"></div>
+        </div>
+      </div>
+      <div class="prompt-stack">
+        <p class="start-here"><span class="material-symbols-outlined" style="font-size:16px;">arrow_downward</span> Start here</p>
+        <div class="prompt-bar prominent">
+          <textarea id="promptInput" rows="3" placeholder="How she looks / What she is doing / Where she is"></textarea>
+        </div>
+        <div class="prompt-constraint">
+          <label class="prompt-constraint-row">
+            <input type="checkbox" checked disabled aria-checked="true" aria-disabled="true" tabindex="-1">
+            <span class="prompt-constraint-text">She must be alone, no sexual positions</span>
+          </label>
+        </div>
+        <div class="example-demo" id="exampleDemo">
+          <img src="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/c0a5265b-aed9-46d8-ba37-a3ace4bf1536-0.jpg" alt="Example AI-generated result" loading="lazy">
+          <p>This was made from a short text prompt like: <em>“brunette Huge breasts in poker room...”</em></p>
         </div>
         <button type="submit" id="generateBtn">
           <span class="material-symbols-outlined" style="font-size:18px;" id="generateBtnIcon">auto_awesome</span>
-          <span id="generateBtnText">Generate</span>
+          <span id="generateBtnText">Create my image</span>
         </button>
       </div>
 
-      <p class="prompt-note">* she must be alone and without any other person</p>
-
-      <div class="pool-link-row">
-        <button type="button" class="pool-link" id="poolLinkBtn">Want to see her at the pool?</button>
+      <div class="pool-link-wrap">
+        <div class="pool-link-row">
+          <span class="pro-badge">pro</span>
+          <button type="button" class="pool-link" id="poolLinkBtn">See sexual positions</button>
+        </div>
       </div>
     </form>
-
-    <!-- Loading state -->
-    <div class="state-box" id="loadingBox">
-      <p class="progress-percent" id="progressPercent">0%</p>
-      <div class="progress-outer"><div class="progress-inner" id="progressBar"></div></div>
-      <p class="state-title">Creating your image…</p>
-      <p class="state-sub">This may take a few seconds, please wait</p>
-    </div>
 
     <!-- Error state -->
     <div class="state-box" id="errorBox">
@@ -555,39 +1383,14 @@
       <button class="retry-btn" id="retryBtn">Try Again</button>
     </div>
 
-    <!-- Result state -->
-    <div class="state-box" id="resultArea">
-      <div class="result-frame">
-        <img id="resultImg" alt="Generated image">
-      </div>
-      <div class="suggestions">
-        <span class="suggestion-label">More ideas:</span>
-        <div class="suggestion-pills" id="suggestionPills"></div>
-      </div>
+    <div class="browse-gallery-cta">
+      <p>See what others have created.</p>
+      <div class="home-top-six" id="homeTopSix" aria-hidden="false"></div>
+      <a href="/gallery">
+        <span>Open Gallery</span>
+        <span class="material-symbols-outlined" style="font-size:18px;">photo_library</span>
+      </a>
     </div>
-
-    <div class="section-divider"></div>
-
-    <!-- Home feed: top loved images, filled out with the latest to always total 8 -->
-    <section>
-      <div class="section-head">
-        <h2 class="section-title">Most Loved Images</h2>
-        <div>
-          <div class="quota-badge">
-            <span class="material-symbols-outlined">favorite</span>
-            <span>You have <span class="quota-count">3</span> likes left today</span>
-          </div>
-          <div class="quota-exhausted-msg">You've used your 3 likes for today. You can rate again tomorrow.</div>
-        </div>
-      </div>
-      <div class="top-five-list" id="topFiveList"></div>
-      <div class="view-all-row">
-        <a href="#/gallery" class="view-all-link">
-          <span>View All Images</span>
-          <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
-        </a>
-      </div>
-    </section>
   </div>
 
   <!-- ===================== GALLERY VIEW ===================== -->
@@ -596,21 +1399,34 @@
       <h1>All Images</h1>
       <a href="#/" class="back-link">
         <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
-        Back to Create
+        Back to Generate
       </a>
     </div>
-    <div class="section-head">
+    <div class="gallery-toolbar">
+      <div class="gallery-sort" role="tablist" aria-label="Sort gallery">
+        <button type="button" class="gallery-sort-btn active" data-sort="recent" role="tab" aria-selected="true">Recent</button>
+        <button type="button" class="gallery-sort-btn" data-sort="loved" role="tab" aria-selected="false">Most Loved Images</button>
+      </div>
       <div class="quota-badge">
         <span class="material-symbols-outlined">favorite</span>
         <span>You have <span class="quota-count">3</span> likes left today</span>
       </div>
     </div>
+    <form class="gallery-search" id="gallerySearchForm">
+      <input type="search" id="gallerySearchInput" placeholder="Search description (words)…" autocomplete="off">
+      <button type="submit" class="gallery-search-btn">Search</button>
+      <button type="button" class="gallery-search-btn" id="gallerySearchClear">Clear</button>
+    </form>
     <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="gallery-pager" id="galleryPager"></div>
   </div>
 </main>
 
 <footer>
+  <p class="footer-compliance">18 U.S.C. § 2257: Sexually explicit visuals on this site are AI-generated; no actual human performers appear. <a href="/2257.html">2257 Compliance Statement</a> · Copyright complaints: <a href="/dmca.html">DMCA policy &amp; form</a> or <a href="mailto:dmca@nakedwoman.site">dmca@nakedwoman.site</a></p>
   <button type="button" class="footer-link" id="advertiserLinkBtn">Advertise with us</button>
+  <a class="footer-link" href="/2257.html">2257 Compliance</a>
+  <a class="footer-link" href="/dmca.html">DMCA</a>
   <a class="footer-link" href="terms.html">Terms of Use</a>
   <a class="footer-link" href="privacy.html">Privacy Policy</a>
 </footer>
@@ -641,6 +1457,38 @@
       <h3>You're subscribed!</h3>
       <p>We'll notify you when this becomes available</p>
       <button class="modal-close-secondary" id="modalSuccessCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery image lightbox -->
+<div class="modal-overlay" id="galleryLightbox" aria-hidden="true">
+  <div class="modal-card gallery-lightbox-card" role="dialog" aria-modal="true" aria-labelledby="galleryLightboxTitle">
+    <button type="button" class="modal-close" id="galleryLightboxClose" aria-label="Close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 id="galleryLightboxTitle" class="visually-hidden">Gallery image</h3>
+    <div class="gallery-lightbox-frame">
+      <img id="galleryLightboxImg" alt="">
+    </div>
+    <p class="gallery-lightbox-desc" id="galleryLightboxDesc"></p>
+    <p class="gallery-lightbox-share-label">Save or share</p>
+    <div class="gallery-lightbox-actions">
+      <button type="button" class="gallery-lightbox-download" id="galleryLightboxDownload">
+        <span class="material-symbols-outlined" style="font-size:20px;">download</span>
+        Save image
+      </button>
+      <div class="gallery-share-grid">
+        <button type="button" class="gallery-share-btn" data-share="native">Share…</button>
+        <button type="button" class="gallery-share-btn" data-share="whatsapp">WhatsApp</button>
+        <button type="button" class="gallery-share-btn" data-share="facebook">Facebook</button>
+        <button type="button" class="gallery-share-btn" data-share="x">X</button>
+        <button type="button" class="gallery-share-btn" data-share="telegram">Telegram</button>
+        <button type="button" class="gallery-share-btn" data-share="reddit">Reddit</button>
+        <button type="button" class="gallery-share-btn" data-share="email">Email</button>
+        <button type="button" class="gallery-share-btn" data-share="copy">Copy text</button>
+      </div>
+      <p class="gallery-share-toast" id="galleryShareToast">Copied to clipboard</p>
     </div>
   </div>
 </div>
@@ -713,22 +1561,103 @@ if (!visitorId) {
   visitorId = uuidv4();
   localStorage.setItem(VISITOR_ID_KEY, visitorId);
 }
+window.__onPostHogReady = function () {
+  if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
+};
+if (typeof identifyPostHogVisitor === "function") identifyPostHogVisitor(visitorId);
 
-/* ---------------- Age gate ---------------- */
-const AGE_GATE_KEY = "ageVerified18";
+/* ---------------- Age gate (once per calendar day, localStorage) ---------------- */
+const AGE_GATE_KEY = "ageVerified18Day";
+function isAgeVerifiedToday() {
+  return localStorage.getItem(AGE_GATE_KEY) === new Date().toDateString();
+}
 const ageGate = document.getElementById("ageGate");
-if (sessionStorage.getItem(AGE_GATE_KEY) === "yes") {
+if (isAgeVerifiedToday()) {
   ageGate.classList.add("hidden");
   document.body.classList.remove("gated");
 }
+function shouldAutoFocusPrompt() {
+  return window.matchMedia("(min-width: 641px)").matches;
+}
+
+function focusPromptInput() {
+  if (location.hash === "#/gallery") return;
+  if (!isAgeVerifiedToday()) return;
+  if (!shouldAutoFocusPrompt()) return;
+  const input = document.getElementById("promptInput");
+  if (!input) return;
+  setTimeout(() => input.focus({ preventScroll: true }), 50);
+}
+
 document.getElementById("ageConfirmBtn").addEventListener("click", () => {
-  sessionStorage.setItem(AGE_GATE_KEY, "yes");
+  localStorage.setItem(AGE_GATE_KEY, new Date().toDateString());
   ageGate.classList.add("hidden");
   document.body.classList.remove("gated");
+  focusPromptInput();
+  if (typeof capturePostHogEvent === "function") capturePostHogEvent("age_gate_confirmed");
 });
 document.getElementById("ageExitBtn").addEventListener("click", () => {
   window.location.href = "https://www.google.com";
 });
+if (isAgeVerifiedToday()) focusPromptInput();
+
+const EXAMPLE_DEMO_KEY = "v3ExampleDemoHidden";
+const HOW_IT_WORKS_KEY = "v3HowItWorksHidden";
+
+function syncExampleDemoVisibility() {
+  const el = document.getElementById("exampleDemo");
+  if (!el) return;
+  const dismissed = localStorage.getItem(EXAMPLE_DEMO_KEY) === "yes";
+  el.hidden = dismissed;
+  el.classList.toggle("is-dismissed", dismissed);
+}
+
+function hideExampleDemoPermanently() {
+  try {
+    localStorage.setItem(EXAMPLE_DEMO_KEY, "yes");
+  } catch (_) { /* still hide in UI */ }
+  const el = document.getElementById("exampleDemo");
+  if (el) {
+    el.hidden = true;
+    el.classList.add("is-dismissed");
+  }
+}
+
+syncExampleDemoVisibility();
+
+function syncHowItWorksVisibility() {
+  const el = document.getElementById("howItWorks");
+  if (!el) return;
+  const dismissed = localStorage.getItem(HOW_IT_WORKS_KEY) === "yes";
+  el.hidden = dismissed;
+  el.classList.toggle("is-dismissed", dismissed);
+}
+
+function hideHowItWorksPermanently() {
+  try {
+    localStorage.setItem(HOW_IT_WORKS_KEY, "yes");
+  } catch (_) {}
+  hideHowItWorksNow();
+}
+
+function hideHowItWorksNow() {
+  const el = document.getElementById("howItWorks");
+  if (el) {
+    el.hidden = true;
+    el.classList.add("is-dismissed");
+  }
+}
+
+function showHowItWorksIfAllowed() {
+  if (localStorage.getItem(HOW_IT_WORKS_KEY) === "yes") return;
+  const el = document.getElementById("howItWorks");
+  if (el) {
+    el.hidden = false;
+    el.classList.remove("is-dismissed");
+  }
+}
+
+syncHowItWorksVisibility();
 
 /* ---------------- Router ---------------- */
 const homeView = document.getElementById("homeView");
@@ -736,19 +1665,101 @@ const galleryView = document.getElementById("galleryView");
 const navHome = document.getElementById("navHome");
 const navGallery = document.getElementById("navGallery");
 
+const PAGE_SEO = {
+  home: {
+    title: "Naked Woman Site — Free AI Image Generator",
+    description: "Create custom AI images free in ~20 seconds. Describe who you want to see — no account required. Browse the gallery on Naked Woman Site.",
+    canonical: "https://nakedwoman.site/",
+    ogUrl: "https://nakedwoman.site/"
+  },
+  gallery: {
+    title: "AI Image Gallery — Naked Woman Site",
+    description: "Browse AI-generated images from the community. Sort by most loved or recent. Like favorites and get inspired for your next free custom photo.",
+    canonical: "https://nakedwoman.site/#/gallery",
+    ogUrl: "https://nakedwoman.site/#/gallery"
+  }
+};
+
+function updatePageSeo(view) {
+  const seo = PAGE_SEO[view] || PAGE_SEO.home;
+  document.title = seo.title;
+  const desc = document.getElementById("metaDescription");
+  if (desc) desc.setAttribute("content", seo.description);
+  const canonical = document.getElementById("canonicalLink");
+  if (canonical) canonical.setAttribute("href", seo.canonical);
+  ["ogUrl", "ogTitle", "ogDescription", "twitterTitle", "twitterDescription"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (id === "ogUrl") el.setAttribute("content", seo.ogUrl);
+    else if (id.includes("Title")) el.setAttribute("content", seo.title);
+    else el.setAttribute("content", seo.description);
+  });
+}
+
+const CLONE_PROMPT_KEY = "pendingClonePrompt";
+
+function startCloneFromGallery(description) {
+  if (!description) return;
+  sessionStorage.setItem(CLONE_PROMPT_KEY, description);
+  if (location.hash === "#/gallery") {
+    location.hash = "#/";
+  } else {
+    applyPendingClonePrompt();
+  }
+}
+
+function applyPendingClonePrompt() {
+  const pending = sessionStorage.getItem(CLONE_PROMPT_KEY);
+  if (!pending) return false;
+  sessionStorage.removeItem(CLONE_PROMPT_KEY);
+  const input = document.getElementById("promptInput");
+  if (!input) return false;
+  input.value = pending;
+  setTimeout(() => {
+    input.focus({ preventScroll: true });
+    const end = pending.length;
+    input.setSelectionRange(end, end);
+    input.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, 50);
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("gallery_prompt_cloned");
+  }
+  return true;
+}
+
 function route() {
-  const isGallery = location.hash === "#/gallery";
-  homeView.style.display = isGallery ? "none" : "block";
-  galleryView.style.display = isGallery ? "block" : "none";
-  navHome.classList.toggle("active", !isGallery);
-  navGallery.classList.toggle("active", isGallery);
-  if (isGallery) renderGallery();
+  if (location.hash === "#/gallery") {
+    location.replace("/gallery");
+    return;
+  }
+  const isGallery = false;
+  homeView.style.display = "block";
+  galleryView.style.display = "none";
+  navHome.classList.add("active");
+  navGallery.classList.remove("active");
+  updatePageSeo("home");
+  if (!applyPendingClonePrompt()) focusPromptInput();
   window.scrollTo(0, 0);
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("generate_viewed");
+  }
 }
 window.addEventListener("hashchange", route);
 
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".clone-btn");
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  startCloneFromGallery(btn.getAttribute("data-clone-desc") || "");
+});
+
 /* ---------------- Gallery data & likes quota (Supabase-backed) ---------------- */
 let galleryItems = [];
+let gallerySort = "recent";
+let galleryPage = 1;
+let gallerySearch = "";
+const GALLERY_PAGE_SIZE = 50;
 let likedSet = new Set();
 let likesRemaining = 3;
 const HOME_FEED_LOVED_COUNT = 5;
@@ -819,23 +1830,48 @@ async function toggleLike(itemId, btn) {
 
   await loadGalleryItems();
   renderHomeFeed();
+  renderHomeTopSix();
   if (location.hash === "#/gallery") renderGallery();
   updateQuotaBadges();
   btn.disabled = false;
 }
 
-function galleryCardHTML(item, rank) {
+function galleryRankBadgeHTML(rank) {
+  if (!rank) return "";
+  if (rank <= 3) {
+    return `<div class="g-rank g-rank-top g-rank-${rank}" aria-label="Rank ${rank}"><span class="material-symbols-outlined g-rank-trophy" aria-hidden="true">emoji_events</span>#${rank}</div>`;
+  }
+  return `<div class="g-rank">#${rank}</div>`;
+}
+
+function galleryCardHTML(item, rank, openable = false) {
   const liked = likedSet.has(item.id);
+  const descRaw = item.desc || "";
+  const img = escapeHtml(item.img);
+  const desc = escapeHtml(descRaw);
+  const descAttr = escapeAttr(descRaw);
+  const topCardClass = rank && rank <= 3 ? ` g-card-top-${rank}` : "";
+  const imageBlock = openable
+    ? `<button type="button" class="g-image g-image-btn" data-image-url="${img}" data-desc="${desc}" aria-label="View larger image">
+        <img src="${img}" alt="${desc}" loading="lazy">
+      </button>`
+    : `<div class="g-image"><img src="${img}" alt="${desc}" loading="lazy"></div>`;
   return `
-    <article class="g-card">
-      ${rank ? `<div class="g-rank">#${rank}</div>` : ""}
-      <div class="g-image"><img src="${item.img}" alt="${item.desc}" loading="lazy"></div>
+    <article class="g-card${topCardClass}">
+      ${galleryRankBadgeHTML(rank)}
+      ${imageBlock}
       <div class="g-body">
-        <p class="g-desc">${item.desc}</p>
-        <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
-          <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
-          <span>${item.likes.toLocaleString("en-US")}</span>
-        </button>
+        <p class="g-desc">${desc}</p>
+        <div class="g-actions">
+          <button class="like-btn ${liked ? "liked" : ""}" onclick="toggleLike('${item.id}', this)" aria-label="Like">
+            <span class="material-symbols-outlined heart" style="font-variation-settings:'FILL' ${liked ? 1 : 0}">favorite</span>
+            <span>${item.likes.toLocaleString("en-US")}</span>
+          </button>
+          <button type="button" class="clone-btn" data-clone-desc="${descAttr}" aria-label="Clone prompt to generator">
+            <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+            Clone
+          </button>
+        </div>
       </div>
     </article>`;
 }
@@ -853,6 +1889,7 @@ function getHomeFeedItems() {
 
 function renderHomeFeed() {
   const el = document.getElementById("topFiveList");
+  if (!el) return;
   if (!galleryItems.length) {
     el.innerHTML = `<p class="empty-note">No images in the gallery yet</p>`;
     return;
@@ -860,18 +1897,343 @@ function renderHomeFeed() {
   el.innerHTML = getHomeFeedItems().map((item, i) => galleryCardHTML(item, i + 1)).join("");
 }
 
-function renderGallery() {
-  const el = document.getElementById("galleryGrid");
-  if (!galleryItems.length) {
-    el.innerHTML = `<p class="empty-note">No images in the gallery yet</p>`;
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str ?? "";
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return String(str ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+}
+
+function renderHomeTopSix() {
+  const el = document.getElementById("homeTopSix");
+  if (!el) return;
+  const top = [...galleryItems]
+    .sort((a, b) => {
+      const d = b.likes - a.likes;
+      if (d !== 0) return d;
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    })
+    .slice(0, 6);
+  if (!top.length) {
+    el.innerHTML = "";
     return;
   }
-  el.innerHTML = galleryItems.map(item => galleryCardHTML(item, null)).join("");
+  el.innerHTML = top.map((item) => {
+    const src = escapeHtml(item.img);
+    const desc = escapeHtml(item.desc || "");
+    return `<a class="home-top-six-item" href="/gallery">
+      <div class="home-top-six-thumb"><img src="${src}" alt="" loading="lazy"></div>
+      <p class="home-top-six-desc">${desc}</p>
+    </a>`;
+  }).join("");
 }
+
+function getSortedGalleryItems() {
+  if (gallerySort === "recent") {
+    return [...galleryItems].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+  return [...galleryItems].sort((a, b) => {
+    const likeDiff = b.likes - a.likes;
+    if (likeDiff !== 0) return likeDiff;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+
+function filterGalleryBySearch(items) {
+  const q = gallerySearch.trim().toLowerCase();
+  if (!q) return items;
+  const words = q.split(/\s+/).filter(Boolean);
+  return items.filter((item) => {
+    const hay = (item.desc || "").toLowerCase();
+    return words.every((word) => hay.includes(word));
+  });
+}
+
+function renderGalleryPager(totalCount) {
+  const pager = document.getElementById("galleryPager");
+  if (!pager) return;
+  const totalPages = Math.max(1, Math.ceil(totalCount / GALLERY_PAGE_SIZE));
+  const safePage = Math.min(Math.max(1, galleryPage), totalPages);
+  galleryPage = safePage;
+
+  if (totalCount === 0) {
+    pager.innerHTML = gallerySearch.trim()
+      ? `<span class="gallery-pager-info">No images match your search</span>`
+      : "";
+    return;
+  }
+
+  pager.innerHTML = `
+    <span class="gallery-pager-info">${totalCount.toLocaleString("en-US")} images · Page ${safePage} of ${totalPages} (${GALLERY_PAGE_SIZE} per page)</span>
+    <div class="gallery-pager-btns">
+      <button type="button" class="gallery-pager-btn" id="galleryPrevBtn" ${safePage <= 1 ? "disabled" : ""}>Previous</button>
+      <button type="button" class="gallery-pager-btn" id="galleryNextBtn" ${safePage >= totalPages ? "disabled" : ""}>Next</button>
+    </div>`;
+
+  const prev = document.getElementById("galleryPrevBtn");
+  const next = document.getElementById("galleryNextBtn");
+  if (prev) prev.addEventListener("click", () => { galleryPage -= 1; renderGallery(); });
+  if (next) next.addEventListener("click", () => { galleryPage += 1; renderGallery(); });
+}
+
+function renderGallery() {
+  const el = document.getElementById("galleryGrid");
+  const filtered = filterGalleryBySearch(getSortedGalleryItems());
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / GALLERY_PAGE_SIZE));
+  if (galleryPage > totalPages) galleryPage = totalPages;
+  if (galleryPage < 1) galleryPage = 1;
+
+  renderGalleryPager(total);
+
+  if (!total) {
+    el.innerHTML = `<p class="empty-note">${gallerySearch.trim() ? "No matching images" : "No images in the gallery yet"}</p>`;
+    return;
+  }
+
+  const start = (galleryPage - 1) * GALLERY_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + GALLERY_PAGE_SIZE);
+  el.innerHTML = pageItems.map((item, i) => {
+    const rank = gallerySort === "loved" ? start + i + 1 : null;
+    return galleryCardHTML(item, rank, true);
+  }).join("");
+}
+
+document.querySelectorAll(".gallery-sort-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    gallerySort = btn.dataset.sort || "recent";
+    galleryPage = 1;
+    document.querySelectorAll(".gallery-sort-btn").forEach((b) => {
+      const active = b === btn;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-selected", active ? "true" : "false");
+    });
+    renderGallery();
+  });
+});
+
+document.getElementById("gallerySearchForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  gallerySearch = document.getElementById("gallerySearchInput").value;
+  galleryPage = 1;
+  renderGallery();
+});
+document.getElementById("gallerySearchClear").addEventListener("click", () => {
+  document.getElementById("gallerySearchInput").value = "";
+  gallerySearch = "";
+  galleryPage = 1;
+  renderGallery();
+});
+
+const SITE_URL = "https://nakedwoman.site/";
+const R2_GENERATIONS_PREFIX = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/";
+
+function toPublicShareImageUrl(imageUrl) {
+  if (!imageUrl) return "";
+  if (imageUrl.startsWith(R2_GENERATIONS_PREFIX)) {
+    return SITE_URL.replace(/\/?$/, "/") + "g/" + imageUrl.slice(R2_GENERATIONS_PREFIX.length);
+  }
+  try {
+    const u = new URL(imageUrl);
+    const marker = "/generations/";
+    const idx = u.pathname.indexOf(marker);
+    if (idx >= 0) {
+      const tail = u.pathname.slice(idx + marker.length);
+      if (tail) return SITE_URL.replace(/\/?$/, "/") + "g/" + tail;
+    }
+  } catch (_) {}
+  return imageUrl;
+}
+
+const galleryLightbox = document.getElementById("galleryLightbox");
+const galleryLightboxImg = document.getElementById("galleryLightboxImg");
+const galleryLightboxDesc = document.getElementById("galleryLightboxDesc");
+const galleryShareToast = document.getElementById("galleryShareToast");
+let galleryLightboxImageUrl = "";
+
+function getGalleryShareMessage(imageUrl) {
+  const publicImageUrl = toPublicShareImageUrl(imageUrl);
+  const lines = [
+    "I created this image on Naked Woman Site.",
+    "Describe anyone you want and get a custom photo in about 20 seconds — 100% free, no account needed."
+  ];
+  if (publicImageUrl) lines.push(publicImageUrl);
+  lines.push(SITE_URL.trim());
+  return lines.join("\n");
+}
+
+function openGalleryLightbox(imageUrl, description) {
+  galleryLightboxImageUrl = imageUrl || "";
+  galleryLightboxImg.src = imageUrl;
+  galleryLightboxImg.alt = description || "Gallery image";
+  galleryLightboxDesc.textContent = description || "";
+  galleryShareToast.classList.remove("visible");
+  galleryLightbox.classList.add("visible");
+  galleryLightbox.setAttribute("aria-hidden", "false");
+  document.body.classList.add("gated");
+  if (typeof capturePostHogEvent === "function") {
+    capturePostHogEvent("gallery_image_opened");
+  }
+}
+
+function closeGalleryLightbox() {
+  galleryLightbox.classList.remove("visible");
+  galleryLightbox.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("gated");
+  galleryLightboxImg.removeAttribute("src");
+  galleryLightboxImageUrl = "";
+}
+
+document.getElementById("galleryGrid").addEventListener("click", (e) => {
+  const btn = e.target.closest(".g-image-btn");
+  if (!btn) return;
+  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
+});
+
+document.getElementById("galleryGrid").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const btn = e.target.closest(".g-image-btn");
+  if (!btn) return;
+  e.preventDefault();
+  openGalleryLightbox(btn.dataset.imageUrl, btn.dataset.desc);
+});
+
+document.getElementById("galleryLightboxClose").addEventListener("click", closeGalleryLightbox);
+galleryLightbox.addEventListener("click", (e) => {
+  if (e.target === galleryLightbox) closeGalleryLightbox();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && galleryLightbox.classList.contains("visible")) {
+    closeGalleryLightbox();
+  }
+});
+
+async function downloadGalleryImage() {
+  const url = galleryLightboxImageUrl;
+  if (!url) return;
+  const filename = "nakedwoman-site-" + Date.now() + ".jpg";
+  try {
+    const res = await fetch(url, { mode: "cors" });
+    if (!res.ok) throw new Error("fetch failed");
+    const blob = await res.blob();
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(objectUrl);
+    if (typeof capturePostHogEvent === "function") capturePostHogEvent("gallery_image_downloaded");
+  } catch {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+}
+
+document.getElementById("galleryLightboxDownload").addEventListener("click", downloadGalleryImage);
+
+function showGalleryShareToast() {
+  galleryShareToast.classList.add("visible");
+  setTimeout(() => galleryShareToast.classList.remove("visible"), 2200);
+}
+
+async function shareGalleryImage(channel) {
+  const imageUrl = galleryLightboxImageUrl;
+  const publicImageUrl = toPublicShareImageUrl(imageUrl);
+  const message = getGalleryShareMessage(imageUrl);
+  const encodedText = encodeURIComponent(message);
+  const encodedUrl = encodeURIComponent(SITE_URL);
+  const encodedImage = encodeURIComponent(publicImageUrl || SITE_URL);
+  const title = encodeURIComponent("I created this image on Naked Woman Site");
+
+  if (channel === "native") {
+    if (navigator.share) {
+      try {
+        const sharePayload = {
+          title: "Naked Woman Site",
+          text: message,
+          url: publicImageUrl || SITE_URL
+        };
+        if (publicImageUrl && typeof File !== "undefined") {
+          try {
+            const res = await fetch(publicImageUrl);
+            if (res.ok) {
+              const blob = await res.blob();
+              const ext = blob.type.includes("png") ? "png" : "jpg";
+              const file = new File([blob], "nakedwoman." + ext, { type: blob.type || "image/jpeg" });
+              const withFile = { ...sharePayload, files: [file] };
+              if (!navigator.canShare || navigator.canShare(withFile)) {
+                await navigator.share(withFile);
+                if (typeof capturePostHogEvent === "function") {
+                  capturePostHogEvent("gallery_image_shared", { channel: "native" });
+                }
+                return;
+              }
+            }
+          } catch (_) {}
+        }
+        await navigator.share(sharePayload);
+        if (typeof capturePostHogEvent === "function") {
+          capturePostHogEvent("gallery_image_shared", { channel: "native" });
+        }
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+    }
+    channel = "copy";
+  }
+
+  let shareUrl = "";
+  if (channel === "whatsapp") {
+    shareUrl = "https://api.whatsapp.com/send?text=" + encodedText;
+  } else if (channel === "facebook") {
+    shareUrl = "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl + "&quote=" + encodeURIComponent(message.split("\n")[0]);
+  } else if (channel === "x") {
+    shareUrl = "https://twitter.com/intent/tweet?text=" + encodedText;
+  } else if (channel === "telegram") {
+    shareUrl = "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodeURIComponent(message);
+  } else if (channel === "reddit") {
+    shareUrl = "https://www.reddit.com/submit?url=" + encodedImage + "&title=" + title;
+  } else if (channel === "email") {
+    shareUrl = "mailto:?subject=" + title + "&body=" + encodedText;
+  } else if (channel === "copy") {
+    try {
+      await navigator.clipboard.writeText(message);
+      showGalleryShareToast();
+      if (typeof capturePostHogEvent === "function") {
+        capturePostHogEvent("gallery_image_shared", { channel: "copy" });
+      }
+    } catch {
+      window.prompt("Copy this text:", message);
+    }
+    return;
+  }
+
+  if (shareUrl) {
+    window.open(shareUrl, "_blank", "noopener,noreferrer,width=600,height=640");
+    if (typeof capturePostHogEvent === "function") {
+      capturePostHogEvent("gallery_image_shared", { channel });
+    }
+  }
+}
+
+document.querySelectorAll("#galleryLightbox .gallery-share-btn").forEach((btn) => {
+  btn.addEventListener("click", () => shareGalleryImage(btn.dataset.share));
+});
 
 async function initGallery() {
   await Promise.all([loadGalleryItems(), loadLikedSet(), loadRemainingQuota()]);
   renderHomeFeed();
+  renderHomeTopSix();
   updateQuotaBadges();
   route();
 }
@@ -991,8 +2353,6 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ---------------- Image generation (via Supabase Edge Function) ---------------- */
-const DEFAULT_CONTINUATION = "with curly hair and a blue dress, on the beach";
-
 const SUGGESTION_POOL = [
   "Long blonde hair, blue eyes, slim figure, sitting on a bench and holding a coffee, surrounded by trees.",
   "Short dark hair, green eyes, athletic figure, walking down a city street while checking her phone.",
@@ -1112,21 +2472,152 @@ function stopProgressAnimation() {
   clearInterval(progressTimer);
 }
 
+const OUTSTREAM_ZONE_ID = 6047084;
+const outstreamAdWrap = document.getElementById("outstreamAdWrap");
+const outstreamAdSlot = document.getElementById("outstreamAdSlot");
+let outstreamServeToken = 0;
+let outstreamWarmed = false;
+let outstreamAutoplayStop = null;
+
+function stopOutstreamAutoplayWatch() {
+  if (outstreamAutoplayStop) {
+    outstreamAutoplayStop();
+    outstreamAutoplayStop = null;
+  }
+}
+
+function startOutstreamAutoplayWatch(root) {
+  stopOutstreamAutoplayWatch();
+  if (!root) return;
+
+  let stopped = false;
+  const stop = () => {
+    stopped = true;
+    observer.disconnect();
+    clearInterval(timer);
+    clearTimeout(timeout);
+  };
+  outstreamAutoplayStop = stop;
+
+  const nudgeVideos = () => {
+    if (stopped) return;
+    root.querySelectorAll("video").forEach((video) => {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.playsInline = true;
+      video.setAttribute("muted", "");
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      if (!video.hasAttribute("autoplay")) video.setAttribute("autoplay", "");
+      if (video.paused) video.play().catch(() => {});
+    });
+  };
+
+  const observer = new MutationObserver(nudgeVideos);
+  observer.observe(root, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["src", "class"]
+  });
+  nudgeVideos();
+  const timer = setInterval(nudgeVideos, 280);
+  const timeout = setTimeout(stop, 25000);
+}
+
+function pushExoAdProvider(action) {
+  const ap = window.AdProvider = window.AdProvider || [];
+  ap.push(action);
+}
+
+function mountOutstreamUnit() {
+  if (!outstreamAdSlot) return;
+  if (outstreamAdSlot.querySelector("video, iframe, ins[data-processed]")) {
+    pushExoAdProvider({ serve: {} });
+    return;
+  }
+  outstreamAdSlot.replaceChildren();
+  pushExoAdProvider({
+    addUnit: {
+      zone: { id: OUTSTREAM_ZONE_ID },
+      where: outstreamAdSlot
+    }
+  });
+  pushExoAdProvider({ serve: {} });
+}
+
+function warmOutstreamAd() {
+  if (outstreamWarmed || !outstreamAdSlot) return;
+  outstreamWarmed = true;
+  mountOutstreamUnit();
+}
+
+function serveOutstreamAd() {
+  if (!outstreamAdWrap || !outstreamAdSlot) return;
+  const token = ++outstreamServeToken;
+  stopOutstreamAutoplayWatch();
+  warmOutstreamAd();
+  outstreamAdWrap.classList.add("is-active");
+  outstreamAdWrap.setAttribute("aria-hidden", "false");
+  startOutstreamAutoplayWatch(outstreamAdSlot);
+
+  const flushServe = () => {
+    if (token !== outstreamServeToken) return;
+    try {
+      outstreamAdWrap.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "instant" });
+    } catch (_) {}
+    mountOutstreamUnit();
+  };
+
+  flushServe();
+  requestAnimationFrame(flushServe);
+  [300, 900].forEach((ms) => {
+    setTimeout(() => {
+      if (token !== outstreamServeToken) return;
+      pushExoAdProvider({ serve: {} });
+    }, ms);
+  });
+}
+
+function hideOutstreamAd() {
+  outstreamServeToken++;
+  stopOutstreamAutoplayWatch();
+  if (!outstreamAdWrap || !outstreamAdSlot) return;
+  outstreamAdWrap.classList.remove("is-active");
+  outstreamAdWrap.setAttribute("aria-hidden", "true");
+  outstreamAdSlot.replaceChildren();
+}
+
 function showState(name) {
   [loadingBox, errorBox, resultArea].forEach(box => box.classList.remove("visible"));
-  if (name === "loading") loadingBox.classList.add("visible");
-  else if (name === "error") errorBox.classList.add("visible");
-  else if (name === "result") resultArea.classList.add("visible");
+  if (name === "loading") {
+    hideHowItWorksNow();
+    loadingBox.classList.add("visible");
+  } else if (name === "error") {
+    hideOutstreamAd();
+    errorBox.classList.add("visible");
+    showHowItWorksIfAllowed();
+  } else if (name === "result") {
+    hideHowItWorksPermanently();
+    resultArea.classList.add("visible");
+  }
 }
 
 async function generateImage() {
   if (isGenerating) return;
+
+  const continuation = promptInput.value.trim();
+  if (!continuation) {
+    promptInput.focus();
+    return;
+  }
+
   isGenerating = true;
   generateBtn.disabled = true;
+  hideExampleDemoPermanently();
   showState("loading");
+  serveOutstreamAd();
   startProgressAnimation();
-
-  const continuation = promptInput.value.trim() || DEFAULT_CONTINUATION;
 
   try {
     const res = await fetch(EDGE_FUNCTION_URL, {
@@ -1149,8 +2640,11 @@ async function generateImage() {
 
     resultImg.src = data.image_url;
     showState("result");
+    if (typeof capturePostHogEvent === "function") {
+      capturePostHogEvent("image_generated", { prompt_length: continuation.length });
+    }
     renderSuggestions();
-    generateBtnText.textContent = "Update Image";
+    generateBtnText.textContent = "Create another image";
     generateBtnIcon.textContent = "refresh";
 
   } catch (err) {
@@ -1164,6 +2658,14 @@ async function generateImage() {
 
 promptForm.addEventListener("submit", (e) => { e.preventDefault(); generateImage(); });
 retryBtn.addEventListener("click", generateImage);
+if (generateBtn && !generateBtn.dataset.outstreamWarmBound) {
+  generateBtn.dataset.outstreamWarmBound = "1";
+  generateBtn.addEventListener("pointerdown", () => warmOutstreamAd(), { passive: true });
+}
+if (promptInput && !promptInput.dataset.outstreamWarmBound) {
+  promptInput.dataset.outstreamWarmBound = "1";
+  promptInput.addEventListener("focus", () => warmOutstreamAd(), { once: true });
+}
 </script>
 </body>
 </html>
